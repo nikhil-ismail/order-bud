@@ -1,0 +1,24 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import "IReactPackageProvider.idl";
+import "ReactInstanceSettings.idl";
+
+namespace Microsoft.ReactNative {
+
+  [webhosthidden]
+  delegate void OnResumeAction();
+
+  [webhosthidden]
+  [default_interface]
+  runtimeclass ReactNativeHost {
+    ReactNativeHost();
+
+    IVector<IReactPackageProvider> PackageProviders { get; };
+    ReactInstanceSettings InstanceSettings { get; set; };
+
+    Windows.Foundation.IAsyncAction LoadInstance();
+    Windows.Foundation.IAsyncAction ReloadInstance();
+    Windows.Foundation.IAsyncAction UnloadInstance();
+  }
+} // namespace Microsoft.ReactNative

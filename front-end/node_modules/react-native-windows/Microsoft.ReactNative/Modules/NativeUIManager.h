@@ -1,0 +1,114 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+#pragma once
+
+#include <INativeUIManager.h>
+#include <IReactRootView.h>
+#include <Views/ViewManagerBase.h>
+
+#include <folly/dynamic.h>
+#include <yoga/yoga.h>
+
+#include <ReactHost/React.h>
+#include <map>
+#include <memory>
+#include <vector>
+
+namespace react::uwp {
+
+struct IXamlReactControl;
+
+struct YogaNodeDeleter {
+  void operator()(YGNodeRef node) {
+    YGNodeFree(node);
+  }
+};
+
+typedef std::unique_ptr<YGNode, YogaNodeDeleter> YogaNodePtr;
+
+class NativeUIManager final : public facebook::react::INativeUIManager {
+ public:
+  NativeUIManager(Mso::React::IReactContext *reactContext);
+
+  // INativeUIManager
+  facebook::react::ShadowNode *createRootShadowNode(facebook::react::IReactRootView *rootView) override;
+  void configureNextLayoutAnimation(
+      folly::dynamic && /*config*/,
+      facebook::xplat::module::CxxModule::Callback /*success*/,
+      facebook::xplat::module::CxxModule::Callback /*error*/) override{};
+  void destroy() override;
+  void destroyRootShadowNode(facebook::react::ShadowNode *) override;
+  void removeRootView(facebook::react::ShadowNode &rootshadow) override;
+  void setHost(facebook::react::INativeUIManagerHost *host) override;
+  facebook::react::INativeUIManagerHost *getHost() override {
+    return m_host;
+  }
+  void AddRootView(facebook::react::ShadowNode &shadowNode, facebook::react::IReactRootView *pReactRootView) override;
+  void CreateView(facebook::react::ShadowNode &shadowNode, folly::dynamic /*ReadableMap*/ props) override;
+  void AddView(
+      facebook::react::ShadowNode &parentShadowNode,
+      facebook::react::ShadowNode &childShadowNode,
+      uint64_t index) override;
+  void RemoveView(facebook::react::ShadowNode &shadowNode, bool removeChildren = true) override;
+  void ReplaceView(facebook::react::ShadowNode &shadowNode) override;
+  void UpdateView(facebook::react::ShadowNode &shadowNode, folly::dynamic /*ReadableMap*/ props) override;
+  void onBatchComplete() override;
+  void ensureInBatch() override;
+  void measure(
+      facebook::react::ShadowNode &shadowNode,
+      facebook::react::ShadowNode &shadowRoot,
+      facebook::xplat::module::CxxModule::Callback callback) override;
+  void measureInWindow(facebook::react::ShadowNode &shadowNode, facebook::xplat::module::CxxModule::Callback callback)
+      override;
+  void measureLayout(
+      facebook::react::ShadowNode &shadowNode,
+      facebook::react::ShadowNode &ancestorNode,
+      facebook::xplat::module::CxxModule::Callback errorCallback,
+      facebook::xplat::module::CxxModule::Callback callback) override;
+  void findSubviewIn(
+      facebook::react::ShadowNode &shadowNode,
+      float x,
+      float y,
+      facebook::xplat::module::CxxModule::Callback callback) override;
+
+  void focus(int64_t reactTag) override;
+  void blur(int64_t reactTag) override;
+
+  // Other public functions
+  void DirtyYogaNode(int64_t tag);
+  void AddBatchCompletedCallback(std::function<void()> callback);
+
+  // For unparented node like Flyout, XamlRoot should be set to handle
+  // XamlIsland/AppWindow scenarios. Since it doesn't have parent, and all nodes
+  // in the tree should have the same XamlRoot, this function iterates all roots
+  // and try to get a valid XamlRoot.
+  xaml::XamlRoot tryGetXamlRoot();
+
+  // Searches itself and its parent to get a valid XamlView.
+  // Like Mouse/Keyboard, the event source may not have matched XamlView.
+  XamlView reactPeerOrContainerFrom(xaml::FrameworkElement fe);
+
+ private:
+  void DoLayout();
+  void UpdateExtraLayout(int64_t tag);
+  YGNodeRef GetYogaNode(int64_t tag) const;
+
+  std::weak_ptr<react::uwp::IXamlReactControl> GetParentXamlReactControl(int64_t tag) const;
+
+ private:
+  facebook::react::INativeUIManagerHost *m_host = nullptr;
+  Mso::CntPtr<Mso::React::IReactContext> m_context;
+  YGConfigRef m_yogaConfig;
+  bool m_inBatch = false;
+
+  std::map<int64_t, YogaNodePtr> m_tagsToYogaNodes;
+  std::map<int64_t, std::unique_ptr<YogaContext>> m_tagsToYogaContext;
+  std::vector<xaml::FrameworkElement::SizeChanged_revoker> m_sizeChangedVector;
+  std::vector<std::function<void()>> m_batchCompletedCallbacks;
+  std::vector<int64_t> m_extraLayoutNodes;
+
+  std::map<int64_t, std::weak_ptr<IXamlReactControl>> m_tagsToXamlReactControl;
+};
+
+} // namespace react::uwp

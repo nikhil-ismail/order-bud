@@ -1,0 +1,21 @@
+// Copyright (c) Microsoft Corporation.
+// Licensed under the MIT License.
+
+import "IJSValueWriter.idl";
+import "ReactNativeHost.idl";
+#include "NamespaceRedirect.h"
+
+namespace Microsoft.ReactNative {
+
+  [default_interface]
+  [webhosthidden]
+  runtimeclass ReactRootView : XAML_NAMESPACE.Controls.Grid {
+    ReactRootView();
+
+    ReactNativeHost ReactNativeHost { get; set; };
+    String ComponentName { get; set; };
+    JSValueArgWriter InitialProps { get; set; };
+
+    void ReloadView();
+  }
+} // namespace Microsoft.ReactNative
