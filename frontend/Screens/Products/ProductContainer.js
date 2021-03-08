@@ -1,17 +1,10 @@
 import React, { useState, useCallback } from "react";
-import {
-  View,
-  StyleSheet,
-  ActivityIndicator,
-  FlatList,
-  ScrollView,
-  Dimensions,
-  SafeAreaView
-} from "react-native";
-import { Container, Header, Icon, Item, Input, Text } from "native-base";
+import { Text, View, StyleSheet, ActivityIndicator, ScrollView, Dimensions, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
+import { Container } from "native-base";
 import { useFocusEffect } from '@react-navigation/native'
 import baseUrl from "../../assets/common/baseUrl"
 import axios from 'axios';
+import { Icon } from 'react-native-elements'
 
 import ProductList from "./ProductList";
 import SearchedProduct from "./SearchedProducts";
@@ -116,6 +109,23 @@ const ProductContainer = (props) => {
                   setActive={setActive}
                 />
                 <View style={styles.listContainer}>
+                  <View style={styles.deliverPickup}>
+                    <TouchableOpacity style={styles.deliverPickupDetails}>
+                      <Text style={styles.deliverPickupDetailsText}>Deliver</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deliverPickupDetails}>
+                      <Text style={styles.deliverPickupDetailsText}>400B Albert Street</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.deliverPickupDetails}>
+                      <Text style={styles.deliverPickupDetailsText}>Now</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={styles.searchContainer}>
+                    <TextInput style={styles.searchBar} placeholder="Search..."></TextInput>
+                    <TouchableOpacity style={styles.filterBtn}>
+                      <Icon name="sliders-h" type="font-awesome-5" size={30} />
+                    </TouchableOpacity>
+                  </View>
                   {productsCtg.map((item) => {
                     return (
                       <ProductList
@@ -147,6 +157,49 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
     elevation: 8,
+  },
+  deliverPickup: {
+    width: '90%',
+    marginTop: 20,
+    flexDirection: "row",
+    justifyContent: "center"
+  },
+  deliverPickupDetails: {
+    marginHorizontal: 5,
+    paddingHorizontal: 20,
+    paddingVertical: 7.5,
+    borderRadius: 15,
+    backgroundColor: "green"
+  },
+  deliverPickupDetailsText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16
+  },
+  searchContainer: {
+    width: '95%',
+    marginVertical: 20,
+    height: 50,
+    flexDirection: "row"
+  },
+  searchBar: {
+    width: '85%',
+    height: 50,
+    backgroundColor: "white",
+    borderTopLeftRadius: 30,
+    borderBottomLeftRadius: 30,
+    paddingHorizontal: 20,
+    fontSize: 18,
+    borderRightWidth: 1,
+    borderRightColor: "#ededed"
+  },
+  filterBtn: {
+    width: '15%',
+    height: 50,
+    backgroundColor: "white",
+    borderTopRightRadius: 30,
+    borderBottomRightRadius: 30,
+    justifyContent: "center",
   },
   center: {
     justifyContent: 'center',

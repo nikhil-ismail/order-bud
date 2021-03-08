@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-    StyleSheet,
-    View,
-    Dimensions,
-    Image,
-    Text,
-    Button
-} from 'react-native'
-import Toast from 'react-native-toast-message'
-import EasyButton from "../../Shared/StyledComponents/EasyButton"
+import { StyleSheet, View, Dimensions, Image, Text} from 'react-native'
 import { connect } from 'react-redux'
 import * as actions from '../../Redux/Actions/cartActions';
 
@@ -19,81 +10,65 @@ const ProductCard = (props) => {
 
     return (
         <View style={styles.container}>
-            <Image 
+            <Image
                 style={styles.image}
                 resizeMode="contain"
-                source={{uri: image ? 
-                    image : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png'}}
+                source={{
+                    uri: image ?
+                        image : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png'
+                }}
             />
-            <View style={styles.card}/>
-            <Text style={styles.title}>
-                {name.length > 15 ? name.substring(0, 15 - 3)
-                    + '...' : name
-                }
-            </Text>
-            <Text style={styles.price}>${price}</Text>
-
-            { countInStock > 0 ? (
-                <View style={{ marginBottom: 60 }}>
-                    <EasyButton 
-                    primary
-                    medium
-                    onPress={() => {
-                        props.addItemToCart(props),
-                        Toast.show({
-                            topOffset: 60,
-                            type: "success",
-                            text1: `${name} added to Cart`,
-                            text2: "Go to your cart to complete order"
-                        })
-                    }}
-                    >
-                        <Text style={{ color: "white"}}>Add</Text>
-                    </EasyButton>
-                </View>
-            ) : <Text style={{ marginTop: 20 }}>Currently Unavailable</Text>}
+            <View style={styles.productDetails}>
+                <Text style={styles.title}>Tokyo Smoke</Text>
+                <Text styles={{marginBottom: "50"}}>88 Cumberland Street</Text>
+                <Text>250m away</Text>
+                <Text style={styles.friendOrders}>Greg and 3 others have ordered from here</Text>
+            </View>
         </View>
     )
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addItemToCart: (product) => 
-            dispatch(actions.addToCart({quantity: 1, product}))
+        addItemToCart: (product) =>
+            dispatch(actions.addToCart({ quantity: 1, product }))
     }
 }
 
 const styles = StyleSheet.create({
     container: {
         width: "100%",
-        height: width * 0.4,
+        height: width * 0.35,
         flexDirection: "row",
-        borderRadius: 30,
+        borderRadius: 15,
         alignItems: 'center',
         elevation: 8,
         backgroundColor: 'white',
     },
     image: {
-        width: "40%",
-        height: width * 0.25,
-        backgroundColor: 'transparent',
-        position: 'absolute',
-        margin: 10
+        width: "37.5%",
+        height: width * 0.225,
+        marginVertical: 20,
+        marginHorizontal: 10
     },
-    card: {
-        marginBottom: 10,
-        height: width / 2 - 20 - 90,
-        backgroundColor: 'transparent',
-        width: width / 2 - 20 - 10
+    productDetails: {
+        marginVertical: 20,
+        width: "60%",
+        flexGrow: 1,
+        flex: 1,
+        marginVertical: 20,
+        marginLeft: 35,
     },
     title: {
         fontWeight: "bold",
-        fontSize: 14,
-        textAlign: 'center'
+        fontSize: 24,
+        width: "100%",
+        marginBottom: 5
     },
-    price: {
-        fontSize: 20,
-        color: 'orange',
+    friendOrders: {
+        fontSize: 14,
+        color: 'green',
+        fontWeight: 'bold',
         marginTop: 10
     }
 })

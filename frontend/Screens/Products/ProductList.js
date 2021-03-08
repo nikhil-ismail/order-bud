@@ -21,8 +21,8 @@ const ProductList = (props) => {
 
 const styles = StyleSheet.create({
     productContainer: {
-        width: '80%',
-        marginBottom: 10
+        width: '95%',
+        marginBottom: 15
     }
   });
 
