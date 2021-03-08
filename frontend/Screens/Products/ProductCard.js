@@ -20,10 +20,10 @@ const ProductCard = (props) => {
     return (
         <View style={styles.container}>
             <Image 
-            style={styles.image}
-            resizeMode="contain"
-            source={{uri: image ? 
-                image : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png'}}
+                style={styles.image}
+                resizeMode="contain"
+                source={{uri: image ? 
+                    image : 'https://cdn.pixabay.com/photo/2012/04/01/17/29/box-23649_960_720.png'}}
             />
             <View style={styles.card}/>
             <Text style={styles.title}>
@@ -65,23 +65,20 @@ const mapDispatchToProps = (dispatch) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: width / 2 - 20,
-        height: width / 1.7,
-        padding: 10,
-        borderRadius: 10,
-        marginTop: 55,
-        marginBottom: 5,
-        marginLeft: 10,
+        width: "100%",
+        height: width * 0.4,
+        flexDirection: "row",
+        borderRadius: 30,
         alignItems: 'center',
         elevation: 8,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     image: {
-        width: width / 2 - 20 - 10,
-        height: width / 2 - 20 - 30,
+        width: "40%",
+        height: width * 0.25,
         backgroundColor: 'transparent',
         position: 'absolute',
-        top: -45
+        margin: 10
     },
     card: {
         marginBottom: 10,

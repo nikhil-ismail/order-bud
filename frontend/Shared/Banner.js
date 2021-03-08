@@ -21,47 +21,39 @@ const Banner = () => {
 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.swiper}>
-          <Swiper
-            style={{ height: width / 2 }}
-            showButtons={false}
-            autoplay={true}
-            autoplayTimeout={2}
-          >
-            {bannerData.map((item) => {
-              return (
-                <Image
-                  key={item}
-                  style={styles.imageBanner}
-                  resizeMode="contain"
-                  source={{ uri: item }}
-                />
-              );
-            })}
-          </Swiper>
-          <View style={{ height: 20 }}></View>
-        </View>
+      <View style={styles.swiper}>
+        <Swiper
+          style={{ height: width * 0.4}}
+          showButtons={false}
+          autoplay={true}
+          autoplayTimeout={4}
+        >
+          {bannerData.map((item) => {
+            return (
+              <Image
+                key={item}
+                style={styles.imageBanner}
+                resizeMode="contain"
+                source={{ uri: item }}
+              />
+            );
+          })}
+        </Swiper>
       </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "gainsboro",
-  },
   swiper: {
+    flex: 1,
     width: width,
-    alignItems: "center",
-    marginTop: 10,
   },
   imageBanner: {
-    height: width / 2,
-    width: width - 40,
-    borderRadius: 10,
-    marginHorizontal: 20,
+    height: width * 0.38,
+    width: width * 0.75,
+    borderRadius: 30,
+    marginHorizontal: (width - width * 0.75) * 0.5,
   },
 });
 
