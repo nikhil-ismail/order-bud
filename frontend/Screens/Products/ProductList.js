@@ -3,8 +3,6 @@ import { TouchableOpacity, View, Dimensions, StyleSheet } from 'react-native';
 
 import ProductCard from './ProductCard'
 
-var { width } = Dimensions.get("window");
-
 const ProductList = (props) => {
     const { item } = props;
     return(

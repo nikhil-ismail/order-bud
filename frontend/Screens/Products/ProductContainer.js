@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { Text, View, StyleSheet, ActivityIndicator, ScrollView, Dimensions, SafeAreaView, TextInput, Modal, Pressable, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, ActivityIndicator, ScrollView, Dimensions, SafeAreaView, TextInput, TouchableOpacity } from "react-native";
 import { Container } from "native-base";
 import { useFocusEffect } from '@react-navigation/native'
 import baseUrl from "../../assets/common/baseUrl"
@@ -22,11 +22,7 @@ const ProductContainer = (props) => {
   const [productsCtg, setProductsCtg] = useState([]);
   const [active, setActive] = useState();
   const [initialState, setInitialState] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [pickup, setPickup] = useState(false);
-  const [mapView, setMapView] = useState(false);
-  const [showAddressModal, setShowAddressModal] = useState(false);
-  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [loading, setLoading] = useState(true)
 
   useFocusEffect((
     useCallback(
@@ -92,32 +88,6 @@ const ProductContainer = (props) => {
     }
   };
 
-  const changeOrderMethod = () => {
-    setPickup(!pickup);
-  }
-
-  const changePickupView = () => {
-    setMapView(!mapView);
-  }
-
-  const changeAddress = () => {
-    setShowAddressModal(!showAddressModal);
-  }
-
-  const confirmAddress = () => {
-    //setAddress()
-    setShowAddressModal(!showAddressModal);
-  }
-
-  const changeSchedule = () => {
-    setShowScheduleModal(!showScheduleModal);
-  }
-
-  const confirmSchedule = () => {
-    //scheduleOrder()
-    setShowScheduleModal(!showScheduleModal);
-  }
-
   return (
     <>
       {loading == false ? (
@@ -141,87 +111,21 @@ const ProductContainer = (props) => {
                 <View style={styles.listContainer}>
                   <View style={styles.deliverPickup}>
                     <TouchableOpacity style={styles.deliverPickupDetails}>
-                    {
-                      pickup ?
-                      <Text onPress={changeOrderMethod} style={styles.deliverPickupDetailsText}>Pickup</Text>
-                      :
-                      <Text onPress={changeOrderMethod} style={styles.deliverPickupDetailsText}>Delivery</Text>
-                    }
+                      <Text style={styles.deliverPickupDetailsText}>Deliver</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.deliverPickupDetails}>
-                      <Text onPress={changeAddress} style={styles.deliverPickupDetailsText}>400B Albert Street</Text>
+                      <Text style={styles.deliverPickupDetailsText}>400B Albert Street</Text>
                     </TouchableOpacity>
-                    <Modal
-                      animationType="slide"
-                      transparent={true}
-                      visible={showAddressModal}
-                      onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setShowAddressModal(!showAddressModal);
-                      }}
-                      >
-                      <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                          <Text style={styles.modalText}>Set your delivery address</Text>
-                          <TextInput style={styles.addressSearchBar} placeholder="Enter address..."></TextInput>
-                          <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={(text) => confirmAddress(text)}
-                          >
-                            <Text style={styles.textStyle}>Confirm Address</Text>
-                          </Pressable>
-                        </View>
-                      </View>
-                    </Modal>
                     <TouchableOpacity style={styles.deliverPickupDetails}>
-                      <Text onPress={changeSchedule} style={styles.deliverPickupDetailsText}>Now</Text>
+                      <Text style={styles.deliverPickupDetailsText}>Now</Text>
                     </TouchableOpacity>
-                    <Modal
-                      animationType="slide"
-                      transparent={true}
-                      visible={showScheduleModal}
-                      onRequestClose={() => {
-                        Alert.alert("Modal has been closed.");
-                        setShowScheduleModal(!showScheduleModal);
-                      }}
-                      >
-                      <View style={styles.centeredView}>
-                        <View style={styles.modalView}>
-                          <Text style={styles.modalText}>Schedule your order</Text>
-                          <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={(text) => confirmSchedule(text)}
-                          >
-                            <Text style={styles.textStyle}>Confirm Order Time</Text>
-                          </Pressable>
-                        </View>
-                      </View>
-                    </Modal>
                   </View>
-                  {
-                    pickup ?
-                    <View style={styles.searchContainer}>
-                      <TextInput style={styles.pickupSearchBar} placeholder="Search..."></TextInput>
-                      {
-                        mapView ?
-                        <TouchableOpacity style={styles.mapBtn}>
-                          <Icon onPress={changePickupView} name="list-ul" type="font-awesome-5" size={30} />
-                        </TouchableOpacity> :
-                        <TouchableOpacity style={styles.mapBtn}>
-                          <Icon onPress={changePickupView} name="map-marked-alt" type="font-awesome-5" size={30} />
-                        </TouchableOpacity>
-                      }
-                      <TouchableOpacity style={styles.filterBtn}>
-                        <Icon name="sliders-h" type="font-awesome-5" size={30} />
-                      </TouchableOpacity>
-                    </View> :
-                    <View style={styles.searchContainer}>
-                      <TextInput style={styles.deliverySearchBar} placeholder="Search..."></TextInput>
-                      <TouchableOpacity style={styles.filterBtn}>
-                        <Icon name="sliders-h" type="font-awesome-5" size={30} />
-                      </TouchableOpacity>
-                    </View>
-                  }
+                  <View style={styles.searchContainer}>
+                    <TextInput style={styles.searchBar} placeholder="Search..."></TextInput>
+                    <TouchableOpacity style={styles.filterBtn}>
+                      <Icon name="sliders-h" type="font-awesome-5" size={30} />
+                    </TouchableOpacity>
+                  </View>
                   {productsCtg.map((item) => {
                     return (
                       <ProductList
@@ -278,18 +182,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row"
   },
-  pickupSearchBar: {
-    width: '70%',
-    height: 50,
-    backgroundColor: "white",
-    borderTopLeftRadius: 30,
-    borderBottomLeftRadius: 30,
-    paddingHorizontal: 20,
-    fontSize: 18,
-    borderRightWidth: 1,
-    borderRightColor: "#ededed"
-  },
-  deliverySearchBar: {
+  searchBar: {
     width: '85%',
     height: 50,
     backgroundColor: "white",
@@ -308,66 +201,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 30,
     justifyContent: "center",
   },
-  mapBtn: {
-    width: '15%',
-    height: 50,
-    backgroundColor: "white",
-    justifyContent: "center",
-  },
   center: {
     justifyContent: 'center',
     alignItems: 'center'
-  },
-  addressSearchBar: {
-    width: '30%',
-    height: 30,
-    backgroundColor: "white",
-    borderRadius: 30,
-    borderColor: "green",
-    borderStyle: "solid",
-    paddingHorizontal: 20,
-    fontSize: 18,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center"
   }
 });
 
