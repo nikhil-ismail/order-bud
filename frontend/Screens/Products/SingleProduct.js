@@ -4,7 +4,7 @@ import { Left, Right, Container, H1 } from 'native-base';
 import Toast from 'react-native-toast-message';
 import EasyButton from '../../Shared/StyledComponents/EasyButton'
 import TrafficLight from '../../Shared/StyledComponents/TrafficLight'
-import { Icon, BottomSheet, ListItem } from 'react-native-elements';
+import { Icon, BottomSheet } from 'react-native-elements';
 
 import { connect } from 'react-redux';
 import * as actions from '../../Redux/Actions/cartActions';
