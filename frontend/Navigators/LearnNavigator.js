@@ -1,8 +1,10 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
-import ProductContainer from "../Screens/Products/ProductContainer";
-import SingleProduct from "../Screens/Products/SingleProduct"
+import Home from "../Screens/Businesses/Home";
+import BusinessPage from "../Screens/Businesses/BusinessPage";
+import Checkout from "../Screens/Businesses/Checkout";
+
 
 const Stack = createStackNavigator()
 
@@ -11,22 +13,29 @@ function MyStack() {
         <Stack.Navigator>
             <Stack.Screen 
                 name='Home'
-                component={ProductContainer}
+                component={Home}
                 options={{
                     headerShown: false,
                 }}
             />
             <Stack.Screen 
-                name='Product Detail'
-                component={SingleProduct}
+                name='Business Page'
+                component={BusinessPage}
                 options={{
-                    headerShown: true,
+                    headerShown: false,
+                }}
+            />
+            <Stack.Screen 
+                name='Checkout'
+                component={Checkout}
+                options={{
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>
     )
 }
 
-export default function LearnNavigator() {
+export default function HomeNavigator() {
     return <MyStack />;
 }

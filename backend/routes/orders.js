@@ -45,7 +45,7 @@ router.post('/', async (req,res)=>{
         return totalPrice
     }))
 
-    const totalPrice = totalPrices.reduce((a,b) => a +b , 0);
+    const totalPrice = totalPrices.reduce((a,b) => a + b , 0);
 
     let order = new Order({
         orderItems: orderItemsIdsResolved,
@@ -68,7 +68,7 @@ router.post('/', async (req,res)=>{
 })
 
 
-router.put('/:id',async (req, res)=> {
+router.put('/:id', async (req, res)=> {
     const order = await Order.findByIdAndUpdate(
         req.params.id,
         {
@@ -136,4 +136,4 @@ router.get(`/get/userorders/:userid`, async (req, res) =>{
 
 
 
-module.exports =router;
+module.exports = router;
