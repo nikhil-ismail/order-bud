@@ -1,66 +1,41 @@
 import React, { useState, useEffect } from 'react'
-import { Image, View, StyleSheet, Text, ScrollView, TextInput, TouchableOpacity, Dimensions } from 'react-native';
-import { Left, Right, Container, H1 } from 'native-base';
-import Toast from 'react-native-toast-message';
-import EasyButton from '../../Shared/StyledComponents/EasyButton'
-import TrafficLight from '../../Shared/StyledComponents/TrafficLight'
+import { Image, View, StyleSheet, Text, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
 import { Icon, BottomSheet } from 'react-native-elements';
 
-import { connect } from 'react-redux';
-import * as actions from '../../Redux/Actions/cartActions';
-
 import MenuCard from './MenuCard'
+
+import SearchBar from "../../Shared/SearchBar";
 
 var { width, height } = Dimensions.get('window')
 
 
-const SingleProduct = (props) => {
+const BusinessPage = (props) => {
 
-    const [item, setItem] = useState(props.route.params.item);
-    const [availability, setAvailability] = useState(null);
-    const [availabilityText, setAvailabilityText] = useState("");
     const [showAddToCart, setShowAddToCart] = useState(false);
+
+    const { coverImage, profileImage, name, address } = props.route.params;
 
     const showBottomSheet = () => {
         setShowAddToCart(!showAddToCart);
     }
 
-    useEffect(() => {
-        /*if (props.route.params.item.countInStock == 0) {
-            setAvailability(<TrafficLight unavailable></TrafficLight>);
-            setAvailabilityText("Unvailable")
-        } else if (props.route.params.item.countInStock <= 5) {
-            setAvailability(<TrafficLight limited></TrafficLight>);
-            setAvailabilityText("Limited Stock")
-        } else {
-            setAvailability(<TrafficLight available></TrafficLight>);
-            setAvailabilityText("Available")
-        }*/
-
-        return () => {
-            setAvailability(null);
-            setAvailabilityText("");
-        }
-    }, [])
-
     return (
-        <ScrollView style={{ backgroundColor: "white" }}>
-            <View style={styles.coverPhoto}></View>
+        <ScrollView>
             <View style={styles.profileContainer}>
-                <View style={styles.profilePhoto}></View>
-                <View style={styles.profileDetails}>
-                    <Text style={styles.businessName}>Tokyo Smoke</Text>
-                    <View style={{ flexDirection: "row", marginBottom: 5 }}>
-                        <Text style={styles.businessDetails}>Open Now · </Text>
-                        <View style={styles.stars}>
-                            <Icon name="star" type="font-awesome-5" color="green" size={15} />
-                            <Icon name="star" type="font-awesome-5" color="green" size={15} />
-                            <Icon name="star" type="font-awesome-5" color="green" size={15} />
-                            <Icon name="star" type="font-awesome-5" color="green" size={15} />
-                            <Icon name="star" type="font-awesome-5" color="green" size={15} />
-                        </View>
+                <Image
+                    style={styles.coverPhoto}
+                    source={{ uri: coverImage }}
+                />
+                <View style={styles.profileTextContainer}>
+                    <View style={styles.businessNameContainer}>
+                        <Text style={styles.businessName}>{name}</Text>
                     </View>
-                    <Text style={styles.businessDetails}>88 Cumberland Street</Text>
+                    <View style={styles.businessNameUnderline} />
+                    <View style={{ flexDirection: "row", marginBottom: 5 }}>
+                        <Text style={styles.businessDetails}>800 meters</Text>
+                        <Text style={styles.businessDetails}> · </Text>
+                        <Text style={styles.businessDetails}>{address}</Text>
+                    </View>
                 </View>
             </View>
             <ScrollView style={styles.menuFilters} horizontal={true}>
@@ -81,25 +56,20 @@ const SingleProduct = (props) => {
                 </TouchableOpacity>
             </ScrollView>
             <View style={styles.listContainer}>
-                <View style={styles.searchContainer}>
-                    <TextInput style={styles.searchBar} placeholder="Search Menu..."></TextInput>
-                    <TouchableOpacity style={styles.filterBtn}>
-                        <Icon name="sliders-h" type="font-awesome-5" size={30} />
-                    </TouchableOpacity>
-                </View>
+                <SearchBar />
                 <View style={styles.categoryHeader}>
-                    <Text style={styles.categoryHeaderText}>Bud (3)</Text>
+                    <Text style={styles.categoryHeaderText}>Bud</Text>
                 </View>
                 <MenuCard handlePress={showBottomSheet} />
                 <MenuCard handlePress={showBottomSheet} />
                 <MenuCard handlePress={showBottomSheet} />
                 <View style={styles.categoryHeader}>
-                    <Text style={styles.categoryHeaderText}>Pre-Rolls (2)</Text>
+                    <Text style={styles.categoryHeaderText}>Pre-Rolls</Text>
                 </View>
                 <MenuCard handlePress={showBottomSheet} />
                 <MenuCard handlePress={showBottomSheet} />
                 <View style={styles.categoryHeader}>
-                    <Text style={styles.categoryHeaderText}>Edibles (1)</Text>
+                    <Text style={styles.categoryHeaderText}>Edibles</Text>
                 </View>
                 <MenuCard handlePress={showBottomSheet} />
             </View>
@@ -107,15 +77,15 @@ const SingleProduct = (props) => {
                 showAddToCart &&
                 <BottomSheet
                     isVisible={showAddToCart}
-                    containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0.05)' }}
+                    containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0)' }}
                 >
                     <View style={styles.bottomSheet}>
                         <TouchableOpacity style={styles.addToCartBackBtn} onPress={showBottomSheet}>
                             <Icon name="arrow-left" type="font-awesome-5" color="black" size={17.5} />
                         </TouchableOpacity>
+                        <Text style={styles.itemName}>Blue Dream</Text>
+                        <Text style={styles.itemDescription}>This sativa leaning varietal from Canna Farms has a mid-high THC (17.5-20%) content with virtually no CBD. Blue Dream is descended from Blueberry Haze and offers a bouquet of pine and citrus.</Text>
                         <View style={styles.itemDetailsContainer}>
-                            <Text style={styles.itemName}>Blue Dream</Text>
-                            <Text style={styles.itemDescription}>This sativa leaning varietal from Canna Farms has a mid-high THC (17.5-20%) content with virtually no CBD. Blue Dream is descended from Blueberry Haze and offers a bouquet of pine and citrus.</Text>
                             <View style={styles.selectSize}>
                                 <TouchableOpacity style={styles.leftSelectSize}>
                                     <Text style={styles.selectSizeText}>1g</Text>
@@ -154,58 +124,55 @@ const SingleProduct = (props) => {
 
 }
 
-const mapToDispatchToProps = (dispatch) => {
-    return {
-        addItemToCart: (product) =>
-            dispatch(actions.addToCart({ quantity: 1, product }))
-    }
-}
-
 const styles = StyleSheet.create({
     coverPhoto: {
         width: width,
-        height: height * 0.2,
-        backgroundColor: "grey"
+        height: height * 0.225,
     },
     profileContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between"
+        alignItems: "center",
+        justifyContent: "center",
     },
-    profilePhoto: {
-        height: 160,
-        width: 160,
-        borderRadius: 80,
-        backgroundColor: "black",
+    profileTextContainer: {
+        flexDirection: "column",
+        alignItems: "center",
         marginTop: -40,
-        marginLeft: 15
+        backgroundColor: 'white',
+        width: 0.7 * width,
+        borderRadius: 5,
+        padding: 20
     },
-    profileDetails: {
-        marginRight: 15,
-        marginTop: 15
+    businessNameContainer: {
+        width: 0.7 * width,
+        justifyContent: "center",
     },
     businessName: {
-        fontSize: 31,
+        fontSize: 30,
         fontWeight: "bold",
-        marginBottom: 10
+        marginBottom: 10,
+        textAlign: "center"
+    },
+    businessNameUnderline: {
+        height: 2,
+        width: 0.4 * width,
+        backgroundColor: "green",
+        marginTop: -2.5,
+        marginBottom: 15
     },
     businessDetails: {
-        fontSize: 16,
-        marginRight: 5,
-    },
-    stars: {
-        flexDirection: "row",
-        marginTop: 3,
+        fontSize: 18,
+        color: "grey"
     },
     menuFilters: {
-        marginVertical: 25,
-        marginHorizontal: 15
+        marginHorizontal: 15,
+        marginTop: 20,
     },
     menuFilterTextContainer: {
         marginHorizontal: 5,
         paddingHorizontal: 20,
         paddingVertical: 7.5,
-        borderRadius: 15,
-        backgroundColor: "green"
+        borderRadius: 5,
+        backgroundColor: 'rgba(0, 128, 0, 0.75)',
     },
     menuFilterText: {
         color: "white",
@@ -215,53 +182,26 @@ const styles = StyleSheet.create({
     listContainer: {
         flex: 1,
         alignItems: "center",
-        backgroundColor: "#ededed",
-        borderTopLeftRadius: 50,
-        borderTopRightRadius: 50,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
         elevation: 8,
     },
-    searchContainer: {
-        width: '90%',
-        marginVertical: 20,
-        height: 50,
-        flexDirection: "row"
-    },
-    searchBar: {
-        width: '85%',
-        height: 50,
-        backgroundColor: "white",
-        borderTopLeftRadius: 30,
-        borderBottomLeftRadius: 30,
-        paddingHorizontal: 20,
-        fontSize: 18,
-        borderRightWidth: 1,
-        borderRightColor: "#ededed"
-    },
-    filterBtn: {
-        width: '15%',
-        height: 50,
-        backgroundColor: "white",
-        borderTopRightRadius: 30,
-        borderBottomRightRadius: 30,
-        justifyContent: "center",
-    },
     categoryHeader: {
-        marginBottom: 15,
-        width: "95%",
+        marginBottom: -1,
+        marginTop: 9,
+        width: "100%",
         backgroundColor: "white",
         paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderRadius: 15,
+        borderRadius: 5,
     },
     categoryHeaderText: {
         fontSize: 30,
-        marginLeft: 30,
         fontWeight: "bold",
-        color: "green"
+        marginLeft: 25,
+        marginTop: 10
     },
     addToCartBackBtn: {
         backgroundColor: "white",
-        borderWidth: 1,
         height: 50,
         width: 50,
         borderRadius: 25,
@@ -272,8 +212,8 @@ const styles = StyleSheet.create({
     bottomSheet: {
         backgroundColor: 'white',
         padding: 20,
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5
     },
     itemDetailsContainer: {
         alignItems: "center"
@@ -285,12 +225,12 @@ const styles = StyleSheet.create({
     },
     itemDescription: {
         fontSize: 17,
-        marginHorizontal: 10
+        color: "grey",
     },
     addToCart: {
         backgroundColor: "green",
         width: "90%",
-        borderRadius: 30,
+        borderRadius: 5,
         paddingVertical: 15,
         paddingHorizontal: 30,
         marginTop: 25,
@@ -308,8 +248,8 @@ const styles = StyleSheet.create({
     },
     leftSelectSize: {
         backgroundColor: "#e6e6e6",
-        borderTopLeftRadius: 30,
-        borderBottomLeftRadius: 30,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5,
         paddingVertical: 15,
         width: 80,
         alignItems: "center",
@@ -318,8 +258,8 @@ const styles = StyleSheet.create({
     },
     rightSelectSize: {
         backgroundColor: "#e6e6e6",
-        borderTopRightRadius: 30,
-        borderBottomRightRadius: 30,
+        borderTopRightRadius: 5,
+        borderBottomRightRadius: 5,
         paddingVertical: 15,
         width: 80,
         alignItems: "center"
@@ -360,4 +300,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect(null, mapToDispatchToProps)(SingleProduct);
+export default BusinessPage;

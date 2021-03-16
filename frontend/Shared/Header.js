@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignContent: "center",
         justifyContent: "space-between",
-        marginTop: 10,
-        marginBottom: 15
+        marginTop: 7.5,
+        marginBottom: 7.5
     },
     pickUpDelivery: {
         flexDirection: "row",
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     },
     pickUpDeliveryText: {
         fontWeight: "bold",
-        fontSize: 18,
+        fontSize: 19,
         marginHorizontal: 7.5
     },
     address: {
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     addressText: {
         color: "green",
-        fontSize: 18,
+        fontSize: 19,
         fontWeight: "bold",
         marginHorizontal: 10
     },

@@ -1,8 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, Image, Text, TouchableOpacity} from 'react-native';
 import { Icon } from 'react-native-elements';
-
-var { width } = Dimensions.get("window");
 
 const BusinessCard = (props) => {
     const { coverImage, name, address } = props.business;
@@ -14,13 +12,17 @@ const BusinessCard = (props) => {
                 source={{uri: coverImage}}
             />
             <View style={styles.businessDetails}>
-                <Text style={styles.title}>{name}</Text>
-                <View style={styles.addressRatingContainer}>
-                    <Text style={{fontSize: 15}}>{address}</Text>
-                    <View style={styles.stars}>
-                        <Text style={{marginRight: 5, fontSize: 15}}>5</Text>
-                        <Icon name="star" type="font-awesome-5" color="green" size={15} />
+                <View style={styles.businessDetailsHeaderRow}>
+                    <Text style={styles.title}>{name}</Text>
+                    <View style={styles.ratingContainer}>
+                        <Text style={styles.ratingText}>4.7</Text>
                     </View>
+                </View>
+                <View style={styles.businessDetailsSubRow}>
+                    <Text style={styles.businessDetailsSubRowText}>{address} | </Text>
+                    <Text style={styles.businessDetailsSubRowText}>Bud · </Text>
+                    <Text style={styles.businessDetailsSubRowText}>Pre-Rolls · </Text>
+                    <Text style={styles.businessDetailsSubRowText}>Edibles</Text>
                 </View>
                 <Text style={styles.friendOrders}>Greg and 3 others have ordered from here</Text>
             </View>
@@ -41,28 +43,46 @@ const styles = StyleSheet.create({
         height: 160
     },
     businessDetails: {
-        marginTop: 20,
-        marginBottom: 15,
-        paddingHorizontal: 15
+        paddingHorizontal: 15,
+        marginVertical: 10
+    },
+    businessDetailsHeaderRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginVertical: 2.5
     },
     title: {
         fontWeight: "bold",
-        fontSize: 24,
-        marginBottom: 15
+        fontSize: 20,
     },
-    addressRatingContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center"
+    ratingContainer: {
+        backgroundColor: 'rgba(0, 128, 0, 0.75)',
+        height: 30,
+        width: 30,
+        borderRadius: 15,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 5
     },
-    stars: {
+    ratingText: {
+        fontWeight: "bold",
+        color: "white"
+    },
+    businessDetailsSubRow: {
         flexDirection: "row",
-        marginTop: 3,
+        alignItems: "center",
+        marginVertical: 2.5
+    },
+    businessDetailsSubRowText: {
+        fontSize: 15,
+        color: "grey",
+        fontWeight: "bold"
     },
     friendOrders: {
         fontSize: 16,
         fontWeight: 'bold',
-        marginTop: 10
+        marginVertical: 2.5
     }
 })
 
