@@ -19,10 +19,9 @@ const BusinessCard = (props) => {
                     </View>
                 </View>
                 <View style={styles.businessDetailsSubRow}>
-                    <Text style={styles.businessDetailsSubRowText}>{address} | </Text>
-                    <Text style={styles.businessDetailsSubRowText}>Bud · </Text>
-                    <Text style={styles.businessDetailsSubRowText}>Pre-Rolls · </Text>
-                    <Text style={styles.businessDetailsSubRowText}>Edibles</Text>
+                    <Text style={styles.businessDetailsSubRowText}>{address} • </Text>
+                    <Text style={styles.businessDetailsSubRowText}>$2.99 • </Text>
+                    <Text style={styles.businessDetailsSubRowText}>30-40 min</Text>
                 </View>
                 <Text style={styles.friendOrders}>Greg and 3 others have ordered from here</Text>
             </View>

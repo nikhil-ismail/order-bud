@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { View, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView } from "react-native";
+import { View, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, Alert } from "react-native";
 import { Container } from "native-base";
 import { useFocusEffect } from '@react-navigation/native'
 import axios from 'axios';
@@ -12,6 +12,7 @@ import ViewCartButton from "../../Shared/ViewCartButton";
 import CategoryFilter from "./CategoryFilter";
 import BusinessCard from "./BusinessCard";
 import Cart from "./Cart";
+import Filter from "./Filter";
 
 import baseURL from "../../assets/common/baseUrl";
 
@@ -21,9 +22,14 @@ const ProductContainer = (props) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true)
   const [showAddToCart, setShowAddToCart] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
   const showBottomSheet = () => {
     setShowAddToCart(!showAddToCart);
+  }
+
+  const handleFilter = () => {
+    setShowFilter(!showFilter);
   }
 
   const goToCheckout = () => {
@@ -74,7 +80,10 @@ const ProductContainer = (props) => {
             <Banner />
             <CategoryFilter categories={categories} />
             <View style={styles.listContainer}>
-              <SearchBar />
+              <SearchBar handleFilter={handleFilter} />
+              {showFilter &&
+                <Filter showFilter={showFilter} handleFilter={handleFilter} />
+              }
               {businesses.map(business => {
                 return (
                   <BusinessCard key={business.name} business={business} navigation={props.navigation} />
