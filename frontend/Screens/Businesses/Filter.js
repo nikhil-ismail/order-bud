@@ -99,7 +99,6 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginTop: 10,
         marginBottom: 20,
-        marginLeft: 5
     },
     filterCategoryContainer: {
         marginTop: 5,

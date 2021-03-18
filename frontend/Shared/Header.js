@@ -16,10 +16,10 @@ const Header = () => {
                     <Text style={styles.pickUpDeliveryText}>Pick-Up</Text>
                 </TouchableOpacity>
             </View>
-            <TouchableOpacity style={styles.address}>
+            <View style={styles.address}>
                 <Text style={styles.addressText}>400B Albert Street</Text>
                 <Icon name="angle-down" type="font-awesome-5" color="green" size={20} />
-            </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }
