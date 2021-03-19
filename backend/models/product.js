@@ -7,22 +7,20 @@ const productSchema = mongoose.Schema({
     },
     description: {
         type: String,
-        required: true
-    },
-    richDescription: {
-        type: String,
         default: ''
     },
     image: {
         type: String,
         default: ''
     },
-    images: [{
-        type: String
-    }],
     brand: {
         type: String,
         default: ''
+    },
+    business: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Business',
+        required: true
     },
     price: {
         type: Number,
@@ -31,7 +29,7 @@ const productSchema = mongoose.Schema({
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category',
-        required:true
+        required: true
     },
     countInStock: {
         type: Number,
@@ -46,10 +44,6 @@ const productSchema = mongoose.Schema({
     numReviews: {
         type: Number,
         default: 0,
-    },
-    isFeatured: {
-        type: Boolean,
-        default: false,
     },
     dateCreated: {
         type: Date,

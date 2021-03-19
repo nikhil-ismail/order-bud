@@ -4,7 +4,7 @@ import { Icon, BottomSheet } from 'react-native-elements';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 
-const Filter = props => {
+const HomeFilter = props => {
 
     return (
         <BottomSheet
@@ -130,4 +130,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Filter;
+export default HomeFilter;

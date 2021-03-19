@@ -3,8 +3,8 @@ import { Image, View, StyleSheet, Text, ScrollView, TouchableOpacity, Dimensions
 import { Icon, BottomSheet } from 'react-native-elements';
 
 import MenuCard from './MenuCard'
-
 import SearchBar from "../../Shared/SearchBar";
+import BusinessPageFilter from './BusinessPageFilter';
 
 var { width, height } = Dimensions.get('window')
 
@@ -12,11 +12,16 @@ var { width, height } = Dimensions.get('window')
 const BusinessPage = (props) => {
 
     const [showAddToCart, setShowAddToCart] = useState(false);
-
+    const [showFilter, setShowFilter] = useState(false);
+    const [showFilterIcon, setShowFilterIcon] = useState(false);
     const { coverImage, profileImage, name, address } = props.route.params;
 
     const showBottomSheet = () => {
         setShowAddToCart(!showAddToCart);
+    }
+
+    const handleFilter = () => {
+        setShowFilter(!showFilter);
     }
 
     return (
@@ -31,10 +36,10 @@ const BusinessPage = (props) => {
                         <Text style={styles.businessName}>{name}</Text>
                     </View>
                     <View style={styles.businessNameUnderline} />
-                    <TouchableOpacity style={{ flexDirection: "row", marginBottom: 5 }}>
+                    <TouchableOpacity style={{ flexDirection: "row", marginBottom: 6 }}>
                         <Text style={styles.businessDetails}>{address}</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flexDirection: "row", marginBottom: 5 }}>
+                    <TouchableOpacity style={{ flexDirection: "row", marginBottom: 6 }}>
                             <Text style={styles.businessDetails}>9:00 AM - 10:00 PM</Text>
                     </TouchableOpacity>
                     <View style={{ flexDirection: "row"}}>
@@ -80,9 +85,15 @@ const BusinessPage = (props) => {
                 <TouchableOpacity style={styles.menuFilterTextContainer}>
                     <Text style={styles.menuFilterText}>Capsules</Text>
                 </TouchableOpacity>
+                <TouchableOpacity style={styles.menuFilterTextContainer}>
+                    <Text style={styles.menuFilterText}>Accessories</Text>
+                </TouchableOpacity>
             </ScrollView>
             <View style={styles.listContainer}>
-                <SearchBar />
+                <SearchBar handleFilter={handleFilter} showFilterIcon={showFilterIcon} />
+                {showFilter &&
+                    <BusinessPageFilter showFilter={showFilter} handleFilter={handleFilter} />
+                }
                 <View style={styles.categoryHeader}>
                     <Text style={styles.categoryHeaderText}>Deals</Text>
                 </View>
@@ -190,7 +201,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     businessDetails: {
-        fontSize: 15,
+        fontSize: 16,
         color: "grey"
     },
     menuFilters: {

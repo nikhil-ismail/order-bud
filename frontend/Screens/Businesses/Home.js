@@ -12,7 +12,7 @@ import ViewCartButton from "../../Shared/ViewCartButton";
 import CategoryFilter from "./CategoryFilter";
 import BusinessCard from "./BusinessCard";
 import Cart from "./Cart";
-import Filter from "./Filter";
+import HomeFilter from "./HomeFilter";
 
 import baseURL from "../../assets/common/baseUrl";
 
@@ -23,6 +23,7 @@ const ProductContainer = (props) => {
   const [loading, setLoading] = useState(true)
   const [showAddToCart, setShowAddToCart] = useState(false);
   const [showFilter, setShowFilter] = useState(false);
+  const [showFilterIcon, setShowFilterIcon] = useState(true);
 
   const showBottomSheet = () => {
     setShowAddToCart(!showAddToCart);
@@ -80,9 +81,9 @@ const ProductContainer = (props) => {
             <Banner />
             <CategoryFilter categories={categories} />
             <View style={styles.listContainer}>
-              <SearchBar handleFilter={handleFilter} />
+              <SearchBar handleFilter={handleFilter} showFilterIcon={showFilterIcon} />
               {showFilter &&
-                <Filter showFilter={showFilter} handleFilter={handleFilter} />
+                <HomeFilter showFilter={showFilter} handleFilter={handleFilter} />
               }
               {businesses.map(business => {
                 return (
