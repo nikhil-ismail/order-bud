@@ -6,6 +6,8 @@ import MenuCard from './MenuCard'
 import SearchBar from "../../Shared/SearchBar";
 import BusinessPageFilter from './BusinessPageFilter';
 
+import BlueDream from './blue-dream.png';
+
 var { width, height } = Dimensions.get('window')
 
 
@@ -14,14 +16,29 @@ const BusinessPage = (props) => {
     const [showAddToCart, setShowAddToCart] = useState(false);
     const [showFilter, setShowFilter] = useState(false);
     const [showFilterIcon, setShowFilterIcon] = useState(false);
+    const [counter, setCounter] = useState(1);
     const { coverImage, profileImage, name, address } = props.route.params;
+    const [love, setLove] = useState(false);
+
+    const handleLove = () => {
+        setLove(!love);
+    }
 
     const showBottomSheet = () => {
         setShowAddToCart(!showAddToCart);
+        setCounter(1);
     }
 
     const handleFilter = () => {
         setShowFilter(!showFilter);
+    }
+
+    const handlePlusCounter = () => {
+        setCounter(counter + 1);
+    }
+
+    const handleMinusCounter = () => {
+        setCounter(counter - 1);
     }
 
     return (
@@ -121,9 +138,27 @@ const BusinessPage = (props) => {
                     containerStyle={{ backgroundColor: 'rgba(0.5, 0.25, 0, 0)' }}
                 >
                     <View style={styles.bottomSheet}>
-                        <TouchableOpacity style={styles.addToCartBackBtn} onPress={showBottomSheet}>
-                            <Icon name="arrow-left" type="font-awesome-5" color="black" size={17.5} />
-                        </TouchableOpacity>
+                        <View style={styles.separator} />
+                        {love ?
+                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                            <TouchableOpacity style={styles.addToCartBackBtn} onPress={showBottomSheet}>
+                                <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{marginTop: 15}} onPress={handleLove}>
+                                <Icon name="heart" type="font-awesome-5" color="red" size={25} />
+                            </TouchableOpacity>
+                        </View>
+                        :
+                        <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                            <TouchableOpacity style={styles.addToCartBackBtn} onPress={showBottomSheet}>
+                                <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
+                            </TouchableOpacity>
+                            <TouchableOpacity style={{marginTop: 15}} onPress={handleLove}>
+                                <Icon name="heart" type="font-awesome-5" color="black" size={25} />
+                            </TouchableOpacity>
+                        </View>
+                        }
+                        <Image style={styles.itemImage} source={BlueDream} />
                         <Text style={styles.itemName}>Blue Dream</Text>
                         <Text style={styles.itemDescription}>This sativa leaning varietal from Canna Farms has a mid-high THC (17.5-20%) content with virtually no CBD. Blue Dream is descended from Blueberry Haze and offers a bouquet of pine and citrus.</Text>
                         <View style={styles.itemDetailsContainer}>
@@ -142,13 +177,13 @@ const BusinessPage = (props) => {
                                 </TouchableOpacity>
                             </View>
                             <View style={styles.selectQuantity}>
-                                <TouchableOpacity style={styles.leftSelectQuantity}>
+                                <TouchableOpacity onPress={handleMinusCounter} style={styles.leftSelectQuantity}>
                                     <Icon name="minus" type="font-awesome-5" color="black" size={17.5} />
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.quantity}>
-                                    <Text style={styles.selectSizeText}>1</Text>
+                                    <Text style={styles.selectSizeText}>{counter}</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.rightSelectQuantity}>
+                                <TouchableOpacity onPress={handlePlusCounter} style={styles.rightSelectQuantity}>
                                     <Icon name="plus" type="font-awesome-5" color="black" size={17.5} />
                                 </TouchableOpacity>
                             </View>
@@ -254,7 +289,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
         padding: 20,
         borderTopLeftRadius: 5,
-        borderTopRightRadius: 5
+        borderTopRightRadius: 5,
+        height: height
+    },
+    separator: {
+        backgroundColor: "grey",
+        height: 1,
+        marginVertical: 15
     },
     itemDetailsContainer: {
         alignItems: "center"
@@ -267,6 +308,12 @@ const styles = StyleSheet.create({
     itemDescription: {
         fontSize: 17,
         color: "grey",
+    },
+    itemImage: {
+        height: "30%",
+        width: "50%",
+        marginBottom: 10,
+        justifyContent: "center"
     },
     addToCart: {
         backgroundColor: "green",
