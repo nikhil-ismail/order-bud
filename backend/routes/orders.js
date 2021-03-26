@@ -17,8 +17,9 @@ router.get(`/:id`, async (req, res) =>{
     .populate('user', 'name')
     .populate({ 
         path: 'orderItems', populate: {
-            path : 'product', populate: 'category'} 
-        });
+            path : 'product', populate: 'category'
+        } 
+    });
 
     if(!order) {
         res.status(500).json({success: false})
@@ -27,7 +28,7 @@ router.get(`/:id`, async (req, res) =>{
 })
 
 router.post('/', async (req,res)=>{
-    const orderItemsIds = Promise.all(req.body.orderItems.map(async (orderItem) =>{
+    const orderItemsIds = Promise.all(req.body.orderItems.map(async (orderItem) => {
         let newOrderItem = new OrderItem({
             quantity: orderItem.quantity,
             product: orderItem.product

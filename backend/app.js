@@ -43,14 +43,13 @@ mongoose.connect(process.env.CONNECTION_STRING, {
     dbName: 'eshop-database'
 })
 .then(()=>{
-    console.log('Database Connection is ready...')
+    console.log('Database Connection is ready...');
 })
 .catch((err)=> {
     console.log(err);
 })
 
 //Server
-app.listen(3000, ()=>{
-
+app.listen(3000, () => {
     console.log('server is running http://localhost:3000');
 })

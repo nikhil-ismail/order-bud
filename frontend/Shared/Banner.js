@@ -30,9 +30,8 @@ const Banner = () => {
           >
             {bannerData.map((item) => {
               return (
-                <View>
+                <View key={item}>
                   <Image
-                    key={item}
                     style={styles.imageBanner}
                     source={{ uri: item }}
                   />

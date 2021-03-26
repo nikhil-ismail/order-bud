@@ -10,13 +10,12 @@ import LearnNavigator from "./LearnNavigator";
 import UserNavigator from "./UserNavigator";
 import AdminNavigator from "./AdminNavigator";
 
-import AuthGlobal from "../Context/store/AuthGlobal";
-
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
 
-  const context = useContext(AuthGlobal)
+  const isAdmin = false;
+
 
   return (
     <Tab.Navigator
@@ -59,7 +58,7 @@ const Main = () => {
         }}
       />
       
-      {context.stateUser.user.isAdmin == true ? (
+      {isAdmin == true ? (
         <Tab.Screen
         name="Admin"
         component={AdminNavigator}
