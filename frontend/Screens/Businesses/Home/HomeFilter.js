@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         paddingVertical: 15,
         paddingHorizontal: 25,
-        width: "65%",
+        width: "100%",
         marginTop: 20
     },
     applyText: {

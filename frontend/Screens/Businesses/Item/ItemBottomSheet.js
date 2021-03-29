@@ -6,9 +6,11 @@ import ItemDetails from './ItemDetails';
 import QuantitySetter from './QuantitySetter';
 import AddToCartButton from './AddToCartButton';
 import Disclaimer from './Disclaimer';
+import CreateAccountButton from './CreateAccountButton';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, updateItemQuantity, selectCartItems, clearCart } from '../../../Redux/cartSlice';
+import { selectIsLoggedIn } from '../../../Redux/userSlice';
 
 const ItemBottomSheet = (props) => {
     const [quantity, setQuantity] = useState(props.quantity ? props.quantity : 1);
@@ -17,6 +19,7 @@ const ItemBottomSheet = (props) => {
     const { image, name, description, brand, price, business } = props.product;
 
     const cartItems = useSelector(selectCartItems);
+    const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const dispatch = useDispatch();
 
@@ -91,12 +94,23 @@ const ItemBottomSheet = (props) => {
         }
     }
 
+    const handleGoToLogin = () => {
+        props.handleRemoveItemModal();
+        props.navigation.navigate('Login', { goToBusinessPage: true });
+    }
+
     return (
         <View style={styles.container}>
             <ItemImage image={image} handleRemoveItemModal={props.handleRemoveItemModal} />
             <ItemDetails name={name} brand={brand} description={description} />
             <QuantitySetter quantity={quantity} onPlus={handlePlusCounter} onMinus={handleMinusCounter} />
-            <AddToCartButton handlePress={handleAddToCart} price={price} quantity={quantity} cartType={props.cartType} />
+            {
+                isLoggedIn
+                ?
+                <AddToCartButton handlePress={handleAddToCart} price={price} quantity={quantity} cartType={props.cartType} />
+                :
+                <CreateAccountButton goToLogin={handleGoToLogin} />
+            }
             {
                 showDisclaimer &&
                 <Disclaimer

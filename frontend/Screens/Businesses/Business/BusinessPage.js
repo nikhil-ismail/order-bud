@@ -39,7 +39,7 @@ const BusinessPage = (props) => {
                 <View style={styles.categoriesContainer}>
                     <BusinessCategories categories={categories} />
                 </View>
-                <Menu categories={categories} products={products} handleShowItemModal={handleShowItemModal} />
+                <Menu navigation={props.navigation} categories={categories} products={products} handleShowItemModal={handleShowItemModal} />
             </ScrollView>
             {
                 cart.length > 0 &&
@@ -56,6 +56,7 @@ const BusinessPage = (props) => {
                     quantity={null}
                     handleRemoveItemModal={handleRemoveItemModal}
                     cartType="Add"
+                    navigation={props.navigation}
                 />
             </Modal>
         </View>

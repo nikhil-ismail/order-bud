@@ -19,7 +19,10 @@ const Menu = (props) => {
                                     <View>
                                         {
                                             product.category.name === category.name &&
-                                            <MenuCard product={product} handleShowItemModal={props.handleShowItemModal} />
+                                            <MenuCard
+                                                product={product}
+                                                handleShowItemModal={props.handleShowItemModal}
+                                            />
                                         }
                                     </View>
                                 );

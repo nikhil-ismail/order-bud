@@ -1,36 +1,98 @@
 import React, { useState } from "react";
-import { View, SafeAreaView, TextInput, StyleSheet, Dimensions, Text, TouchableOpacity, Touchable } from "react-native";
+import { View, SafeAreaView, TextInput, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
+
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../Redux/userSlice';
+
+import baseURL from "../../assets/common/baseUrl";
 
 const { height } = Dimensions.get("window");
 
-const Login = () => {
+const Login = (props) => {
     const [page, setPage] = useState('Register');
     const [emailFocus, setEmailFocus] = useState(false);
     const [nameFocus, setNameFocus] = useState(false);
+    const [phoneFocus, setPhoneFocus] = useState(false);
     const [passwordFocus, setPasswordFocus] = useState(false);
     const [confirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
 
     const [email, setEmail] = useState('');
     const [name, setName] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
 
+    const [error, setError] = useState('');
+
+    const dispatch = useDispatch();
+
     const handleTabSwitch = () => {
         setPage('Register');
-        setEmailFocus(true);
+        setEmailFocus(false);
         setNameFocus(false);
+        setPhoneFocus(false);
         setPasswordFocus(false);
         setConfirmPasswordFocus(false);
     }
 
     const handleSubmit = () => {
-        console.log("hello");
+        if (page === 'Login') {
+            axios.post(`${baseURL}users/login`, { email, password })
+            .then(response => {
+                if (response.data.auth) {
+                    dispatch(setUser(response.data));
+                } else {
+                    setError('Unable to register. Please try again.');
+                    setEmail('');
+                    setName('');
+                    setPhone('');
+                    setPassword('');
+                    setConfirmPassword('');
+                }
+            })
+            .catch(err => {
+                setError('An error occurred while registering. Please try again.')
+                setEmail('');
+                setName('');
+                setPhone('');
+                setPassword('');
+                setConfirmPassword('');
+            });
+        } else {
+            if (password === confirmPassword) {
+                axios.post(`${baseURL}users/register`, { email, name, phone, password })
+                    .then(response => {
+                        if (response.data.auth) {
+                            dispatch(setUser(response.data));
+                        } else {
+                            setError('Unable to register. Please try again.');
+                            setEmail('');
+                            setName('');
+                            setPhone('');
+                            setPassword('');
+                            setConfirmPassword('');
+                        }
+                    })
+                    .catch(err => {
+                        setError('An error occurred while registering. Please try again.')
+                        setEmail('');
+                        setName('');
+                        setPhone('');
+                        setPassword('');
+                        setConfirmPassword('');
+                    });
+            } else {
+                setError('You passwords did not match. Please try again.')
+            }
+        }
+        if (props.route.params !== undefined) {
+            props.navigation.navigate('Business Page');
+        }
     }
 
     return (
-        <View
-            style={styles.container}
-        >
+        <View style={styles.container}>
             <SafeAreaView style={styles.safeContainer}>
                 <View style={styles.headerContainer}>
                     <Text style={styles.header}>Welcome To OrderBud</Text>
@@ -52,6 +114,20 @@ const Login = () => {
                         </TouchableOpacity>
                     </View>
                     <View style={styles.inputContainer}>
+                        {
+                            page === 'Register' &&
+                            <TextInput
+                                style={[styles.textInput, nameFocus && styles.focusInputStyle]}
+                                name="name"
+                                value={name}
+                                onChangeText={text => setName(text)}
+                                placeholder="Name"
+                                onFocus={() => setNameFocus(true)}
+                                onBlur={() => setNameFocus(false)}
+                                blurOnSubmit={false}
+                                autoCapitalize={false}
+                            />
+                        }
                         <TextInput
                             style={[styles.textInput, emailFocus && styles.focusInputStyle]}
                             name="email"
@@ -66,15 +142,15 @@ const Login = () => {
                         {
                             page === 'Register' &&
                             <TextInput
-                                style={[styles.textInput, nameFocus && styles.focusInputStyle]}
-                                name="name"
-                                value={name}
-                                onChangeText={text => setName(text)}
-                                placeholder="Name"
-                                onFocus={() => setNameFocus(true)}
-                                onBlur={() => setNameFocus(false)}
+                                style={[styles.textInput, phoneFocus && styles.focusInputStyle]}
+                                name="phone"
+                                value={phone}
+                                onChangeText={text => setPhone(text)}
+                                placeholder="Phone Number"
+                                onFocus={() => setPhoneFocus(true)}
+                                onBlur={() => setPhoneFocus(false)}
                                 blurOnSubmit={false}
-                                autoCapitalize={false}
+                                keyboardType="numeric"
                             />
                         }
                         <TextInput
@@ -108,6 +184,10 @@ const Login = () => {
                     <TouchableOpacity style={styles.buttonContainer} onPress={handleSubmit}>
                         <Text style={styles.buttonText}>{page === 'Login' ? 'Login' : 'Create Account'}</Text>
                     </TouchableOpacity>
+                    {
+                        error.length > 0 && page === 'Register' &&
+                        <Text style={styles.error}>{error}</Text>
+                    }
                 </View>
             </SafeAreaView>
         </View>
@@ -156,7 +236,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: "50%",
-        padding: 20,
+        padding: 10,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -170,9 +250,15 @@ const styles = StyleSheet.create({
     highlightedText: {
         color: "white"
     },
+    error: {
+        color: "red",
+        fontSize: 16,
+        marginTop: 20
+    },
     inputContainer: {
         width: "100%",
-        marginVertical: 30
+        marginVertical: 30,
+        alignItems: "center"
     },
     textInput: {
         marginVertical: 10,
@@ -190,7 +276,7 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         backgroundColor: "green",
-        padding: 20,
+        padding: 10,
         width: "100%",
         justifyContent: "center",
         alignItems: "center",

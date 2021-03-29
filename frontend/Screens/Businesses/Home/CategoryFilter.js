@@ -1,8 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, TouchableOpacity, ScrollView, View } from 'react-native';
 import { ListItem, Text } from 'native-base';
 
 const CategoryFilter = (props) => {
+        
     return (
         <ScrollView
             bounces={true}
@@ -10,10 +11,10 @@ const CategoryFilter = (props) => {
             style={{ backgroundColor: "white"}}
         >
             <ListItem>
-                {props.categories.map((item) => (
-                    <TouchableOpacity key={item._id}>
-                        <TouchableOpacity style={styles.imageFilter} />
-                        <Text style={styles.textStyle}>{item.name}</Text>
+                {props.categories.map((category) => (
+                    <TouchableOpacity key={category._id} onPress={() => props.navigation.navigate('Search Results', {category: category.name})}>
+                        <View style={styles.imageFilter} />
+                        <Text style={styles.textStyle}>{category.name}</Text>
                     </TouchableOpacity>
                 ))}
             </ListItem>

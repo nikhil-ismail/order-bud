@@ -59,16 +59,13 @@ const Orders = (props) => {
               </View>
               <View style={{ backgroundColor: "white", marginTop: 10 }}>
                 <Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 25, marginTop: 15 }}>Current</Text>
-                {
-                  orders.map(order => {
-                    <OrderCard
-                      order={order}
-                    />
-                  })
-                }
+                <OrderCard />
               </View>
               <View style={{ backgroundColor: "white", marginTop: 10 }}>
                 <Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 25, marginTop: 15 }}>Completed</Text>
+                <OrderCard />
+                <OrderCard />
+                <OrderCard />
                 <OrderCard />
               </View>
             </View>

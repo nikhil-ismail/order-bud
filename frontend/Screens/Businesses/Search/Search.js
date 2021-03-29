@@ -1,0 +1,82 @@
+import React, { useState, useCallback } from "react";
+import { SafeAreaView, StyleSheet, Dimensions, Text, View } from 'react-native'
+import { ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
+import axios from 'axios';
+
+import baseURL from "../../../assets/common/baseUrl";
+
+import SearchBar from '../../../Shared/SearchBar';
+import SearchFilter from './SearchFilter';
+import SearchResultCard from './SearchResultCard';
+
+var { width } = Dimensions.get("window")
+
+const Search = (props) => {
+
+  const [showFilter, setShowFilter] = useState(false);
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState([]);
+
+  const { category } = props.route.params;
+
+  const handleFilter = () => {
+    setShowFilter(!showFilter);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+
+        // Businesses
+        axios.get(`${baseURL}businesses/search?search=${category}`)
+        .then((res) => {
+          setResults(res.data);
+          setLoading(false)
+        })
+        .catch((error) => {
+          console.log('Api call error')
+        })
+
+        return () => {
+          
+        };
+      }, [])
+  )
+    
+    return(
+        <SafeAreaView>
+          <ScrollView>
+            <View style={{marginTop: 15}}>
+              <SearchBar placeholder={category} handleFilter={handleFilter} showFilterIcon={true} />
+              {showFilter &&
+                  <SearchFilter showFilter={showFilter} handleFilter={handleFilter} />
+              }
+            </View>
+            <View style={styles.titleContainer}>
+              <Text style={styles.title}>80 results for "{category}"</Text>
+            </View>
+            <SearchResultCard />
+            <SearchResultCard />
+            <SearchResultCard />
+            <SearchResultCard />
+            <SearchResultCard />
+            <SearchResultCard />
+          </ScrollView>
+        </SafeAreaView>
+    );
+};
+
+const styles = StyleSheet.create({
+  titleContainer: {
+    backgroundColor: "white",
+    paddingLeft: 19,
+    paddingBottom: 18,
+    paddingTop: 5
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "bold"
+  }
+})
+
+export default Search;

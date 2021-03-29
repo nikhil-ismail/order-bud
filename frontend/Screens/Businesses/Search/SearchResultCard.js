@@ -3,24 +3,21 @@ import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from 'rea
 
 var { width } = Dimensions.get("window");
 
-const OrderCard = (props) => {
+const SearchResultCard = (props) => {
 
     return (
         <View>
             <TouchableOpacity style={styles.productContainer}>
-                <View style={styles.imagePlaceholder}></View>
                 <View style={styles.productDetails}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={styles.title}>Tokyo Smoke</Text>
+                        <Text style={styles.title}>Houseplant Indica</Text>
                     </View>
                     <View style={{ marginVertical: 10 }}>
-                        <Text style={styles.subText}>March 29 • 3 Items</Text>
-                        <Text style={styles.subText}>$50.74</Text>
+                        <Text style={styles.subText}>Tokyo Smoke • Houseplant</Text>
                     </View>
+                    <Text style={styles.friendOrders}>Greg, James and 10 friends have ordered this before</Text>
                 </View>
-                <TouchableOpacity style={styles.viewMenu}>
-                    <Text>View Menu</Text>
-                </TouchableOpacity>
+                <View style={styles.imagePlaceholder}></View>
             </TouchableOpacity>
         </View>
     )
@@ -44,7 +41,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: "bold",
-        fontSize: 17,
+        fontSize: 20,
     },
     subText: {
         color: "grey",
@@ -52,16 +49,15 @@ const styles = StyleSheet.create({
     },
     imagePlaceholder: {
         backgroundColor: "grey",
-        marginLeft: 20,
+        marginRight: 20,
         height: "100%",
-        width: "22%"
+        width: "25%"
     },
-    viewMenu: {
-        backgroundColor: "#D3D3D3",
-        padding: 10,
-        borderRadius: 10,
-        marginRight: 18
+    friendOrders: {
+        fontSize: 14,
+        color: 'green',
+        fontWeight: 'bold',
     }
 })
 
-export default OrderCard;
+export default SearchResultCard;

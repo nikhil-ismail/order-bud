@@ -7,14 +7,14 @@ const SearchBar = (props) => {
         <View style={styles.container}>
           {props.showFilterIcon ?
             <View style={styles.searchContainer}>
-              <TextInput style={styles.searchBarFilterIcon} placeholder="Search..." />
+              <TextInput style={styles.searchBarFilterIcon} placeholder={props.placeholder} />
               <TouchableOpacity onPress={props.handleFilter} style={styles.filterBtn}>
                 <Icon name="sliders-h" type="font-awesome-5" size={30} />
               </TouchableOpacity>
             </View>
             :
             <View style={styles.searchContainer}>
-              <TextInput style={styles.searchBar} placeholder="Search..." />
+              <TextInput style={styles.searchBar} placeholder={props.placeholder} />
             </View>
           }
         </View>

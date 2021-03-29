@@ -66,8 +66,8 @@ const ProductContainer = (props) => {
           <ScrollView>
             <Header />
             <Banner />
-            <CategoryFilter categories={categories} />
-            <SearchBar handleFilter={handleFilter} showFilterIcon={true} />
+            <CategoryFilter navigation={props.navigation} businesses={businesses} categories={categories} />
+            <SearchBar placeholder="Search..." handleFilter={handleFilter} showFilterIcon={true} />
             <View style={styles.listContainer}>
               {showFilter &&
                 <HomeFilter showFilter={showFilter} handleFilter={handleFilter} />

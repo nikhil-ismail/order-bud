@@ -52,6 +52,23 @@ router.get(`/`, async (req, res) => {
     res.status(200).send(businessList);
 })
 
+router.get('/search', async (req, res) => {
+    const query = req.query.search
+    console.log(query);
+
+    const categorySearchResults = Business.find({"products.category.name": query})
+    console.log(categorySearchResults);
+
+    if (!categorySearchResults) {
+        res.status(500).json({ success: false })
+    }
+
+    else {
+        res.status(200).send(categorySearchResults);
+    }
+
+})
+
 router.get('/:id', async (req, res) => {
     const business = await Business.find()
     .populate('categories', 'name')
