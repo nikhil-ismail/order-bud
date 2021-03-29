@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Dimensions, ScrollView } from "react-native";
+import { View, Dimensions, ScrollView, SafeAreaView } from "react-native";
 
 import CheckoutHeader from './CheckoutHeader';
 import DeliverPickupSelector from './DeliverPickupSelector';

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { View } from "react-native";
 import { Icon } from 'react-native-elements'
@@ -6,7 +6,6 @@ import { Icon } from 'react-native-elements'
 // Stacks
 import HomeNavigator from "./HomeNavigator";
 import OrdersNavigator from "./OrdersNavigator";
-import LearnNavigator from "./LearnNavigator";
 import UserNavigator from "./UserNavigator";
 import AdminNavigator from "./AdminNavigator";
 
@@ -42,17 +41,6 @@ const Main = () => {
           tabBarIcon: ({ color }) => (
             <View>
               <Icon name="receipt" type="font-awesome-5" color={color} size={30} />
-            </View>
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Learn"
-        component={LearnNavigator}
-        options={{
-          tabBarIcon: ({ color }) => (
-            <View>
-              <Icon name="book-open" type="font-awesome-5" color={color} size={30} />
             </View>
           ),
         }}

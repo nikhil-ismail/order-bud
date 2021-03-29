@@ -12,7 +12,7 @@ const CategoryFilter = (props) => {
             <ListItem>
                 {props.categories.map((item) => (
                     <TouchableOpacity key={item._id}>
-                        <TouchableOpacity style={styles.imageFilter}></TouchableOpacity>
+                        <TouchableOpacity style={styles.imageFilter} />
                         <Text style={styles.textStyle}>{item.name}</Text>
                     </TouchableOpacity>
                 ))}
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         width: 125,
         borderRadius: 5,
         backgroundColor: 'grey',
-        marginHorizontal: 5
+        marginRight: 10
     },
     textStyle: {
         position: "absolute",

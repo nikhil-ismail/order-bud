@@ -67,8 +67,8 @@ const ProductContainer = (props) => {
             <Header />
             <Banner />
             <CategoryFilter categories={categories} />
+            <SearchBar handleFilter={handleFilter} showFilterIcon={true} />
             <View style={styles.listContainer}>
-              <SearchBar handleFilter={handleFilter} showFilterIcon={true} />
               {showFilter &&
                 <HomeFilter showFilter={showFilter} handleFilter={handleFilter} />
               }
@@ -97,6 +97,7 @@ const ProductContainer = (props) => {
 const styles = StyleSheet.create({
   listContainer: {
     flex: 4,
+    marginTop: 10,
     alignItems: "center",
     backgroundColor: "#ededed",
     borderTopLeftRadius: 50,

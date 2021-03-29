@@ -1,27 +1,27 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, Text, Dimensions } from "react-native";
+import { StyleSheet, SafeAreaView, TouchableOpacity, Text, Dimensions } from "react-native";
 
-var { height } = Dimensions.get("window");
+const { height } = Dimensions.get("window");
 
 const PurchaseButton = props => {
 
     return (
-        <View style={styles.buttonContainer}>
+        <SafeAreaView style={styles.buttonContainer}>
             <TouchableOpacity style={styles.button}>
                 <Text style={styles.buttonText}>Purchase</Text> 
             </TouchableOpacity>
-        </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
     buttonContainer: {
         paddingHorizontal: 15,
-        alignItems: "center",
+        alignItems: "center",   
         justifyContent: "center",
-        backgroundColor: "white",
         position: "absolute",
-        top: 0.825 * height,
+        bottom: 80,
+        backgroundColor: "white",
         width: "100%",
         paddingVertical: 10
     },

@@ -30,7 +30,7 @@ const BusinessCard = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: "90%",
+        width: "95%",
         borderRadius: 5,
         elevation: 8,
         backgroundColor: 'white',

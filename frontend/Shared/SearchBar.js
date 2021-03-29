@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 
 const SearchBar = (props) => {
     return(
-        <View>
+        <View style={styles.container}>
           {props.showFilterIcon ?
             <View style={styles.searchContainer}>
               <TextInput style={styles.searchBarFilterIcon} placeholder="Search..." />
@@ -22,16 +22,21 @@ const SearchBar = (props) => {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: -5,
+    backgroundColor: "white",
+    alignItems: "center"
+  },
   searchContainer: {
-    width: '90%',
-    marginVertical: 20,
+    marginVertical: 15,
     height: 50,
-    flexDirection: "row"
+    flexDirection: "row",
+    backgroundColor: "#ededed",
+    width: "95%"
   },
   searchBarFilterIcon: {
     width: '85%',
     height: 50,
-    backgroundColor: "white",
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     paddingHorizontal: 20,
@@ -42,13 +47,11 @@ const styles = StyleSheet.create({
   searchBar: {
     width: '100%',
     height: 50,
-    backgroundColor: "white",
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     paddingHorizontal: 20,
     fontSize: 18,
-    borderRightWidth: 1,
-    borderRightColor: "#ededed"
+    borderRightWidth: 2,
   },
   filterBtn: {
     width: '15%',
@@ -57,6 +60,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
     justifyContent: "center",
+    backgroundColor: "#ededed"
   }
 })
 

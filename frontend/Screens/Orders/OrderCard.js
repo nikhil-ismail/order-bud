@@ -14,8 +14,8 @@ const OrderCard = (props) => {
                         <Text style={styles.title}>Tokyo Smoke</Text>
                     </View>
                     <View style={{ marginVertical: 10 }}>
-                        <Text style={styles.subText}>March 26 • 3 Items</Text>
-                        <Text style={styles.subText}>$40.16</Text>
+                        <Text style={styles.subText}>date • 3 Items</Text>
+                        <Text style={styles.subText}>${props.order.totalPrice}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.viewMenu}>

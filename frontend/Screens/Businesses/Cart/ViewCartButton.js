@@ -7,7 +7,7 @@ import Cart from "./Cart";
 import { useSelector } from 'react-redux';
 import { selectCartValue, selectCartSize } from '../../../Redux/cartSlice';
 
-var { height, width } = Dimensions.get("window");
+const { height, width } = Dimensions.get("window");
 
 const ViewCartButton = props => {
     const [showCart, setShowCart] = useState(false);
