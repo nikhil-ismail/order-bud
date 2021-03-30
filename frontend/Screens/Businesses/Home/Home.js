@@ -40,7 +40,7 @@ const ProductContainer = (props) => {
           setLoading(false)
         })
         .catch((error) => {
-          console.log('Api call error')
+          console.log('Api call error - businesses')
         })
 
         // Categories
@@ -49,7 +49,7 @@ const ProductContainer = (props) => {
           setCategories(res.data)
         })
         .catch((error) => {
-          console.log('Api call error')
+          console.log('Api call error - categories')
         })
 
         return () => {

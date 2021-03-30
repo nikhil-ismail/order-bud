@@ -15,33 +15,12 @@ var { width } = Dimensions.get("window")
 const Search = (props) => {
 
   const [showFilter, setShowFilter] = useState(false);
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState([]);
 
   const { category } = props.route.params;
 
   const handleFilter = () => {
     setShowFilter(!showFilter);
   }
-
-  useFocusEffect(
-    useCallback(() => {
-
-        // Businesses
-        axios.get(`${baseURL}businesses/search?search=${category}`)
-        .then((res) => {
-          setResults(res.data);
-          setLoading(false)
-        })
-        .catch((error) => {
-          console.log('Api call error')
-        })
-
-        return () => {
-          
-        };
-      }, [])
-  )
     
     return(
         <SafeAreaView>

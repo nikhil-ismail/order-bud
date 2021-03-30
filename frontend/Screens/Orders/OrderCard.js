@@ -4,6 +4,7 @@ import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from 'rea
 var { width } = Dimensions.get("window");
 
 const OrderCard = (props) => {
+    const { order } = props;
 
     return (
         <View>
@@ -15,10 +16,10 @@ const OrderCard = (props) => {
                     </View>
                     <View style={{ marginVertical: 10 }}>
                         <Text style={styles.subText}>March 29 • 3 Items</Text>
-                        <Text style={styles.subText}>$50.74</Text>
+                        <Text style={styles.subText}>${order.totalPrice}</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.viewMenu}>
+                <TouchableOpacity style={styles.viewMenu} onPress={() => props.navigation.navigate('Business Page', props.businesses[0])}>
                     <Text>View Menu</Text>
                 </TouchableOpacity>
             </TouchableOpacity>

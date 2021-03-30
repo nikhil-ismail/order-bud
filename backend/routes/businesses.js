@@ -56,15 +56,22 @@ router.get('/search', async (req, res) => {
     const query = req.query.search
     console.log(query);
 
-    const categorySearchResults = Business.find({"products.category.name": query})
-    console.log(categorySearchResults);
+    const categorySearchResults = await Product.find({"category": query});
+    const brandSearchResults = await Product.find({"brand": query});
+    const productSearchResults = await Product.find({"name": query});
+    const businessSearchResults = await Business.find({"name": query});
+
+    const searchResults = ({
+        categoryMatches: categorySearchResults,
+        brandMatches: brandSearchResults,
+        productMatches: productSearchResults,
+        businessMatches: businessSearchResults
+    });
 
     if (!categorySearchResults) {
         res.status(500).json({ success: false })
-    }
-
-    else {
-        res.status(200).send(categorySearchResults);
+    } else {
+        res.status(200).send(searchResults);
     }
 
 })

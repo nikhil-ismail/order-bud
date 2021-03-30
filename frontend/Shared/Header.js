@@ -1,20 +1,38 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, SafeAreaView, View, TouchableOpacity, Text } from "react-native";
 
 import { Icon } from 'react-native-elements';
 
 const Header = () => {
+
+    const [delivery, setDelivery] = useState(true);
+
+    const handleDeliveryToggle = () => {
+        setDelivery(!delivery);
+    }
+
     return(
         <SafeAreaView style={styles.header}>
-            <View style={styles.pickUpDelivery}>
-                <TouchableOpacity>
-                    <View>
-                        <Text style={[styles.pickUpDeliveryText]}>Deliver</Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity>
-                    <Text style={styles.pickUpDeliveryText}>Pick-Up</Text>
-                </TouchableOpacity>
+            <View>
+                { delivery ?
+                <View style={styles.pickUpDelivery}>
+                    <TouchableOpacity onPress={handleDeliveryToggle}>
+                        <Text style={styles.textSelected}>Deliver</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleDeliveryToggle}>
+                        <Text style={styles.textUnselected}>Pick-Up</Text>
+                    </TouchableOpacity>
+                </View>
+                :
+                <View style={styles.pickUpDelivery}>
+                    <TouchableOpacity onPress={handleDeliveryToggle}>
+                        <Text style={[styles.textUnselected]}>Deliver</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={handleDeliveryToggle}>
+                        <Text style={styles.textSelected}>Pick-Up</Text>
+                    </TouchableOpacity>
+                </View>
+                }
             </View>
             <View style={styles.address}>
                 <Text style={styles.addressText}>400B Albert Street</Text>
@@ -39,10 +57,16 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         marginLeft: 15
     },
-    pickUpDeliveryText: {
+    textSelected: {
         fontWeight: "bold",
         fontSize: 19,
         marginHorizontal: 7.5
+    },
+    textUnselected: {
+        fontWeight: "bold",
+        fontSize: 19,
+        marginHorizontal: 7.5,
+        color: "grey"
     },
     address: {
         flexDirection: "row",
