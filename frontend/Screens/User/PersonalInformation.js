@@ -11,8 +11,8 @@ const PersonalInformation = (props) => {
     return (
         <SafeAreaView>
             <ScrollView>
-                <View>
-                    <Text>Personal Information</Text>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>Personal Information</Text>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -20,7 +20,16 @@ const PersonalInformation = (props) => {
 }
 
 const styles = StyleSheet.create({
-    
+    titleContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 10,
+        marginBottom: 20
+    },
+    title: {
+        fontSize: 26,
+        fontWeight: "bold"
+    },
 })
 
 export default PersonalInformation;
