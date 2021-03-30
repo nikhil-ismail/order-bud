@@ -2,7 +2,7 @@ import React from "react"
 import { createStackNavigator } from '@react-navigation/stack'
 
 import Profile from '../Screens/User/Profile';
-import Friends from '../Screens/User/Friends';
+import Friends from '../Screens/User/Friends/Friends';
 import Payment from '../Screens/User/Payment';
 import PersonalInformation from '../Screens/User/PersonalInformation';
 import Rewards from '../Screens/User/Rewards';

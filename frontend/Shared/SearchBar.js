@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     height: 50,
     flexDirection: "row",
     backgroundColor: "#ededed",
+    borderRadius: 15,
     width: "95%"
   },
   searchBarFilterIcon: {
@@ -50,8 +51,7 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
     paddingHorizontal: 20,
-    fontSize: 18,
-    borderRightWidth: 2,
+    fontSize: 16,
   },
   filterBtn: {
     width: '15%',

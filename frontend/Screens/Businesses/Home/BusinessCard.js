@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     },
     friendOrders: {
         fontSize: 16,
+        color: "green",
         fontWeight: 'bold',
         marginVertical: 2.5
     }

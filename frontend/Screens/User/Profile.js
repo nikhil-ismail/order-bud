@@ -12,9 +12,9 @@ const UserProfile = (props) => {
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.nameContainer}>
-                    <View style={styles.sectionIcon}>
+                    <TouchableOpacity style={styles.sectionIcon}>
                         <Icon name="user-circle" type="font-awesome-5" color="black" size={45} />
-                    </View>
+                    </TouchableOpacity>
                     <Text style={styles.name}>{userDetails.name}</Text>
                 </View>
                 <View style={styles.categoryContainer}>
