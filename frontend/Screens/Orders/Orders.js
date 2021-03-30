@@ -54,8 +54,6 @@ const Orders = (props) => {
       }, [])
   )
 
-console.log(orders);
-
   return (
     <View style={styles.container}>
       <SafeAreaView>
