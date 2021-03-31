@@ -1,7 +1,7 @@
 import React from "react"
 import { createStackNavigator } from '@react-navigation/stack'
 
-import Profile from '../Screens/User/Profile';
+import Profile from '../Screens/User/User';
 import Friends from '../Screens/User/Friends/Friends';
 import Payment from '../Screens/User/Payment';
 import PersonalInformation from '../Screens/User/PersonalInformation';
