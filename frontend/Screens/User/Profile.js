@@ -2,12 +2,25 @@ import React from "react";
 import { View, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 
+import axios from 'axios';
+import baseURL from "../../assets/common/baseUrl";
+
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserDetails, clearUser } from "../../Redux/userSlice";
 
 const Profile = (props) => {
     const userDetails = useSelector(selectUserDetails);
     const dispatch = useDispatch();
+
+    const handleDeleteUser = () => {
+        axios.delete(`${baseURL}users/${userDetails.id}`)
+        .then((res) => {
+          dispatch(clearUser());
+        })
+        .catch((error) => {
+          console.log('Api call error - user could not be deleted');
+        })
+    }
 
     return (
         <SafeAreaView>
@@ -31,10 +44,6 @@ const Profile = (props) => {
                         <Icon name="user" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Personal Information</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Rewards')}>
-                        <Icon name="gift" type="font-awesome-5" color="black" size={30} />
-                        <Text style={styles.categoryText}>Rewards</Text>
-                    </TouchableOpacity>
                     <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Addresses')}>
                         <Icon name="home" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Addresses</Text>
@@ -51,7 +60,7 @@ const Profile = (props) => {
                         <Icon name="sign-out-alt" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Log Out</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.category}>
+                    <TouchableOpacity style={styles.category} onPress={handleDeleteUser}>
                         <Icon name="trash" type="font-awesome-5" color="black" size={30} />
                         <Text style={{fontSize: 18, color: "red", fontWeight: "bold", marginLeft: 15, marginTop: 5}}>Delete Account</Text>
                     </TouchableOpacity>

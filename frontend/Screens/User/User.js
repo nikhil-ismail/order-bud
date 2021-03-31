@@ -7,7 +7,7 @@ import Profile from './Profile';
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "../../Redux/userSlice";
 
-const User = () => {
+const User = (props) => {
     const isLoggedIn = useSelector(selectIsLoggedIn);
 
     const params = { goToBusinessPage: true }
@@ -17,7 +17,7 @@ const User = () => {
             {
                 isLoggedIn
                 ?
-                <Profile />
+                <Profile navigation={props.navigation} />
                 :
                 <Login route={params} />
             }
