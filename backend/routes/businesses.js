@@ -73,7 +73,6 @@ router.get('/search', async (req, res) => {
     } else {
         res.status(200).send(searchResults);
     }
-
 })
 
 router.get('/:id', async (req, res) => {

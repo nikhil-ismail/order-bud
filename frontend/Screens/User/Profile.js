@@ -1,12 +1,13 @@
 import React from "react";
-import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
-import { Icon, BottomSheet } from 'react-native-elements';
+import { View, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Icon } from 'react-native-elements';
 
-import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../Redux/userSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { selectUserDetails, clearUser } from "../../Redux/userSlice";
 
-const UserProfile = (props) => {
+const Profile = (props) => {
     const userDetails = useSelector(selectUserDetails);
+    const dispatch = useDispatch();
 
     return (
         <SafeAreaView>
@@ -46,7 +47,7 @@ const UserProfile = (props) => {
                         <Icon name="lock" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Privacy</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.category}>
+                    <TouchableOpacity style={styles.category} onPress={() => dispatch(clearUser())}>
                         <Icon name="sign-out-alt" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Log Out</Text>
                     </TouchableOpacity>
@@ -91,4 +92,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default UserProfile;
+export default Profile;
