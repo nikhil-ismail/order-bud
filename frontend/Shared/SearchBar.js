@@ -14,6 +14,9 @@ const SearchBar = (props) => {
             </View>
             :
             <View style={styles.searchContainer}>
+              <View style={{paddingTop: 15, paddingLeft: 18}}>
+                <Icon name="search" type="font-awesome-5" size={20} />
+              </View>
               <TextInput style={styles.searchBar} placeholder={props.placeholder} />
             </View>
           }
@@ -40,7 +43,7 @@ const styles = StyleSheet.create({
     height: 50,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
-    paddingHorizontal: 20,
+    paddingHorizontal: 15,
     fontSize: 18,
     borderRightWidth: 1,
     borderRightColor: "#ededed"
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
   filterBtn: {
     width: '15%',
     height: 50,
+    marginRight: 20,
     backgroundColor: "white",
     borderTopRightRadius: 5,
     borderBottomRightRadius: 5,
