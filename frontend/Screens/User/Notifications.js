@@ -83,11 +83,6 @@ const Notifications = (props) => {
                         </TouchableOpacity>
                         }
                     </View>
-                    <View style={{ alignItems: "center" }}>
-                        <TouchableOpacity style={styles.applyBtn}>
-                            <Text style={styles.applyText}>Apply</Text>
-                        </TouchableOpacity>
-                    </View>
                 </View>
             </ScrollView>
         </SafeAreaView>
@@ -98,8 +93,7 @@ const styles = StyleSheet.create({
     titleContainer: {
         justifyContent: "center",
         alignItems: "center",
-        marginTop: 10,
-        marginBottom: 20
+        marginTop: 20
     },
     title: {
         fontSize: 26,
@@ -122,21 +116,6 @@ const styles = StyleSheet.create({
     },
     switchBtn: {
         marginLeft: 100
-    },
-    applyBtn: {
-        backgroundColor: "green",
-        borderRadius: 10,
-        flexDirection: "row",
-        justifyContent: "center",
-        paddingVertical: 15,
-        paddingHorizontal: 25,
-        width: "90%",
-        marginTop: 30
-    },
-    applyText: {
-        color: "white",
-        fontWeight: "bold",
-        fontSize: 18,
     }
 })
 
