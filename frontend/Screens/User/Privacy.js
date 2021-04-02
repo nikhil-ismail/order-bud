@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     categoryText: {
         marginLeft: 20,
         marginTop: 15,
-        fontSize: 16
+        fontSize: 17
     }
 })
 

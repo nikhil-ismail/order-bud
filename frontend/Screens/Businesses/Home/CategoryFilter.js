@@ -12,7 +12,7 @@ const CategoryFilter = (props) => {
         >
             <ListItem>
                 {props.categories.map((category) => (
-                    <TouchableOpacity key={category._id} onPress={() => props.navigation.navigate('Search Results', {category: category.name})}>
+                    <TouchableOpacity key={category._id} onPress={() => props.navigation.navigate('Category Filter Results', {category: category.name})}>
                         <View style={styles.imageFilter} />
                         <Text style={styles.textStyle}>{category.name}</Text>
                     </TouchableOpacity>

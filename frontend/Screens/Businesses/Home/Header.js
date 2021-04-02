@@ -3,36 +3,19 @@ import { StyleSheet, SafeAreaView, View, TouchableOpacity, Text } from "react-na
 
 import { Icon } from 'react-native-elements';
 
-const Header = () => {
-
-    const [delivery, setDelivery] = useState(true);
-
-    const handleDeliveryToggle = () => {
-        setDelivery(!delivery);
-    }
+const Header = (props) => {
 
     return(
         <SafeAreaView style={styles.header}>
             <View>
-                { delivery ?
                 <View style={styles.pickUpDelivery}>
-                    <TouchableOpacity onPress={handleDeliveryToggle}>
-                        <Text style={styles.textSelected}>Deliver</Text>
+                    <TouchableOpacity onPress={props.toggleDelivery}>
+                        <Text style={props.delivery ? styles.textSelected : styles.textUnselected}>Deliver</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={handleDeliveryToggle}>
-                        <Text style={styles.textUnselected}>Pick-Up</Text>
+                    <TouchableOpacity onPress={props.toggleDelivery}>
+                        <Text style={!props.delivery ? styles.textSelected : styles.textUnselected}>Pick-Up</Text>
                     </TouchableOpacity>
                 </View>
-                :
-                <View style={styles.pickUpDelivery}>
-                    <TouchableOpacity onPress={handleDeliveryToggle}>
-                        <Text style={[styles.textUnselected]}>Deliver</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={handleDeliveryToggle}>
-                        <Text style={styles.textSelected}>Pick-Up</Text>
-                    </TouchableOpacity>
-                </View>
-                }
             </View>
             <View style={styles.address}>
                 <Text style={styles.addressText}>400B Albert Street</Text>

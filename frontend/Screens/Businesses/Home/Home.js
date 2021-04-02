@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
 
-import Header from "../../../Shared/Header";
+import Header from "./Header";
 import Banner from "../../../Shared/Banner";
 import SearchBar from "../../../Shared/SearchBar";
 
@@ -23,11 +23,16 @@ const ProductContainer = (props) => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true)
   const [showFilter, setShowFilter] = useState(false);
+  const [delivery, setDelivery] = useState(true)
 
   const cart = useSelector(selectCartItems);
 
   const handleFilter = () => {
     setShowFilter(!showFilter);
+  }
+
+  const toggleDelivery = () => {
+    setDelivery(!delivery);
   }
 
   useFocusEffect(
@@ -61,10 +66,10 @@ const ProductContainer = (props) => {
 
   return (
     <>
-      {loading == false ? (
+      {loading === false ? (
         <SafeAreaView>
           <ScrollView>
-            <Header />
+            <Header delivery={delivery} toggleDelivery={toggleDelivery} />
             <Banner />
             <CategoryFilter navigation={props.navigation} businesses={businesses} categories={categories} />
             <SearchBar placeholder="Search..." handleFilter={handleFilter} showFilterIcon={true} />
@@ -73,9 +78,12 @@ const ProductContainer = (props) => {
                 <HomeFilter showFilter={showFilter} handleFilter={handleFilter} />
               }
               {businesses.map(business => {
-                return (
-                  <BusinessCard key={business.name} business={business} navigation={props.navigation} />
-                )
+                  if (delivery && business.delivery || !delivery && business.pickup) {
+                    return (
+                      <BusinessCard key={business.name} business={business} navigation={props.navigation} />
+                    )
+                  }
+                  
               })}
             </View>
           </ScrollView>

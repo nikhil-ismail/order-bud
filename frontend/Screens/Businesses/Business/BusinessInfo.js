@@ -1,7 +1,7 @@
 import React from 'react'
-import { Image, View, StyleSheet, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
 
-var { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window')
 
 const BusinessInfo = (props) => {
 

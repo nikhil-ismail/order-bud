@@ -8,11 +8,10 @@ import baseURL from "../../../assets/common/baseUrl";
 
 import SearchBar from '../../../Shared/SearchBar';
 import SearchFilter from './SearchFilter';
-import SearchResultCard from './SearchResultCard';
 
 var { width } = Dimensions.get("window")
 
-const Search = (props) => {
+const SearchResults = (props) => {
 
   const [showFilter, setShowFilter] = useState(false);
 
@@ -22,7 +21,7 @@ const Search = (props) => {
     setShowFilter(!showFilter);
   }
     
-    return(
+    return (
         <SafeAreaView>
           <ScrollView>
             <View style={{marginTop: 15}}>
@@ -34,12 +33,6 @@ const Search = (props) => {
             <View style={styles.titleContainer}>
               <Text style={styles.title}>80 results for "{category}"</Text>
             </View>
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
-            <SearchResultCard />
           </ScrollView>
         </SafeAreaView>
     );
@@ -58,4 +51,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default Search;
+export default SearchResults;

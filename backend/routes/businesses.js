@@ -52,29 +52,6 @@ router.get(`/`, async (req, res) => {
     res.status(200).send(businessList);
 })
 
-router.get('/search', async (req, res) => {
-    const query = req.query.search
-    console.log(query);
-
-    const categorySearchResults = await Product.find({"category": query});
-    const brandSearchResults = await Product.find({"brand": query});
-    const productSearchResults = await Product.find({"name": query});
-    const businessSearchResults = await Business.find({"name": query});
-
-    const searchResults = ({
-        categoryMatches: categorySearchResults,
-        brandMatches: brandSearchResults,
-        productMatches: productSearchResults,
-        businessMatches: businessSearchResults
-    });
-
-    if (!categorySearchResults) {
-        res.status(500).json({ success: false })
-    } else {
-        res.status(200).send(searchResults);
-    }
-})
-
 router.get('/:id', async (req, res) => {
     const business = await Business.find()
     .populate('categories', 'name')

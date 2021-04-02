@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, ScrollView, StyleSheet, Modal, Dimensions } from 'react-native';
+import { View, ScrollView, StyleSheet } from 'react-native';
 
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
@@ -8,9 +8,7 @@ import Menu from './Menu';
 import BusinessInfo from './BusinessInfo';
 import BusinessCategories from './BusinessCategories';
 import ViewCartButton from "../Cart/ViewCartButton";
-import ItemBottomSheet from '../Item/ItemBottomSheet';
-
-var { height, width } = Dimensions.get("window");
+import Item from '../Item/Item';
 
 const BusinessPage = (props) => {
 
@@ -45,30 +43,17 @@ const BusinessPage = (props) => {
                 cart.length > 0 &&
                 <ViewCartButton navigation={props.navigation} />
             }
-            <Modal
-                visible={showItemModal}
-                animationType='none'
-                transparent={true}
-            >
-                <View style={styles.modalBackground} />
-                <ItemBottomSheet
-                    product={product}
-                    quantity={null}
-                    handleRemoveItemModal={handleRemoveItemModal}
-                    cartType="Add"
-                    navigation={props.navigation}
-                />
-            </Modal>
+            <Item
+                showItemModal={showItemModal}
+                product={product}
+                handleRemoveItemModal={handleRemoveItemModal}
+                navigation={props.navigation}
+            />
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    modalBackground: {
-        backgroundColor: 'rgba(0, 0, 0, 0.66)',
-        height: height,
-        width: width
-    },
     categoriesContainer: {
         backgroundColor: "white",
         paddingLeft: 15
