@@ -19,7 +19,17 @@ router.get('/', (req, res) => {
         },
         {
             $match: {
-                "category.name": { $regex : new RegExp(query, "i") }
+                $or: [
+                    {
+                        "category.name": { $regex: new RegExp(query, "i") }
+                    },
+                    {
+                        "name": { $regex: new RegExp(query, "i") }
+                    },
+                    {
+                        "brand": { $regex: new RegExp(query, "i") }
+                    }
+                ]
             }
         },
         {
@@ -28,32 +38,39 @@ router.get('/', (req, res) => {
             }
         }
     ])
-    .exec((err, categoryMatches) => {
-        if (err) {
-            res.send(500).send({msg: "Unable to reconcile categories"});
-        }
-
-        Product.aggregate([
-            {
-                $match: {
-                    "brand": { $regex : new RegExp(query, "i") }
-                }
-            },
-            {
-                $sort: {
-                    "rating": -1
-                }
-            }
-        ])
-        .exec((err, brandMatches) => {
+        .exec((err, productMatches) => {
             if (err) {
-                res.send(500).send({msg: "Unable to reconcile brands"});
+                res.send(500).send({ msg: "Unable to reconcile categories" });
             }
 
-            Product.aggregate([
+            Business.aggregate([
                 {
                     $match: {
-                        "name": { $regex : new RegExp(query, "i") }
+                        "name": { $regex: new RegExp(query, "i") }
+                    }
+                },
+                {
+                    $lookup: {
+                        from: Category.collection.name,
+                        localField: "categories",
+                        foreignField: "_id",
+                        as: "categories"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: Product.collection.name,
+                        localField: "products",
+                        foreignField: "_id",
+                        as: "products"
+                    }
+                },
+                {
+                    $lookup: {
+                        from: Category.collection.name,
+                        localField: "products.category",
+                        foreignField: "_id",
+                        as: "category"
                     }
                 },
                 {
@@ -62,38 +79,17 @@ router.get('/', (req, res) => {
                     }
                 }
             ])
-            .exec((err, productMatches) => {
-                if (err) {
-                    res.send(500).send({msg: "Unable to reconcile product names"});
-                }
-
-                Business.aggregate([
-                    {
-                        $match: {
-                            "name": { $regex : new RegExp(query, "i") }
-                        }
-                    },
-                    {
-                        $sort: {
-                            "rating": -1
-                        }
-                    }
-                ])
                 .exec((err, businessMatches) => {
                     if (err) {
-                        res.send(500).send({msg: "Unable to reconcile business names"});
+                        res.status(500).send({ msg: "Unable to reconcile business names" });
                     }
 
                     return res.status(200).send({
-                        categoryMatches,
-                        brandMatches,
                         productMatches,
                         businessMatches
                     })
                 })
-            })
         })
-    })
 })
 
 router.get('/category', (req, res) => {
@@ -115,7 +111,7 @@ router.get('/category', (req, res) => {
         }
     ]).exec((err, matches) => {
         if (err) {
-            res.send(500).send({msg: "Unable to reconcile categories"});
+            res.send(500).send({ msg: "Unable to reconcile categories" });
         }
         res.status(200).send(matches);
     });

@@ -4,6 +4,8 @@ import { View, StyleSheet, Text, ScrollView } from 'react-native';
 import MenuCard from './MenuCard';
 
 const Menu = (props) => {
+
+    console.log(props.products);
     
     return (
         <ScrollView>

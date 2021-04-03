@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
 import { View, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView } from "react-native";
-import { Container } from "native-base";
 import { useFocusEffect } from '@react-navigation/native'
 import axios from 'axios';
 
@@ -9,12 +8,12 @@ import { selectCartItems } from '../../../Redux/cartSlice';
 
 import Header from "./Header";
 import Banner from "../../../Shared/Banner";
-import SearchBar from "../../../Shared/SearchBar";
 
 import CategoryFilter from "./CategoryFilter";
 import BusinessCard from "./BusinessCard";
 import HomeFilter from "./HomeFilter";
 import ViewCartButton from "../Cart/ViewCartButton";
+import SearchBar from "../Search/SearchBar";
 
 import baseURL from "../../../assets/common/baseUrl";
 
@@ -69,10 +68,22 @@ const ProductContainer = (props) => {
       {loading === false ? (
         <SafeAreaView>
           <ScrollView>
-            <Header delivery={delivery} toggleDelivery={toggleDelivery} />
+            <Header
+              delivery={delivery}
+              toggleDelivery={toggleDelivery}
+            />
             <Banner />
-            <CategoryFilter navigation={props.navigation} businesses={businesses} categories={categories} />
-            <SearchBar placeholder="Search..." handleFilter={handleFilter} showFilterIcon={true} />
+            <CategoryFilter
+              navigation={props.navigation}
+              businesses={businesses}
+              categories={categories}
+            />
+            <SearchBar
+              placeholder="Search..."
+              handleFilter={handleFilter}
+              showFilterIcon={true}
+              navigation={props.navigation}
+            />
             <View style={styles.listContainer}>
               {showFilter &&
                 <HomeFilter showFilter={showFilter} handleFilter={handleFilter} />
@@ -83,7 +94,6 @@ const ProductContainer = (props) => {
                       <BusinessCard key={business.name} business={business} navigation={props.navigation} />
                     )
                   }
-                  
               })}
             </View>
           </ScrollView>
@@ -94,9 +104,9 @@ const ProductContainer = (props) => {
         </SafeAreaView>
       ) : (
           // Loading
-          <Container style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
+          <View style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
             <ActivityIndicator size="large" color="green" />
-          </Container>
+          </View>
         )}
     </>
   );

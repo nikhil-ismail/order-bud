@@ -2,10 +2,14 @@ import React, { useState, useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native'
 import { StyleSheet, View, ActivityIndicator, Dimensions, Text } from 'react-native';
 import { Container } from "native-base";
+import axios from 'axios';
+
+import { useSelector } from 'react-redux';
+import { selectCartItems } from '../../../Redux/cartSlice';
 
 import Item from '../Item/Item';
 import MenuCard from '../Business/MenuCard';
-import axios from 'axios';
+import ViewCartButton from "../Cart/ViewCartButton";
 
 import baseURL from "../../../assets/common/baseUrl";
 
@@ -16,6 +20,8 @@ const CategoryFilterResults = (props) => {
     const [results, setResults] = useState();
     const [product, setProduct] = useState();
     const [showItemModal, setShowItemModal] = useState(false);
+
+    const cart = useSelector(selectCartItems);
 
     const handleShowItemModal = (product) => {
         setProduct(product)
@@ -47,40 +53,49 @@ const CategoryFilterResults = (props) => {
     return (
         <>
             {loading === false ? (
-                <View>
+                <View style={styles.container}>
                     <View style={styles.categoryFilterHeader}>
                         <Text style={styles.categoryTitle}>{props.route.params.category}</Text>
                     </View>
                     <View style={styles.numResultsContainer}>
                         <Text style={styles.matchesText}>{results.length} {results.length === 1 ? "match" : "matches"}</Text>
                     </View>
-                    {
-                        results.map(result => {
-                            return (
-                                <MenuCard
-                                    product={result}
-                                    handleShowItemModal={handleShowItemModal}
-                                />
-                            )
-                        })
-                    }
+                    <View>
+                        {
+                            results.map(result => {
+                                return (
+                                    <MenuCard
+                                        product={result}
+                                        handleShowItemModal={handleShowItemModal}
+                                    />
+                                )
+                            })
+                        }
+                    </View>
                     <Item
                         showItemModal={showItemModal}
                         product={product}
                         handleRemoveItemModal={handleRemoveItemModal}
                         navigation={props.navigation}
                     />
+                    {
+                        cart.length > 0 &&
+                        <ViewCartButton navigation={props.navigation} />
+                    }
                 </View>
             ) : (
-                    <Container style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
-                        <ActivityIndicator size="large" color="green" />
-                    </Container>
-                )}
+                <Container style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
+                    <ActivityIndicator size="large" color="green" />
+                </Container>
+            )}
         </>
     )
 }
 
 const styles = StyleSheet.create({
+    container: {
+        height: height,
+    },
     categoryFilterHeader: {
         width: width,
         height: height * 0.225,
@@ -96,7 +111,7 @@ const styles = StyleSheet.create({
         fontSize: 40,
         position: "absolute",
         bottom: 10,
-        left: 10
+        left: 20
     },
     numResultsContainer: {
         backgroundColor: "white",
@@ -104,7 +119,8 @@ const styles = StyleSheet.create({
     },
     matchesText: {
         fontSize: 28,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        paddingLeft: 5
     }
 })
 
