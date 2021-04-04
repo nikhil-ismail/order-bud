@@ -34,16 +34,6 @@ const multipleFieldUpload = uploadOptions.fields([{ name: "profilePhoto" }, { na
 router.get(`/`, async (req, res) => {
     const businessList = await Business.find()
     .populate('categories', 'name')
-    .populate({ 
-        path: 'products', populate: {
-            path : 'category', select: 'name'
-        }
-    })
-    .populate({
-        path: 'products', populate: {
-            path : 'business', select: 'name'
-        }
-    });
 
     if (!businessList) {
         res.status(500).json({ success: false })
@@ -55,11 +45,6 @@ router.get(`/`, async (req, res) => {
 router.get('/:id', async (req, res) => {
     const business = await Business.find()
     .populate('categories', 'name')
-    .populate({ 
-        path: 'products', populate: {
-            path : 'category', select: 'name'
-        }
-    });
 
     if (!business) {
         res.status(500).json({ message: 'The business with the given ID was not found.' })
@@ -100,10 +85,11 @@ router.post('/', multipleFieldUpload, async (req, res) => {
         return res.status(400).send('the business cannot be created!')
     }
 
-    res.send(business);
+    res.status(200).send(business);
 })
 
 router.put('/:id', multipleFieldUpload, async (req, res) => {
+    // NEED TO UPDATE
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
     let coverPhotoPath;

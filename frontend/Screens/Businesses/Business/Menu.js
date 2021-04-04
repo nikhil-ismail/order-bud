@@ -1,14 +1,12 @@
 import React from 'react'
-import { View, StyleSheet, Text, ScrollView } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 
 import MenuCard from './MenuCard';
 
-const Menu = (props) => {
 
-    console.log(props.products);
-    
+const Menu = (props) => {
+     
     return (
-        <ScrollView>
             <View style={styles.listContainer}>
                 {props.categories.map(category => {
                     return (
@@ -33,7 +31,6 @@ const Menu = (props) => {
                     )
                 })}
             </View>
-        </ScrollView>
     )
 
 }

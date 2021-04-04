@@ -1,18 +1,12 @@
 import React from 'react'
-import { Image, View, StyleSheet, Text, Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window')
+import { View, StyleSheet, Text } from 'react-native';
 
 const BusinessInfo = (props) => {
 
-    const { coverImage, name, address, rating } = props.businessDetails
+    const { name, address, rating } = props.businessDetails
 
     return (
         <View>
-            <Image
-                style={styles.coverPhoto}
-                source={{ uri: coverImage }}
-            />
             <View style={styles.profileTextContainer}>
                 <View style={styles.businessNameAndRating}>
                     <Text style={styles.businessName}>{name}</Text>
@@ -37,10 +31,6 @@ const BusinessInfo = (props) => {
 }
 
 const styles = StyleSheet.create({
-    coverPhoto: {
-        width: width,
-        height: height * 0.225,
-    },
     profileTextContainer: {
         flexDirection: "column",
         backgroundColor: 'white',

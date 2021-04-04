@@ -33,28 +33,30 @@ const storage = multer.diskStorage({
 
 const uploadOptions = multer({ storage: storage })
 
-router.get(`/`, async (req, res) => {
-
-    const productList = await Product.find();
-
-    if (!productList) {
-        res.status(500).json({ success: false })
-    }
-    res.send(productList);
-})
-
 router.get(`/:id`, async (req, res) => {
-    const product = await Product.findById(req.params.id);
+    const products = await Product.find({ "business": mongoose.Types.ObjectId(req.params.id)})
+    .populate('business', {
+        "address": 1,
+        "coverImage": 1,
+        "delivery": 1,
+        "pickup": 1,
+        "name": 1,
+        "rating": 1
+    })
+    .populate('category', {
+        "name": 1,
+        "_id": 0
+    });
 
-    if (!product) {
-        res.status(500).json({ success: false })
+    if (!products) {
+        return res.status(400).send('Invalid Business');
     }
-    res.send(product);
+
+    res.send(products);
 })
 
 router.post(`/`, uploadOptions.single('image'), async (req, res) => {
-
-    const business = await Business.findById(req.body.business);
+    const business = await Category.findById(req.body.business);
     if (!business) {
         return res.status(400).send('Invalid Business');
     }
@@ -72,39 +74,30 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     const fileName = file.filename
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
-    let newProduct = new Product({
+    let product = new Product({
         name: req.body.name,
         description: req.body.description,
         image: `${basePath}${fileName}`,
         brand: req.body.brand,
-        business: req.body.business,
         price: req.body.price,
+        business: req.body.business,
         category: req.body.category,
         countInStock: req.body.countInStock,
         rating: req.body.rating,
         numReviews: req.body.numReviews
     })
 
-    savedProduct = await newProduct.save();
+    product = await product.save();
 
-    let updatedBusiness = await Business.findByIdAndUpdate(
-        req.body.business,
-        {
-            $push: {"products": savedProduct._id},
-        },
-        { new: true}
-    )
-
-    updatedBusiness = await business.save();
-
-    if(!updatedBusiness) {
-        return res.status(400).send('cannot add product to business!')
+    if (!product) {
+        return res.status(500).send('the product cannot be updated!')
     }
 
-    res.send(newProduct);
+    res.send(product);
 })
 
 router.put('/:id', uploadOptions.single('image'), async (req, res) => {
+    // NEED TO UPDATE
     if (!mongoose.isValidObjectId(req.params.id)) {
         return res.status(400).send('Invalid Product Id')
     }
@@ -129,7 +122,6 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
             description: req.body.description,
             image: `${basePath}${fileName}`,
             brand: req.body.brand,
-            business: req.body.business,
             price: req.body.price,
             category: req.body.category,
             countInStock: req.body.countInStock,

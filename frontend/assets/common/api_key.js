@@ -1,0 +1,1 @@
+export const googlePlacesApiKey = "AIzaSyDNfMeO4XEagvGo-4478BSEGgygSGzQYcY";

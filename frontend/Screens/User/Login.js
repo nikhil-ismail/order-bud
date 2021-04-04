@@ -87,7 +87,7 @@ const Login = (props) => {
             }
         }
         if (props.route.params !== undefined) {
-            props.navigation.navigate('Business Page');
+            props.navigation.goBack();
         }
     }
 

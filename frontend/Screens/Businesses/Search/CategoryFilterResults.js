@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useFocusEffect } from '@react-navigation/native'
-import { StyleSheet, View, ActivityIndicator, Dimensions, Text } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Dimensions, Text, ScrollView } from 'react-native';
 import { Container } from "native-base";
 import axios from 'axios';
 
@@ -54,47 +54,49 @@ const CategoryFilterResults = (props) => {
         <>
             {loading === false ? (
                 <View style={styles.container}>
-                    <View style={styles.categoryFilterHeader}>
-                        <Text style={styles.categoryTitle}>{props.route.params.category}</Text>
-                    </View>
-                    <View style={styles.numResultsContainer}>
-                        <Text style={styles.matchesText}>{results.length} {results.length === 1 ? "match" : "matches"}</Text>
-                    </View>
-                    <View>
-                        {
-                            results.map(result => {
-                                return (
-                                    <MenuCard
-                                        product={result}
-                                        handleShowItemModal={handleShowItemModal}
-                                    />
-                                )
-                            })
-                        }
-                    </View>
-                    <Item
-                        showItemModal={showItemModal}
-                        product={product}
-                        handleRemoveItemModal={handleRemoveItemModal}
-                        navigation={props.navigation}
-                    />
+                    <ScrollView>
+                        <View style={styles.categoryFilterHeader}>
+                            <Text style={styles.categoryTitle}>{props.route.params.category}</Text>
+                        </View>
+                        <View style={styles.numResultsContainer}>
+                            <Text style={styles.matchesText}>{results.length} {results.length === 1 ? "match" : "matches"}</Text>
+                        </View>
+                        <View>
+                            {
+                                results.map(result => {
+                                    return (
+                                        <MenuCard
+                                            product={result}
+                                            handleShowItemModal={handleShowItemModal}
+                                        />
+                                    )
+                                })
+                            }
+                        </View>
+                        <Item
+                            showItemModal={showItemModal}
+                            product={product}
+                            handleRemoveItemModal={handleRemoveItemModal}
+                            navigation={props.navigation}
+                        />
+                    </ScrollView>
                     {
                         cart.length > 0 &&
                         <ViewCartButton navigation={props.navigation} />
                     }
                 </View>
             ) : (
-                <Container style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
-                    <ActivityIndicator size="large" color="green" />
-                </Container>
-            )}
+                    <Container style={[styles.center, { backgroundColor: "#f2f2f2" }]}>
+                        <ActivityIndicator size="large" color="green" />
+                    </Container>
+                )}
         </>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        height: height,
+        flex: 1,
     },
     categoryFilterHeader: {
         width: width,

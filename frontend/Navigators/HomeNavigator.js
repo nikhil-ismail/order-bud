@@ -7,6 +7,7 @@ import Checkout from "../Screens/Businesses/Checkout/Checkout";
 import Login from '../Screens/User/Login';
 import SearchResults from '../Screens/Businesses/Search/SearchResults';
 import CategoryFilterResults from "../Screens/Businesses/Search/CategoryFilterResults";
+import EnterAddress from "../Screens/Businesses/Home/EnterAddress";
 
 const Stack = createStackNavigator()
 
@@ -53,6 +54,13 @@ function MyStack() {
                 component={Login}
                 options={{
                     headerShown: false
+                }}
+            />
+            <Stack.Screen 
+                name='Enter Address'
+                component={EnterAddress}
+                options={{
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator>

@@ -6,6 +6,9 @@ const SearchBar = (props) => {
   const [query, setQuery] = useState('');
 
   const handleSubmit = () => {
+    if (props.parent === "results") {
+      props.handleQuery(query);
+    }
     setQuery('')
     props.navigation.navigate("Search Results", { query })
   }
@@ -23,9 +26,6 @@ const SearchBar = (props) => {
             onSubmitEditing={handleSubmit}
             autoCapitalize={false}
           />
-          <TouchableOpacity onPress={props.handleFilter} style={styles.filterBtn}>
-            <Icon name="sliders-h" type="font-awesome-5" size={30} />
-          </TouchableOpacity>
         </View>
         :
         <View style={styles.searchContainer}>

@@ -17,14 +17,14 @@ const productSchema = mongoose.Schema({
         type: String,
         default: ''
     },
+    price: {
+        type: Number,
+        default:0
+    },
     business: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Business',
         required: true
-    },
-    price: {
-        type: Number,
-        default:0
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,

@@ -112,8 +112,8 @@ router.post('/register', async (req, res) => {
     })
 })
 
-
 router.delete('/:id', (req, res) => {
+    console.log('here');
     User.findByIdAndRemove(req.params.id).then(user =>{
         if(user) {
             return res.status(200).json({success: true, message: 'the user is deleted!'})

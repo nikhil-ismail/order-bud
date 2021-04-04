@@ -26,6 +26,9 @@ const ItemBottomSheet = (props) => {
     const checkValidAdd = () => {
         let validAdd = true;
         cartItems.map(cartItem => {
+            console.log(cartItem)
+            console.log(cartItem.business)
+            console.log(business.name)
             if (cartItem.business !== business.name) {
                 validAdd = false;
             }
@@ -42,7 +45,7 @@ const ItemBottomSheet = (props) => {
                     name: name,
                     brand: brand,
                     description,
-                    price: price,
+                    price: price.$numberDecimal ? price.$numberDecimal : price,
                     quantity: quantity,
                     business: business.name
                 }))
@@ -53,7 +56,7 @@ const ItemBottomSheet = (props) => {
                     name: name,
                     brand: brand,
                     description,
-                    price: price,
+                    price: price.$numberDecimal ? price.$numberDecimal : price,
                     quantity: quantity,
                     business: business
                 }))
@@ -85,7 +88,7 @@ const ItemBottomSheet = (props) => {
                 name: name,
                 brand: brand,
                 description,
-                price: price,
+                price: price.$numberDecimal ? price.$numberDecimal : price,
                 quantity: quantity,
                 business: business.name
             }))
@@ -96,7 +99,7 @@ const ItemBottomSheet = (props) => {
 
     const handleGoToLogin = () => {
         props.handleRemoveItemModal();
-        props.navigation.navigate('Login', { goToBusinessPage: true });
+        props.navigation.navigate('Login', { goBack: true });
     }
 
     return (
