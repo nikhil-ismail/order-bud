@@ -4,7 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack"
 import Home from "../Screens/Businesses/Home/Home";
 import BusinessPage from "../Screens/Businesses/Business/BusinessPage";
 import Checkout from "../Screens/Businesses/Checkout/Checkout";
-import Login from '../Screens/User/Login';
+import LoginRegister from '../Screens/User/Account/LoginRegister';
 import SearchResults from '../Screens/Businesses/Search/SearchResults';
 import CategoryFilterResults from "../Screens/Businesses/Search/CategoryFilterResults";
 import EnterAddress from "../Screens/Businesses/Home/EnterAddress";
@@ -51,7 +51,7 @@ function MyStack() {
             />
             <Stack.Screen 
                 name='Login'
-                component={Login}
+                component={LoginRegister}
                 options={{
                     headerShown: false
                 }}

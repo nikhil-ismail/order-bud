@@ -8,6 +8,7 @@ import PersonalInformation from '../Screens/User/PersonalInformation/PersonalInf
 import Addresses from '../Screens/User/Addresses/Addresses';
 import Notifications from '../Screens/User/Notifications';
 import Privacy from '../Screens/User/Privacy';
+import EnterAddress from "../Screens/Businesses/Home/EnterAddress";
 
 const Stack = createStackNavigator();
 
@@ -59,6 +60,13 @@ function MyStack() {
             <Stack.Screen
                 name="Privacy"
                 component={Privacy}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen 
+                name="Enter Address"
+                component={EnterAddress}
                 options={{
                     headerShown: false
                 }}

@@ -5,36 +5,31 @@ import axios from 'axios';
 
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
-import { selectUserDetails } from '../../../Redux/userSlice';
+import { selectIsDelivery } from '../../../Redux/orderDetailsSlice';
 
 import Header from "./Header";
 import Banner from "./Banner";
 
 import CategoryFilter from "./CategoryFilter";
 import BusinessCard from "./BusinessCard";
-import HomeFilter from "./HomeFilter";
 import ViewCartButton from "../Cart/ViewCartButton";
 import SearchBar from "../Search/SearchBar";
 
 import baseURL from "../../../assets/common/baseUrl";
 
-const { width, height } = Dimensions.get("window")
+const { width } = Dimensions.get("window")
 
 const ProductContainer = (props) => {
   const [businesses, setBusinesses] = useState([]);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true)
   const [showFilter, setShowFilter] = useState(false);
-  const [delivery, setDelivery] = useState(true)
 
   const cart = useSelector(selectCartItems);
+  const isDelivery = useSelector(selectIsDelivery);
 
   const handleFilter = () => {
     setShowFilter(!showFilter);
-  }
-
-  const toggleDelivery = () => {
-    setDelivery(!delivery);
   }
 
   useFocusEffect(
@@ -71,8 +66,6 @@ const ProductContainer = (props) => {
       {loading === false ? (
         <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
             <Header
-              delivery={delivery}
-              toggleDelivery={toggleDelivery}
               navigation={props.navigation}
             />
             <ScrollView>
@@ -93,7 +86,7 @@ const ProductContainer = (props) => {
               <Text style={styles.header}>Your Local Dispensaries</Text>
               <View style={styles.listContainer}>
                 {businesses.map(business => {
-                  if (delivery && business.delivery || !delivery && business.pickup) {
+                  if (isDelivery && business.delivery || !isDelivery && business.pickup) {
                     return (
                       <BusinessCard key={business.name} business={business} navigation={props.navigation} />
                     )

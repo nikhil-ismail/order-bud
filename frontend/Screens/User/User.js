@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 
-import Login from './Login';
+import LoginRegister from './Account/LoginRegister';
 import Profile from './Profile';
 
 import { useSelector } from "react-redux";
@@ -19,7 +19,7 @@ const User = (props) => {
                 ?
                 <Profile navigation={props.navigation} />
                 :
-                <Login route={params} />
+                <LoginRegister route={params} navigation={props.navigation} />
             }
         </View>
     )

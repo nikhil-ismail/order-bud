@@ -8,6 +8,7 @@ import baseURL from "../../assets/common/baseUrl";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUserDetails, clearUser } from "../../Redux/userSlice";
 import { clearCart } from "../../Redux/cartSlice";
+import { clearAddress } from "../../Redux/orderDetailsSlice";
 
 const Profile = (props) => {
     const userDetails = useSelector(selectUserDetails);
@@ -26,6 +27,7 @@ const Profile = (props) => {
     const handleLogoutUser = () => {
         dispatch(clearCart());
         dispatch(clearUser());
+        dispatch(clearAddress());
     }
 
     return (

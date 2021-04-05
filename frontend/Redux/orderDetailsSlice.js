@@ -1,4 +1,4 @@
-import { SET_ADDRESS, SET_TIMING } from './constants';
+import { SET_ADDRESS, CLEAR_ADDRESS, SET_IS_DELIVERY } from './constants';
 
 // ACTIONS
 export const setAddress = (payload) => {
@@ -8,16 +8,22 @@ export const setAddress = (payload) => {
     }
 }
 
-export const setTiming = (payload) => {
+export const setIsDelivery = (payload) => {
     return {
-        type: SET_TIMING,
+        type: SET_IS_DELIVERY,
         payload
+    }
+}
+
+export const clearAddress = () => {
+    return {
+        type: CLEAR_ADDRESS
     }
 }
 
 
 // REDUCER
-const initialState = [];
+const initialState = {delivery: true};
 export const orderDetailsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ADDRESS:
@@ -25,11 +31,14 @@ export const orderDetailsReducer = (state = initialState, action) => {
                 ...state,
                 address: action.payload
             }
-        case SET_TIMING:
+        case SET_IS_DELIVERY:
+            console.log(action.payload);
             return {
                 ...state,
-                timing: action.payload
+                delivery: action.payload
             }
+        case CLEAR_ADDRESS:
+            return state = {}
     }
     return state;
 }
@@ -37,4 +46,4 @@ export const orderDetailsReducer = (state = initialState, action) => {
 
 // SELECTOR
 export const selectAddress = (state) => state.orderDetails.address;
-export const selectTiming = (state) => state.orderDetails.timing;
+export const selectIsDelivery = (state) => state.orderDetails.delivery;

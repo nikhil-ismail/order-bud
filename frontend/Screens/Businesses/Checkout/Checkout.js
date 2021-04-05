@@ -1,13 +1,13 @@
 import React from "react";
-import { View, Dimensions, ScrollView, Text, StyleSheet } from "react-native";
+import { View, Dimensions, ScrollView, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-native";
+import { Icon } from 'react-native-elements';
 
 import CheckoutHeader from './CheckoutHeader';
-import DeliverPickupSelector from './DeliverPickupSelector';
 import OrderLogistics from './OrderLogistics';
 import OrderSummary from './OrderSummary';
 import PurchaseButton from './PurchaseButton';
 
-var { height } = Dimensions.get("window");
+var { height, width } = Dimensions.get("window");
 
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
@@ -21,8 +21,7 @@ const Checkout = props => {
             <View style={{ height: height }}>
                 <ScrollView>
                     <CheckoutHeader />
-                    <DeliverPickupSelector />
-                    <OrderLogistics />
+                    <OrderLogistics navigation={props.navigation} />
                     <OrderSummary />
                 </ScrollView>
                 <PurchaseButton />
@@ -31,7 +30,14 @@ const Checkout = props => {
     } else {
         return (
             <View style={styles.emptyCartContainer}>
-                <Text>Your cart is empty.</Text>
+                <TouchableOpacity style={styles.iconContainer} onPress={() => props.navigation.navigate('Home')}>
+                    <SafeAreaView style={styles.icon}>
+                        <Icon name="times" type="font-awesome-5" color="black" size={26} />
+                    </SafeAreaView>
+                </TouchableOpacity>
+                <View style={styles.emptyCartTextContainer}>
+                    <Text style={styles.emptyCartText}>Your cart is empty.</Text>
+                </View>
             </View>
         )
     }
@@ -40,8 +46,23 @@ const Checkout = props => {
 const styles = StyleSheet.create({
     emptyCartContainer: {
         height: height,
-        justifyContent: "center",
         alignItems: "center"
+    },
+    iconContainer: {
+        height: 90,
+        width: width,
+        backgroundColor: "white"
+    },
+    icon: {
+        position: "absolute",
+        marginLeft: 20
+    },
+    emptyCartTextContainer: {
+        justifyContent: "center",
+        height: height - 90
+    },
+    emptyCartText: {
+        fontSize: 18
     }
 })
 

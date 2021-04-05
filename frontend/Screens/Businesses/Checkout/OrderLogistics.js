@@ -2,17 +2,20 @@ import React from "react";
 import { View, StyleSheet, Dimensions, Text } from "react-native";
 
 import Address from './Address';
-import Schedule from './Schedule';
+
+import { useSelector } from 'react-redux';
+import { selectAddress, selectIsDelivery } from '../../../Redux/orderDetailsSlice';
 
 const { height } = Dimensions.get('window')
 
 const OrderLogistics = props => {
 
+    const isDelivery = useSelector(selectIsDelivery);
+
     return (
         <View style={styles.checkoutContainer}>
-            <Text style={styles.header}>Delivery Details</Text>
-            <Address />
-            <Schedule />
+            <Text style={styles.header}>{isDelivery ? 'Delivery Details' : 'Pickup Details'}</Text>
+            <Address navigation={props.navigation} />
         </View>
     )
 }

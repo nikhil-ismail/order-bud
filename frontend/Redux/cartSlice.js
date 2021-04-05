@@ -34,6 +34,7 @@ const initialState = [];
 export const cartItemsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART:
+            console.log(action.payload);
             return [...state, action.payload]
         case UPDATE_ITEM_QUANTITY:
             return state.map(cartItem => {
@@ -56,7 +57,8 @@ export const cartItemsReducer = (state = initialState, action) => {
 
 // SELECTOR
 export const selectCartItems = (state) => state.cartItems;
-export const selectCartBusiness = (state) => state.cartItems[0].business;
+export const selectCartBusiness = (state) => state.cartItems[0].business.name;
+export const selectCartBusinessAddress = (state) => state.cartItems[0].business.address;
 export const selectCartValue = (state) => state.cartItems.map(item => item.price * item.quantity)
                                                          .reduce((total, next) => total + next);
 export const selectCartSize = (state) => state.cartItems.map(item => item.quantity)

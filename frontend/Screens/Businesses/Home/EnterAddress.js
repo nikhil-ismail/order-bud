@@ -3,14 +3,24 @@ import { StyleSheet, View, SafeAreaView, TextInput, Text, TouchableOpacity } fro
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
 
+import { useDispatch } from 'react-redux';
+import { setAddress } from '../../../Redux/orderDetailsSlice';
+
 import { googlePlacesApiKey } from "../../../assets/common/api_key";
 
 const EnterAddress = (props) => {
-    const [address, setAddress] = useState('');
+    const [dest, setDest] = useState('');
     const [predictions, setPredictions] = useState([]);
 
+    const dispatch = useDispatch();
+
+    const handleAddAddress = (address) => {
+        dispatch(setAddress(address));
+        props.navigation.goBack();
+    }
+
     const onChangeAddress = async (destination) => {
-        setAddress(destination);
+        setDest(destination);
         try {
             const apiUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?key=${googlePlacesApiKey}&input=${destination}`;
             const result = await axios.get(apiUrl);
@@ -18,7 +28,6 @@ const EnterAddress = (props) => {
         } catch (err) {
             console.log(err);
         }
-
     }
 
     return (
@@ -32,15 +41,19 @@ const EnterAddress = (props) => {
                 </View>
                 <TextInput
                     placeholder="Enter Address"
-                    value={address}
+                    value={dest}
                     style={styles.enterAddressField}
                     onChangeText={destination => onChangeAddress(destination)}
                 />
-                <View style={styles.predictionBody}>
+                <View>
                     {
                         predictions.map(prediction => {
                             return (
-                                <TouchableOpacity key={prediction.id} style={styles.predictionContainer} onPress>
+                                <TouchableOpacity
+                                    key={prediction.id}
+                                    style={styles.predictionContainer}
+                                    onPress={() => handleAddAddress(prediction.structured_formatting.main_text)}
+                                >
                                     <Icon name="map-marker-alt" type="font-awesome-5" color="black" size={26} />
                                     <View style={styles.destinationDetails}>
                                         <Text style={styles.addressMain}>{prediction.structured_formatting.main_text}</Text>
@@ -82,8 +95,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.5,
         fontSize: 20,
         marginVertical: 15
-    },
-    predictionBody: {
     },
     predictionContainer: {
         backgroundColor: "white",

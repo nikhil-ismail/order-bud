@@ -18,17 +18,13 @@ const ItemBottomSheet = (props) => {
 
     const { image, name, description, brand, price, business } = props.product;
 
+    const dispatch = useDispatch();
     const cartItems = useSelector(selectCartItems);
     const isLoggedIn = useSelector(selectIsLoggedIn);
-
-    const dispatch = useDispatch();
 
     const checkValidAdd = () => {
         let validAdd = true;
         cartItems.map(cartItem => {
-            console.log(cartItem)
-            console.log(cartItem.business)
-            console.log(business.name)
             if (cartItem.business !== business.name) {
                 validAdd = false;
             }
@@ -47,7 +43,10 @@ const ItemBottomSheet = (props) => {
                     description,
                     price: price.$numberDecimal ? price.$numberDecimal : price,
                     quantity: quantity,
-                    business: business.name
+                    business: {
+                        name: business.name,
+                        address: business.address
+                    }
                 }))
             } else {
                 dispatch(updateItemQuantity({

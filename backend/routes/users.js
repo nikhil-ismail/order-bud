@@ -49,8 +49,9 @@ router.put('/:id',async (req, res)=> {
         { new: true}
     )
 
-    if(!user)
-    return res.status(400).send('the user cannot be created!')
+    if(!user) {
+        return res.status(400).send('the user cannot be created!')
+    }
 
     res.send(user);
 })
@@ -86,34 +87,57 @@ router.post('/register', async (req, res) => {
     const userExists = await User.findOne({email: req.body.email});
 
     if (userExists) {
+        console.log('here')
         return res.status(400).send('A user with this email already exists');
     }
 
-    let newUser = new User({
+    let user = new User({
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
+        address: req.body.address,
         passwordHash: bcrypt.hashSync(req.body.password, 10),
         isAdmin: false,
     })
-    newUser = await newUser.save();
+    user = await user.save();
 
-    if(!newUser) {
+    if (!user) {
         return res.status(400).send('The user cannot be created!');
     }
 
-    const user = await User.findOne({email: req.body.email});
     const accessToken = jwt.sign({ userId: user.id}, process.env.secret);
 
-    res.status(200).send({
+    return res.status(200).send({
         auth: true,
         user: user,
         accessToken: accessToken
-    })
+    });
 })
 
+router.post('/addAddress/:id', async (req, res) => {
+    const userExists = await User.findById(req.params.id);
+
+    if (!userExists) {
+        return res.status(400).send('Could not find the user');
+    }
+
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+            address: { $push: { address: req.body.address }}
+        },
+        { new: true}
+    )
+
+    if (!user) {
+        return res.status(400).send('Could not add the address to the user');
+    }
+
+    return res.status(200).send({address: req.body.address });
+})
+
+
 router.delete('/:id', (req, res) => {
-    console.log('here');
     User.findByIdAndRemove(req.params.id).then(user =>{
         if(user) {
             return res.status(200).json({success: true, message: 'the user is deleted!'})
