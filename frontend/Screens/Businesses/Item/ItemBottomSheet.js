@@ -43,10 +43,7 @@ const ItemBottomSheet = (props) => {
                     description,
                     price: price.$numberDecimal ? price.$numberDecimal : price,
                     quantity: quantity,
-                    business: {
-                        name: business.name,
-                        address: business.address
-                    }
+                    business: business
                 }))
             } else {
                 dispatch(updateItemQuantity({
@@ -89,7 +86,7 @@ const ItemBottomSheet = (props) => {
                 description,
                 price: price.$numberDecimal ? price.$numberDecimal : price,
                 quantity: quantity,
-                business: business.name
+                business: business
             }))
             setShowDisclaimer(false);
             props.handleRemoveItemModal();

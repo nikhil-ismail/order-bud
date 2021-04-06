@@ -59,6 +59,7 @@ export const cartItemsReducer = (state = initialState, action) => {
 export const selectCartItems = (state) => state.cartItems;
 export const selectCartBusiness = (state) => state.cartItems[0].business.name;
 export const selectCartBusinessAddress = (state) => state.cartItems[0].business.address;
+export const selectCartBusinessCoverImage = (state) => state.cartItems[0].business.coverImage;
 export const selectCartValue = (state) => state.cartItems.map(item => item.price * item.quantity)
                                                          .reduce((total, next) => total + next);
 export const selectCartSize = (state) => state.cartItems.map(item => item.quantity)
