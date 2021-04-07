@@ -25,7 +25,7 @@ const ItemBottomSheet = (props) => {
     const checkValidAdd = () => {
         let validAdd = true;
         cartItems.map(cartItem => {
-            if (cartItem.business !== business.name) {
+            if (cartItem.business.name !== business.name) {
                 validAdd = false;
             }
         })

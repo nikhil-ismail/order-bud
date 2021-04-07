@@ -18,13 +18,13 @@ const Checkout = props => {
 
     if (cartItems.length > 0) {
         return (
-            <View style={{ height: height }}>
+            <View style={{ height: height, flex: 1 }}>
                 <ScrollView>
                     <CheckoutHeader />
                     <OrderLogistics navigation={props.navigation} />
                     <OrderSummary />
                 </ScrollView>
-                <PurchaseButton />
+                <PurchaseButton navigation={props.navigation} />
             </View>
         )
     } else {

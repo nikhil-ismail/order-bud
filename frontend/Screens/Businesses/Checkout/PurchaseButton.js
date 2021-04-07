@@ -1,13 +1,58 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import { StyleSheet, SafeAreaView, TouchableOpacity, Text, Dimensions } from "react-native";
+
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCartItems, selectCartValue, clearCart } from '../../../Redux/cartSlice';
+import { selectUserDetails } from '../../../Redux/userSlice';
+import { selectIsDelivery, selectAddress } from '../../../Redux/orderDetailsSlice';
+
+import { useFocusEffect } from '@react-navigation/native'
+import axios from 'axios';
+
+import baseURL from "../../../assets/common/baseUrl";
 
 const { height } = Dimensions.get("window");
 
 const PurchaseButton = props => {
+    
+    const dispatch = useDispatch();
+
+    const cartDetails = useSelector(selectCartItems);
+    const cartTotalPrice = useSelector(selectCartValue);
+    const userDetails = useSelector(selectUserDetails);
+    const orderType = useSelector(selectIsDelivery);
+    const orderAddress = useSelector(selectAddress);
+
+    const order = {
+        business: cartDetails[0].business._id,
+        orderItems: cartDetails.map(item => {
+            return {
+                id: item.id,
+                quantity: item.quantity
+            }
+        }),
+        shippingAddress1: orderAddress,
+        phone: userDetails.phone,
+        isDelivery: orderType,
+        totalPrice: (cartTotalPrice * 1.13).toFixed(2),
+        user: userDetails.id,
+    }
+
+    const handlePurchase = () => {
+        axios.post(`${baseURL}orders`, { order })
+        .then(res => {
+            console.log('order successfully purchased')
+            props.navigation.navigate('Home');
+            dispatch(clearCart());
+        })
+        .catch(err => {
+            console.log('api error call - could not purchase order')
+        })
+    }
 
     return (
         <SafeAreaView style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={handlePurchase}>
                 <Text style={styles.buttonText}>Purchase</Text> 
             </TouchableOpacity>
         </SafeAreaView>
@@ -20,7 +65,7 @@ const styles = StyleSheet.create({
         alignItems: "center",   
         justifyContent: "center",
         position: "absolute",
-        bottom: 80,
+        bottom: 5,
         backgroundColor: "white",
         width: "100%",
         paddingVertical: 10
