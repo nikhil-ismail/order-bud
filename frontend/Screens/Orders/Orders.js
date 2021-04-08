@@ -20,6 +20,7 @@ const Orders = (props) => {
   const [myOrdersToggle, setMyOrdersToggle] = useState(true);
   const [orders, setOrders] = useState([]);
   const [businesses, setBusinesses] = useState([]);
+  const [ordersCount, setOrdersCount] = useState(0);
 
   const userId = useSelector(selectUserId);
 
@@ -34,7 +35,6 @@ const Orders = (props) => {
         axios.get(`${baseURL}orders/${userId}`)
         .then((res) => {
           setOrders(res.data);
-          console.log(orders[0].totalQuantity)
           setLoading(false);
         })
         .catch((error) => {
@@ -76,7 +76,9 @@ const Orders = (props) => {
                     totalPrice={order.totalPrice}
                     businesses={businesses}
                     business={order.business.name}
-                    totalQuantity={order.totalQuantity} />
+                    totalQuantity={order.totalQuantity}
+                    order={order}
+                    ordersCount={ordersCount} />
                 })
                 }
               </View>
@@ -90,7 +92,9 @@ const Orders = (props) => {
                     totalPrice={order.totalPrice}
                     businesses={businesses}
                     business={order.business.name}
-                    totalQuantity={order.totalQuantity} />
+                    totalQuantity={order.totalQuantity}
+                    order={order}
+                    ordersCount={ordersCount} />
                 })
                 }
               </View>

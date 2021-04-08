@@ -4,13 +4,13 @@ import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from 'rea
 var { width } = Dimensions.get("window");
 
 const OrderCard = (props) => {
-    const { totalPrice, totalQuantity, business, businesses, coverImage, date } = props;
+    const { totalPrice, totalQuantity, business, businesses, coverImage, date, order, ordersCount } = props;
 
     const menu = businesses.filter(dispense => dispense.name === business);
 
     return (
         <View>
-            <TouchableOpacity style={styles.productContainer}>
+            <TouchableOpacity style={styles.productContainer} onPress={() => props.navigation.navigate('Receipt', {order: order, ordersCount: ordersCount})}>
                 <Image
                     style={styles.coverImage}
                     source={{ uri: coverImage }}

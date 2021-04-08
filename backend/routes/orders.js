@@ -12,7 +12,7 @@ router.get(`/:userId`, async (req, res) =>{
         "coverImage": 1
     })
     .populate('orderItems', {
-        "quantity": 1
+        "quantity": 1,
     })
     .sort({'dateOrdered': -1});
     if(!orderList) {
