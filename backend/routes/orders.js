@@ -4,9 +4,17 @@ const mongoose = require('mongoose');
 const { OrderItem } = require('../models/order-item');
 const router = express.Router();
 
-router.get(`/`, async (req, res) =>{
-    const orderList = await Order.find().populate('user', 'name').sort({'dateOrdered': -1});
-
+router.get(`/:userId`, async (req, res) =>{
+    const orderList = await Order.find({ "user": mongoose.Types.ObjectId(req.params.userId)})
+    .populate('user', 'name')
+    .populate('business', {
+        "name": 1,
+        "coverImage": 1
+    })
+    .populate('orderItems', {
+        "quantity": 1
+    })
+    .sort({'dateOrdered': -1});
     if(!orderList) {
         res.status(500).json({success: false})
     } 
@@ -49,6 +57,7 @@ router.post('/', async (req,res)=>{
         phone: req.body.order.phone,
         isDelivery: req.body.order.isDelivery,
         totalPrice: req.body.order.totalPrice,
+        totalQuantity: req.body.order.totalQuantity,
         user: mongoose.Types.ObjectId(req.body.order.user),
     })
     order = await order.save();

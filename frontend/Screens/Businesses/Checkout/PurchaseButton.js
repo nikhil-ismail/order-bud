@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { StyleSheet, SafeAreaView, TouchableOpacity, Text, Dimensions } from "react-native";
 
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCartItems, selectCartValue, clearCart } from '../../../Redux/cartSlice';
+import { selectCartItems, selectCartValue, clearCart, selectCartBusinessAddress, selectCartSize } from '../../../Redux/cartSlice';
 import { selectUserDetails } from '../../../Redux/userSlice';
 import { selectIsDelivery, selectAddress } from '../../../Redux/orderDetailsSlice';
 
@@ -19,9 +19,11 @@ const PurchaseButton = props => {
 
     const cartDetails = useSelector(selectCartItems);
     const cartTotalPrice = useSelector(selectCartValue);
+    const cartTotalQuantity = useSelector(selectCartSize);
     const userDetails = useSelector(selectUserDetails);
     const orderType = useSelector(selectIsDelivery);
     const orderAddress = useSelector(selectAddress);
+    const businessAddress = useSelector(selectCartBusinessAddress);
 
     const order = {
         business: cartDetails[0].business._id,
@@ -31,10 +33,11 @@ const PurchaseButton = props => {
                 quantity: item.quantity
             }
         }),
-        shippingAddress1: orderAddress,
+        shippingAddress1: orderType ? orderAddress : businessAddress,
         phone: userDetails.phone,
         isDelivery: orderType,
         totalPrice: (cartTotalPrice * 1.13).toFixed(2),
+        totalQuantity: cartTotalQuantity,
         user: userDetails.id,
     }
 

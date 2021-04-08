@@ -30,6 +30,9 @@ const orderSchema = mongoose.Schema({
     totalPrice: {
         type: Number,
     },
+    totalQuantity: {
+        type: Number,
+    },
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

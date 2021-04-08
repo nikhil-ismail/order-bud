@@ -4,22 +4,28 @@ import { StyleSheet, View, Dimensions, Image, Text, TouchableOpacity } from 'rea
 var { width } = Dimensions.get("window");
 
 const OrderCard = (props) => {
-    const { order } = props;
+    const { totalPrice, totalQuantity, business, businesses, coverImage, date } = props;
+
+    const menu = businesses.filter(dispense => dispense.name === business);
 
     return (
         <View>
             <TouchableOpacity style={styles.productContainer}>
-                <View style={styles.imagePlaceholder}></View>
+                <Image
+                    style={styles.coverImage}
+                    source={{ uri: coverImage }}
+                />
                 <View style={styles.productDetails}>
                     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                        <Text style={styles.title}>Tokyo Smoke</Text>
+                        <Text style={styles.title}>{business}</Text>
                     </View>
                     <View style={{ marginVertical: 10 }}>
-                        <Text style={styles.subText}>March 29 • 3 Items</Text>
-                        <Text style={styles.subText}>${order.totalPrice}</Text>
+                        <Text style={[styles.subText, {marginBottom: 5}]}>${totalPrice} • {totalQuantity} Items</Text>
+                        <Text style={[styles.subText ,{marginTop: 2}]}>April 7, 2021</Text>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.viewMenu} onPress={() => props.navigation.navigate('Business Page', props.businesses[0])}>
+                <TouchableOpacity 
+                    style={styles.viewMenu} onPress={() => props.navigation.navigate('Business Page', menu[0])}>
                     <Text>View Menu</Text>
                 </TouchableOpacity>
             </TouchableOpacity>
@@ -37,9 +43,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         elevation: 8,
         backgroundColor: 'white',
+        borderBottomWidth: 0.4,
+        borderBottomColor: "grey"
     },
     productDetails: {
         flexGrow: 1,
+        flexWrap: "wrap",
         flex: 1,
         marginLeft: 25,
     },
@@ -51,14 +60,13 @@ const styles = StyleSheet.create({
         color: "grey",
         fontWeight: "bold"
     },
-    imagePlaceholder: {
-        backgroundColor: "grey",
-        marginLeft: 20,
+    coverImage: {
+        marginLeft: 17,
         height: "100%",
-        width: "22%"
+        width: "27%"
     },
     viewMenu: {
-        backgroundColor: "#D3D3D3",
+        backgroundColor: "#E8E8E8",
         padding: 10,
         borderRadius: 10,
         marginRight: 18
