@@ -12,33 +12,44 @@ const Receipt = props => {
     const { order, ordersCount } = props.route.params;
 
     return (
-        <ScrollView>
-            <ReceiptHeader navigation={props.navigation} ordersCount={ordersCount} order={order} />
-            <View style={styles.detailsContainer}>
-                <View style={styles.headerContainer}>
-                    <Text style={styles.header}>Your Order Details</Text>
-                </View>
-                { order.orderItems.map(item => {
-                    return <ReceiptItem item={item} />
-                })}
+        <View>
+            <View style={{backgroundColor: "white", flexDirection: "row", paddingTop: 25, paddingBottom: 15}}>
+                <TouchableOpacity style={{marginTop: 30, marginLeft: 30}} onPress={() => props.navigation.navigate('Orders')}>
+                    <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
+                </TouchableOpacity>
+                <Text style={{fontSize: 22, fontWeight: "bold", marginTop: 30, marginLeft: 105}}>Order #{ordersCount}</Text>
             </View>
-            <View style={styles.tipCategoryContainer}>
-                <View style={styles.category}>
-                    <TouchableOpacity style={styles.icon}>
-                        <Icon name="hand-holding-usd" type="font-awesome-5" color="black" size={25} />
-                    </TouchableOpacity>
-                    <Text style={styles.categoryText}>Tip: $0.00</Text>
+            <ScrollView>
+                <ReceiptHeader navigation={props.navigation} ordersCount={ordersCount} order={order} />
+                <View style={styles.detailsContainer}>
+                    <View style={styles.headerContainer}>
+                        <Text style={styles.header}>Your Order Details</Text>
+                        <TouchableOpacity style={styles.rateContainer} onPress={() => props.navigation.navigate('Rate Order', {order: order})}>
+                            <Text style={{fontSize: 16}}>Rate order</Text>
+                        </TouchableOpacity>
+                    </View>
+                    { order.orderItems.map(item => {
+                        return <ReceiptItem item={item} />
+                    })}
                 </View>
-            </View>
-            <View style={styles.priceCategoryContainer}>
-                <View style={styles.category}>
-                    <TouchableOpacity style={styles.icon}>
-                        <Icon name="receipt" type="font-awesome-5" color="black" size={25} />
-                    </TouchableOpacity>
-                    <Text style={styles.categoryText}>Total: ${order.totalPrice}</Text>
+                <View style={styles.tipCategoryContainer}>
+                    <View style={styles.category}>
+                        <TouchableOpacity style={styles.tipIcon}>
+                            <Icon name="hand-holding-usd" type="font-awesome-5" color="black" size={27.5} />
+                        </TouchableOpacity>
+                        <Text style={styles.categoryText}>Tip: $0.00</Text>
+                    </View>
                 </View>
-            </View>
-        </ScrollView>
+                <View style={styles.priceCategoryContainer}>
+                    <View style={styles.category}>
+                        <TouchableOpacity style={styles.priceIcon}>
+                            <Icon name="receipt" type="font-awesome-5" color="black" size={27.5} />
+                        </TouchableOpacity>
+                        <Text style={styles.categoryText}>Total: ${order.totalPrice}</Text>
+                    </View>
+                </View>
+            </ScrollView>
+        </View>
     )
 }
 
@@ -48,12 +59,21 @@ const styles = StyleSheet.create({
         marginTop: 3
     },
     headerContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
         marginVertical: 15,
         marginLeft: 20
     },
     header: {
         fontSize: 18,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        marginTop: 5
+    },
+    rateContainer: {
+        backgroundColor: "#E8E8E8",
+        padding: 10,
+        borderRadius: 10,
+        marginRight: 20
     },
     tipCategoryContainer: {
         backgroundColor: "white",
@@ -68,10 +88,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
     categoryText: {
-        fontSize: 17
+        fontSize: 17,
+        marginTop: 5
     },
-    icon: {
+    tipIcon: {
         paddingHorizontal: 20
+    },
+    priceIcon: {
+        paddingHorizontal: 25
     }
 })
 

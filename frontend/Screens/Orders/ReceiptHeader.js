@@ -1,6 +1,5 @@
 import React from "react";
 import { StyleSheet, View, Text, Dimensions, Image, TouchableOpacity } from "react-native";
-import { Icon } from 'react-native-elements';
 
 const { width, height } = Dimensions.get('window')
 
@@ -10,12 +9,6 @@ const ReceiptHeader = props => {
 
     return (
         <View>
-            <View style={{backgroundColor: "white", flexDirection: "row", paddingTop: 25, paddingBottom: 15}}>
-                <TouchableOpacity style={{marginTop: 30, marginLeft: 30}}>
-                    <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
-                </TouchableOpacity>
-                <Text style={{fontSize: 22, fontWeight: "bold", marginTop: 30, marginLeft: 100}}>Order #{ordersCount}</Text>
-            </View>
             <Image
                 style={styles.coverPhoto}
                 source={{ uri: order.business.coverImage }}

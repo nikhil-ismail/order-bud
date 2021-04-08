@@ -1,58 +1,36 @@
 const {Order} = require('../models/order');
 const express = require('express');
 const mongoose = require('mongoose');
-const { OrderItem } = require('../models/order-item');
 const router = express.Router();
 
 router.get(`/:userId`, async (req, res) =>{
     const orderList = await Order.find({ "user": mongoose.Types.ObjectId(req.params.userId)})
-    .populate('user', 'name')
-    .populate('business', {
-        "name": 1,
-        "coverImage": 1
-    })
     .populate('orderItems', {
-        "quantity": 1,
+        'quantity': 1,
+        'product': 1
     })
-    .sort({'dateOrdered': -1});
+    .populate('user', 'name')
+    .populate('business', 'name')
+
     if(!orderList) {
         res.status(500).json({success: false})
     } 
     res.send(orderList);
 })
 
-router.get(`/:id`, async (req, res) =>{
-    const order = await Order.findById(req.params.id)
-    .populate('user', 'name')
-    .populate({ 
-        path: 'orderItems', populate: {
-            path : 'product', populate: 'category'
-        } 
-    });
-
-    if(!order) {
-        res.status(500).json({success: false})
-    } 
-    res.send(order);
-})
-
-router.post('/', async (req,res)=>{
-    
-    const orderItemsIds = Promise.all(req.body.order.orderItems.map(async (orderItem) => {
-        let newOrderItem = new OrderItem({
+router.post('/', async (req,res) => {
+    const orderItems = req.body.order.orderItems.map(orderItem => {
+        return {
             quantity: orderItem.quantity,
             product: mongoose.Types.ObjectId(orderItem.id)
-        })
+        }
+    })
 
-        newOrderItem = await newOrderItem.save();
-
-        return newOrderItem._id;
-    }))
-    const orderItemsIdsResolved =  await orderItemsIds;
+    console.log(orderItems);
 
     let order = new Order({
         business: mongoose.Types.ObjectId(req.body.order.business),
-        orderItems: orderItemsIdsResolved,
+        orderItems: orderItems,
         shippingAddress1: req.body.order.shippingAddress1,
         phone: req.body.order.phone,
         isDelivery: req.body.order.isDelivery,

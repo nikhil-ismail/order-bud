@@ -6,8 +6,7 @@ const orderSchema = mongoose.Schema({
         ref: 'Business',
     },
     orderItems: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'OrderItem',
+        type: mongoose.Schema.Types.Mixed,
         required:true
     }],
     shippingAddress1: {
