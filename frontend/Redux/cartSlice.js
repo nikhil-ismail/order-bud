@@ -34,11 +34,10 @@ const initialState = [];
 export const cartItemsReducer = (state = initialState, action) => {
     switch (action.type) {
         case ADD_TO_CART:
-            console.log(action.payload);
             return [...state, action.payload]
         case UPDATE_ITEM_QUANTITY:
             return state.map(cartItem => {
-                if (cartItem.id === action.payload.id) {
+                if (cartItem.dateAdded === action.payload.dateAdded) {
                     return {
                         ...cartItem,
                         ...action.payload

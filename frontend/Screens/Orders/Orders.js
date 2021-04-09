@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
-import { Container } from "native-base";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectUserId } from '../../Redux/userSlice';
 
 import OrderCard from './OrderCard';
-import FriendOrderCard from './FriendOrderCard';
 
 import { useFocusEffect } from '@react-navigation/native'
 import axios from 'axios';
@@ -16,9 +14,10 @@ import baseURL from "../../assets/common/baseUrl";
 var { height } = Dimensions.get("window");
 
 const Orders = (props) => {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [myOrdersToggle, setMyOrdersToggle] = useState(true);
-  const [orders, setOrders] = useState([]);
+  const [pendingOrders, setPendingOrders] = useState([]);
+  const [completedOrders, setCompletedOrders] = useState([]);
   const [businesses, setBusinesses] = useState([]);
   const [ordersCount, setOrdersCount] = useState(0);
 
@@ -31,94 +30,103 @@ const Orders = (props) => {
   useFocusEffect(
     useCallback(() => {
 
-        // Orders
-        axios.get(`${baseURL}orders/${userId}`)
+      // Orders
+      axios.get(`${baseURL}orders/${userId}`)
         .then((res) => {
-          setOrders(res.data);
+          setPendingOrders(res.data.filter(order => order.status === "Pending"));
+          setCompletedOrders(res.data.filter(order => order.status === "Completed"));
+          setOrdersCount(pendingOrders.length + completedOrders.length);
           setLoading(false);
         })
         .catch((error) => {
           console.log('Api call error - getting orders')
         })
 
-        axios.get(`${baseURL}businesses`)
+      axios.get(`${baseURL}businesses`)
         .then((res) => {
           setBusinesses(res.data);
+          console.log(businesses);
           setLoading(false)
         })
         .catch((error) => {
           console.log('Api call error - businesses')
         })
 
-        return () => {
-          setOrders([]);
-          setBusinesses([]);
-        };
+      return () => {
+        setPendingOrders([]);
+        setCompletedOrders([]);
+        setBusinesses([]);
+      };
 
-      }, [])
+    }, [])
   )
 
   return (
-    <View style={{backgroundColor: "white"}}>
-      <SafeAreaView>
-        <ScrollView>
-            <View>
-              <View style={styles.headerContainer}>
+    <>
+      {
+        loading === false ?
+          <View style={{ backgroundColor: "white", height: height, flex: 1 }}>
+            <SafeAreaView>
+              <ScrollView>
+                <View style={styles.headerContainer}>
                   <Text style={styles.header}>My Orders</Text>
-              </View>
-              <View style={{ backgroundColor: "white", marginTop: 10 }}>
-                <Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 17 }}>Current</Text>
-                { orders.filter(order => order.status === "Pending").map(order => {
-                  return <OrderCard
-                    date={order.dateOrdered}
-                    coverImage={order.business.coverImage}
-                    navigation={props.navigation}
-                    totalPrice={order.totalPrice}
-                    businesses={businesses}
-                    business={order.business.name}
-                    totalQuantity={order.totalQuantity}
-                    order={order}
-                    ordersCount={ordersCount} />
-                })
+                </View>
+                {
+                  pendingOrders.length > 0 &&
+                  <View style={{ backgroundColor: "white", marginTop: 10 }}>
+                    <Text style={{ fontSize: 24, fontWeight: "bold", marginLeft: 17, marginBottom: 10 }}>Current</Text>
+                    {pendingOrders.map(order => {
+                      return <OrderCard
+                        navigation={props.navigation}
+                        businesses={businesses}
+                        order={order}
+                        ordersCount={ordersCount}
+                      />
+                    })
+                    }
+                  </View>
                 }
-              </View>
-              <View style={{ backgroundColor: "white", marginTop: 10 }}>
-                <Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 17, marginTop: 10 }}>Completed</Text>
-                { orders.filter(order => order.status !== "Pending").map(order => {
-                  return <OrderCard
-                    date={order.dateOrdered}
-                    coverImage={order.business.coverImage}
-                    navigation={props.navigation}
-                    totalPrice={order.totalPrice}
-                    businesses={businesses}
-                    business={order.business.name}
-                    totalQuantity={order.totalQuantity}
-                    order={order}
-                    ordersCount={ordersCount} />
-                })
+                {
+                  completedOrders.length > 0 &&
+                  <View style={{ backgroundColor: "white", marginTop: 10 }}>
+                    <Text style={{ fontSize: 24, fontWeight: "bold", marginLeft: 17, marginVertical: 10 }}>Completed</Text>
+                    {completedOrders.map(order => {
+                      return <OrderCard
+                        navigation={props.navigation}
+                        businesses={businesses}
+                        order={order}
+                        ordersCount={ordersCount}
+                      />
+                    })
+                    }
+                  </View>
                 }
-              </View>
-            </View>
-        </ScrollView>
-      </SafeAreaView>
-    </View>
+              </ScrollView>
+            </SafeAreaView>
+          </View> :
+          <View style={{ backgroundColor: "#f2f2f2", justifyContent: "center", alignItems: "center" }}>
+            <ActivityIndicator size="large" color="green" />
+          </View>
+      }
+    </>
   )
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
-    height: height
+    height: height,
   },
   headerContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: "white",
-    paddingVertical: 10
+    paddingVertical: 10,
+    marginTop: 15
   },
   header: {
     fontWeight: "bold",
-    fontSize: 24
+    fontSize: 32
   }
 });
 

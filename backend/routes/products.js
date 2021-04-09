@@ -52,6 +52,7 @@ router.get(`/:id`, async (req, res) => {
         return res.status(400).send('Invalid Business');
     }
     console.log(products);
+
     res.send(products);
 })
 

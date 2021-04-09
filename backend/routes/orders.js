@@ -1,36 +1,54 @@
-const {Order} = require('../models/order');
+const { Order } = require('../models/order');
+const { OrderItem } = require('../models/order-item');
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
 
-router.get(`/:userId`, async (req, res) =>{
+router.get(`/:userId`, async (req, res) => {
     const orderList = await Order.find({ "user": mongoose.Types.ObjectId(req.params.userId)})
-    .populate('orderItems', {
-        'quantity': 1,
-        'product': 1
+    .populate({ 
+        path: 'orderItems',
+        populate: { 
+            path: 'product', 
+            select: {
+                'name': 1,
+                'price': 1
+            }
+        }
     })
     .populate('user', 'name')
-    .populate('business', 'name')
+    .populate('business', {
+        coverImage: 1,
+        name: 1,
+        ratings: 1,
+        reviewCount: 1
+
+    })
 
     if(!orderList) {
         res.status(500).json({success: false})
-    } 
+    }
+
     res.send(orderList);
 })
 
 router.post('/', async (req,res) => {
-    const orderItems = req.body.order.orderItems.map(orderItem => {
-        return {
+    const orderItemsIds = Promise.all(req.body.order.orderItems.map(async (orderItem) =>{
+        let newOrderItem = new OrderItem({
             quantity: orderItem.quantity,
             product: mongoose.Types.ObjectId(orderItem.id)
-        }
-    })
+        })
 
-    console.log(orderItems);
+        newOrderItem = await newOrderItem.save();
+
+        return newOrderItem._id;
+    }))
+
+    const orderItemsIdsResolved = await orderItemsIds;
 
     let order = new Order({
         business: mongoose.Types.ObjectId(req.body.order.business),
-        orderItems: orderItems,
+        orderItems: orderItemsIdsResolved,
         shippingAddress1: req.body.order.shippingAddress1,
         phone: req.body.order.phone,
         isDelivery: req.body.order.isDelivery,
@@ -38,14 +56,30 @@ router.post('/', async (req,res) => {
         totalQuantity: req.body.order.totalQuantity,
         user: mongoose.Types.ObjectId(req.body.order.user),
     })
+
     order = await order.save();
 
-    if(!order)
-    return res.status(400).send('the order cannot be created!')
+    if(!order) {
+        return res.status(400).send('the order cannot be created!')
+    }
 
     res.send(order);
 })
 
+router.put('/rated/:orderId', async (req, res)=> {
+    const order = await Order.findByIdAndUpdate(
+        req.params.orderId,
+        {
+            rated: true
+        },
+        { new: true}
+    )
+
+    if(!order)
+    return res.status(400).send('the order cannot be updated!')
+
+    res.send(order);
+})
 
 router.put('/:id', async (req, res)=> {
     const order = await Order.findByIdAndUpdate(

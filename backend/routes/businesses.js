@@ -3,6 +3,7 @@ const { Product } = require('../models/product');
 const { Category } = require('../models/category');
 
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
@@ -52,6 +53,38 @@ router.get('/:id', async (req, res) => {
     res.status(200).send(business);
 })
 
+router.put('/rating/:id', async (req, res) => {
+
+    businessRatings = req.body.businessRatings;
+    reviewCount = req.body.reviewCount;
+    userRating = req.body.userRating;
+
+    businessRatings.push(userRating)
+    console.log(businessRatings);
+
+    let total = 0;
+    for (let i = 0; i < businessRatings.length; i++) {
+        total += businessRatings[i];
+    }
+    let averageRating = total / businessRatings.length;
+    averageRating = Math.round(averageRating * 10) / 10
+
+    const business = await Business.findByIdAndUpdate(req.params.id, {
+            reviewCount: reviewCount+1,
+            ratings: businessRatings,
+            rating: averageRating
+        },
+        { new: true }
+    )
+
+    console.log(business);
+
+    if (!business) {
+        res.status(500).json({ message: 'The business with the given ID was not found.' })
+    }
+    res.status(200).send(business);
+})
+
 router.post('/', multipleFieldUpload, async (req, res) => {
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
@@ -74,7 +107,6 @@ router.post('/', multipleFieldUpload, async (req, res) => {
         address: req.body.address,
         coverImage: coverPhotoPath,
         profileImage: profilePhotoPath,
-        rating: req.body.rating,
         categories: req.body.categories,
         dateCreated: req.body.dateCreated
     })
@@ -114,7 +146,6 @@ router.put('/:id', multipleFieldUpload, async (req, res) => {
             address: req.body.address,
             coverImage: coverPhotoPath,
             profileImage: profilePhotoPath,
-            rating: req.body.rating,
             categories: req.body.categories,
             dateCreated: req.body.dateCreated
         },

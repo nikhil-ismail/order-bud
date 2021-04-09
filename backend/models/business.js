@@ -17,7 +17,15 @@ const businessSchema = mongoose.Schema({
         type: String,
         default: ''
     },
+    ratings: [{
+        type: Number,
+        default: [],
+    }],
     rating: {
+        type: Number,
+        default: 0,
+    },
+    reviewCount: {
         type: Number,
         default: 0,
     },

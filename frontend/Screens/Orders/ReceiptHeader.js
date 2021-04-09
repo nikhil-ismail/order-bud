@@ -7,6 +7,15 @@ const ReceiptHeader = props => {
 
     const { order, ordersCount } = props;
 
+    const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+    const date = order.dateOrdered.toString().substring(0, order.dateOrdered.toString().indexOf('T'));
+    let dateParts = date.split('-');
+    dateParts = dateParts.map(datePart => {
+        return parseInt(datePart - 1);
+    })
+    const formattedDate = `${monthNames[dateParts[1]]} ${dateParts[2]}, ${dateParts[0]}`;
+
     return (
         <View>
             <Image
@@ -16,7 +25,7 @@ const ReceiptHeader = props => {
             <View style={styles.businessNameContainer}>
                 <Text style={[styles.businessNameText, { color: "green", fontSize: 30 }]}>{order.business.name}</Text>
                 <View style={styles.subTextContainer}>
-                    <Text style={styles.subText}>Order {order.status} • {order.dateOrdered}</Text>
+                    <Text style={styles.subText}>Order {order.status} • {formattedDate}</Text>
                 </View>
             </View>
         </View>

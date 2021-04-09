@@ -16,7 +16,7 @@ const ItemBottomSheet = (props) => {
     const [quantity, setQuantity] = useState(props.quantity ? props.quantity : 1);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
 
-    const { image, name, description, brand, price, business } = props.product;
+    const { id, image, name, description, brand, price, business } = props.product;
 
     const dispatch = useDispatch();
     const cartItems = useSelector(selectCartItems);
@@ -36,7 +36,8 @@ const ItemBottomSheet = (props) => {
         if (checkValidAdd()) {
             if (props.cartType === "Add") {
                 dispatch(addToCart({
-                    id: Date.now(),
+                    id: id,
+                    dateAdded: Date.now(),
                     image: image,
                     name: name,
                     brand: brand,
@@ -47,7 +48,8 @@ const ItemBottomSheet = (props) => {
                 }))
             } else {
                 dispatch(updateItemQuantity({
-                    id: props.product.id,
+                    id: id,
+                    dateAdded: props.product.dateAdded,
                     image: image,
                     name: name,
                     brand: brand,
@@ -79,7 +81,8 @@ const ItemBottomSheet = (props) => {
         } else {
             dispatch(clearCart());
             dispatch(addToCart({
-                id: Date.now(),
+                id: id,
+                dateAdded: Date.now(),
                 image: image,
                 name: name,
                 brand: brand,
