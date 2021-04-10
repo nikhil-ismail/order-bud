@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 const Main = () => {
 
-  const isAdmin = false;
+  const isAdmin = true;
 
 
   return (
@@ -52,7 +52,7 @@ const Main = () => {
         component={AdminNavigator}
         options={{
           tabBarIcon: ({ color }) => (
-            <Icon name="cog" color={color} size={30} />
+            <Icon name="store-alt" type="font-awesome-5" color={color} size={30} />
           ),
         }}
       />

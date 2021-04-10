@@ -5,7 +5,6 @@ import Orders from "../Screens/Orders/Orders";
 import BusinessPage from "../Screens/Businesses/Business/BusinessPage";
 import Receipt from '../Screens/Orders/Receipt';
 import RateOrder from '../Screens/Orders/RateOrder';
-import AlreadyRated from '../Screens/Orders/AlreadyRated';
 
 const Stack = createStackNavigator()
 
@@ -36,13 +35,6 @@ function MyStack() {
             <Stack.Screen 
                 name='Rate Order'
                 component={RateOrder}
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <Stack.Screen 
-                name='Already Rated'
-                component={AlreadyRated}
                 options={{
                     headerShown: false,
                 }}

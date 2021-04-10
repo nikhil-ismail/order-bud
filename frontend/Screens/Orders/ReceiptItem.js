@@ -15,10 +15,10 @@ const ReceiptItem = props => {
                 </View>
             </View>
             <View style={styles.itemNameContainer}>
-                <Text style={styles.cartItemText}>{item.product.name}</Text>
+                <Text style={styles.cartItemText}>MK Ultra</Text>
             </View>
             <View style={styles.priceContainer}>
-                <Text style={styles.cartItemText}>${item.product.price * item.quantity}</Text>
+                <Text style={styles.cartItemText}>$29.99</Text>
             </View>
         </View>
     )

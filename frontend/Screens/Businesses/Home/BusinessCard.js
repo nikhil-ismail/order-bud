@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     ratingContainer: {
         backgroundColor: 'rgba(0, 128, 0, 0.75)',
         height: 30,
-        width: 32,
+        width: 30,
         borderRadius: 15,
         alignItems: "center",
         justifyContent: "center",

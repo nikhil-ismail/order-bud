@@ -23,11 +23,6 @@ const orderSchema = mongoose.Schema({
         required: true,
         default: 'Pending',
     },
-    rated: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
     isDelivery: {
         type: Boolean,
         required: true,
