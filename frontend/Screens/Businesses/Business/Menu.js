@@ -5,32 +5,32 @@ import MenuCard from './MenuCard';
 
 
 const Menu = (props) => {
-     
+
     return (
-            <View style={styles.listContainer}>
-                {props.categories.map(category => {
-                    return (
-                        <View>
-                            <View style={styles.categoryHeader}>
-                                <Text style={styles.categoryHeaderText}>{category.name}</Text>
-                            </View>
-                            {props.products.map(product => {
-                                return (
-                                    <View>
-                                        {
-                                            product.category.name === category.name &&
-                                            <MenuCard
-                                                product={product}
-                                                handleShowItemModal={props.handleShowItemModal}
-                                            />
-                                        }
-                                    </View>
-                                );
-                            })}
+        <View style={styles.listContainer}>
+            {props.categories.map(category => {
+                return (
+                    <View>
+                        <View style={styles.categoryHeader}>
+                            <Text style={styles.categoryHeaderText}>{category.name}</Text>
                         </View>
-                    )
-                })}
-            </View>
+                        {props.products.map(product => {
+                            return (
+                                <View>
+                                    {
+                                        product.category.name === category.name && product.showOnMenu &&
+                                        <MenuCard
+                                            product={product}
+                                            handleShowItemModal={props.handleShowItemModal}
+                                        />
+                                    }
+                                </View>
+                            );
+                        })}
+                    </View>
+                )
+            })}
+        </View>
     )
 
 }

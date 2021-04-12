@@ -21,6 +21,7 @@ const BusinessPage = (props) => {
     const [showItemModal, setShowItemModal] = useState(false);
     const [product, setProduct] = useState();
     const [menuItems, setMenuItems] = useState();
+    const [filteredCategories, setFilteredCategories] = useState([]);
 
     const handleShowItemModal = (product) => {
         setProduct(product)
@@ -41,6 +42,19 @@ const BusinessPage = (props) => {
         useCallback(() => {
             axios.get(`${baseURL}products/${id}`)
                 .then(res => {
+
+                    let filters = []
+
+                    for (let i = 0; i < categories.length; i++) {
+                        for (let j = 0; j < res.data.length; j++) {
+                            if (res.data[j].category._id === categories[i]._id) {
+                                filters.push(categories[i]);
+                                break;
+                            }
+                        }
+                    }
+
+                    setFilteredCategories(filters);
                     setMenuItems(res.data);
                     setLoading(false);
                 })
@@ -54,7 +68,7 @@ const BusinessPage = (props) => {
         <>
             {
                 loading === false ?
-                    <View>
+                    <View style={{flex: 1}}>
                         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
                             <Image
                                 style={styles.coverPhoto}
@@ -62,9 +76,9 @@ const BusinessPage = (props) => {
                             />
                             <BusinessInfo businessDetails={businessDetails} />
                             <View style={styles.categoriesContainer}>
-                                <BusinessCategories categories={categories} />
+                                <BusinessCategories categories={filteredCategories} />
                             </View>
-                            <Menu navigation={props.navigation} categories={categories} products={menuItems} handleShowItemModal={handleShowItemModal} />
+                            <Menu navigation={props.navigation} categories={filteredCategories} products={menuItems} handleShowItemModal={handleShowItemModal} />
                         </ScrollView>
                         {
                             cart.length > 0 &&

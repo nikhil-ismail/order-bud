@@ -1,6 +1,7 @@
 const { Product } = require('../models/product');
 const { Category } = require('../models/category');
-const { Business } = require('../models/business');
+const { Order } = require('../models/order');
+const { OrderItem } = require('../models/order-item');
 
 const express = require('express');
 const router = express.Router();
@@ -33,59 +34,108 @@ const storage = multer.diskStorage({
 
 const uploadOptions = multer({ storage: storage })
 
-router.get(`/:id`, async (req, res) => {
-    const products = await Product.find({ "business": mongoose.Types.ObjectId(req.params.id)})
+router.get(`/:businessId`, async (req, res) => {
+    const products = await Product.find({ "business": mongoose.Types.ObjectId(req.params.businessId)})
     .populate('business', {
         "address": 1,
         "coverImage": 1,
         "delivery": 1,
         "pickup": 1,
         "name": 1,
-        "rating": 1
+        "rating": 1,
     })
     .populate('category', {
-        "name": 1,
-        "_id": 0
+        "name": 1
     });
 
     if (!products) {
         return res.status(400).send('Invalid Business');
     }
-    console.log(products);
 
     res.send(products);
 })
 
-router.post(`/`, uploadOptions.single('image'), async (req, res) => {
-    const business = await Category.findById(req.body.business);
-    if (!business) {
-        return res.status(400).send('Invalid Business');
-    }
+router.get(`/topProducts/:businessId`, async (req, res) => {
+    Order.aggregate([
+        {
+            $match: { business: mongoose.Types.ObjectId(req.params.businessId) }
+        },
+        {
+            $lookup: {
+                from: OrderItem.collection.name,
+                localField: "orderItems",
+                foreignField: "_id",
+                as: "orderItems"
+            }
+        },
+        {
+            $unwind: "$orderItems"
+        },
+        {
+            $group: {
+                _id: "$orderItems.product",
+                'count': { $sum: 1 }
+            }
+        },
+        {
+            $sort: {
+                count: -1
+            }
+        },
+        {
+            $lookup: {
+                from: Product.collection.name,
+                localField: "_id",
+                foreignField: "_id",
+                as: "product"
+            }
+        },
+        {
+            $project: {
+                _id: 0,
+                count: 1,
+                product: 1
+            }
+        },
+        {
+            $addFields: {
+                "product": { $first: "$product" }
+            }
+        },
+        {
+            $limit: 5
+        }
+    ]).exec((err, products) => {
+        if (err) {
+            return res.status(500).send({msg: "unable to find top products"})
+        }
+        console.log(products);
+        return res.status(200).send(products);
+    })
+})
 
-    const category = await Category.findById(req.body.category);
+router.post(`/`, uploadOptions.single('image'), async (req, res) => {
+    const category = await Category.findOne({ "name": req.body.category });
     if (!category) {
         return res.status(400).send('Invalid Category');
     }
 
     const file = req.file;
-    if (!file) {
-        return res.status(400).send('No image in the request')
+    let fileName, basePath;
+    if (file) {
+        fileName = file.filename
+        basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
     }
 
-    const fileName = file.filename
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-
     let product = new Product({
+        image: file ? `${basePath}${fileName}` : null,
         name: req.body.name,
-        description: req.body.description,
-        image: `${basePath}${fileName}`,
         brand: req.body.brand,
         price: req.body.price,
-        business: req.body.business,
-        category: req.body.category,
-        countInStock: req.body.countInStock,
-        rating: req.body.rating,
-        numReviews: req.body.numReviews
+        countInStock: req.body.stock,
+        description: req.body.description,
+        category: mongoose.Types.ObjectId(category._id),
+        business: mongoose.Types.ObjectId(req.body.business)
     })
 
     product = await product.save();
@@ -97,37 +147,31 @@ router.post(`/`, uploadOptions.single('image'), async (req, res) => {
     res.send(product);
 })
 
-router.put('/:id', uploadOptions.single('image'), async (req, res) => {
-    // NEED TO UPDATE
-    if (!mongoose.isValidObjectId(req.params.id)) {
-        return res.status(400).send('Invalid Product Id')
-    }
-    const category = await Category.findById(req.body.category);
-
+router.put('/:productId', uploadOptions.single('image'), async (req, res) => {
+    const category = await Category.findOne({ "name": req.body.category });
     if (!category) {
         return res.status(400).send('Invalid Category');
     }
 
     const file = req.file;
-    if (!file) {
-        return res.status(400).send('No image in the request')
+    let fileName, basePath;
+    if (file) {
+        fileName = file.filename
+        basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
     }
 
-    const fileName = file.filename
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-
     const product = await Product.findByIdAndUpdate(
-        req.params.id,
+        mongoose.Types.ObjectId(req.params.productId),
         {
+            image: file ? `${basePath}${fileName}` : null,
             name: req.body.name,
-            description: req.body.description,
-            image: `${basePath}${fileName}`,
             brand: req.body.brand,
             price: req.body.price,
-            category: req.body.category,
-            countInStock: req.body.countInStock,
-            rating: req.body.rating,
-            numReviews: req.body.numReviews
+            countInStock: req.body.stock,
+            description: req.body.description,
+            category: mongoose.Types.ObjectId(category._id),
+            business: mongoose.Types.ObjectId(req.body.business),
+            showOnMenu: req.body.showOnMenu
         },
         { new: true }
     )
@@ -139,8 +183,37 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
     res.send(product);
 })
 
-router.delete('/:id', (req, res) => {
-    Product.findByIdAndRemove(req.params.id).then(product => {
+router.put('/toggleShowOnMenu/:productId', async (req, res) => {
+    const category = await Category.findOne({ "name": req.body.category });
+    if (!category) {
+        return res.status(400).send('Invalid Category');
+    }
+    
+    const product = await Product.findByIdAndUpdate(
+        mongoose.Types.ObjectId(req.params.productId),
+        {
+            image: file ? `${basePath}${fileName}` : null,
+            name: req.body.name,
+            brand: req.body.brand,
+            price: req.body.price,
+            countInStock: req.body.stock,
+            description: req.body.description,
+            category: mongoose.Types.ObjectId(category._id),
+            business: mongoose.Types.ObjectId(req.body.business),
+            showOnMenu: req.body.showOnMenu
+        },
+        { new: true }
+    )
+
+    if (!product) {
+        return res.status(500).send('the product cannot be updated!')
+    }
+
+    res.send(product);
+})
+
+router.delete('/:productId', (req, res) => {
+    Product.findByIdAndRemove(req.params.productId).then(product => {
         if (product) {
             return res.status(200).json({ success: true, message: 'the product is deleted!' })
         } else {

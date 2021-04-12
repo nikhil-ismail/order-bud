@@ -8,15 +8,17 @@ import baseURL from "../../assets/common/baseUrl";
 
 const { width, height } = Dimensions.get("window")
 
-const AddProduct = (props) => {
+const EditProduct = (props) => {
+    const { product } = props.route.params;
+    console.log(product);
 
-    const [image, setImage] = useState();
-    const [productName, setProductName] = useState();
-    const [brand, setBrand] = useState();
-    const [price, setPrice] = useState('');
-    const [stock, setStock] = useState('');
-    const [description, setDescription] = useState();
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [image, setImage] = useState(product.image);
+    const [productName, setProductName] = useState(product.name);
+    const [brand, setBrand] = useState(product.brand);
+    const [price, setPrice] = useState(product.price);
+    const [stock, setStock] = useState(product.countInStock);
+    const [description, setDescription] = useState(product.description);
+    const [selectedCategory, setSelectedCategory] = useState(product.category.name);
 
     const [productNameFocus, setProductNameFocus] = useState(false);
     const [brandFocus, setBrandFocus] = useState(false);
@@ -53,8 +55,8 @@ const AddProduct = (props) => {
         }
     };
 
-    const handleAddItem = () => {
-        axios.post(`${baseURL}products`, {
+    const handleUpdateItem = () => {
+        axios.put(`${baseURL}products/${product.id}`, {
             image: image,
             name: productName,
             brand,
@@ -62,13 +64,34 @@ const AddProduct = (props) => {
             stock,
             description,
             category: selectedCategory,
-            business: business.id
+            business: business.id,
+            showOnMenu: product.showOnMenu
+        })
+            .then(res => {
+                props.navigation.navigate('Admin Home');
+            })
+            .catch(err => {
+                console.log('error updating the item')
+            })
+    }
+
+    const handleHideItem = () => {
+        axios.put(`${baseURL}products/${product.id}`, {
+            image: image,
+            name: productName,
+            brand,
+            price,
+            stock,
+            description,
+            category: selectedCategory,
+            business: business.id,
+            showOnMenu: !product.showOnMenu
         })
             .then(() => {
                 props.navigation.goBack();
             })
             .catch(err => {
-                console.log('error adding the item')
+                console.log('error deleting the item')
             })
     }
 
@@ -106,7 +129,7 @@ const AddProduct = (props) => {
                             <TextInput
                                 placeholder="Price"
                                 style={[styles.textInput, styles.priceStockInput, priceFocus && styles.focusInputStyle]}
-                                value={price}
+                                value={`${price}`}
                                 onChangeText={text => setPrice(text)}
                                 onFocus={() => setPriceFocus(true)}
                                 onBlur={() => setPriceFocus(false)}
@@ -114,7 +137,7 @@ const AddProduct = (props) => {
                             <TextInput
                                 placeholder="Number In Stock"
                                 style={[styles.textInput, styles.priceStockInput, stockFocus && styles.focusInputStyle]}
-                                value={stock}
+                                value={`${stock}`}
                                 onChangeText={text => setStock(text)}
                                 onFocus={() => setStockFocus(true)}
                                 onBlur={() => setStockFocus(false)}
@@ -131,7 +154,7 @@ const AddProduct = (props) => {
                         />
                         <View style={styles.separator} />
                         <View style={styles.categoriesContainer}>
-                            <Text style={[styles.categoryHeaderText, {marginBottom: 10}]}>What category will this product fall under?</Text>
+                        <Text style={[styles.categoryHeaderText, {marginBottom: 10}]}>What category will this product fall under?</Text>
                             <View style={styles.categoryTagsContainer}>
                                 {
                                     categories.map(category => {
@@ -154,9 +177,14 @@ const AddProduct = (props) => {
                 </ScrollView>
             </SafeAreaView>
             <View style={styles.button}>
-                <TouchableOpacity style={styles.buttonContainer} onPress={handleAddItem}>
-                    <Text style={styles.buttonText}>Add Item</Text>
-                </TouchableOpacity>
+                <View style={styles.editDeleteButton}>
+                    <TouchableOpacity style={[styles.editDeleteButtonContainer, styles.editButton]} onPress={handleUpdateItem}>
+                        <Text style={styles.buttonText}>Update Item</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.editDeleteButtonContainer, styles.hideButton]} onPress={handleHideItem}>
+                        <Text style={styles.hideButtonText}>Hide From Menu</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         </View>
     )
@@ -333,7 +361,32 @@ const styles = StyleSheet.create({
         color: "white",
         fontSize: 20,
         fontWeight: "bold"
+    },
+    editDeleteButton: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    editDeleteButtonContainer: {
+        width: "48%",
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5
+    },
+    editButton: {
+        backgroundColor: "green",
+    },
+    hideButton: {
+        borderColor: "red",
+        borderWidth: 1
+    },
+    hideButtonText: {
+        color: "red",
+        fontSize: 20,
+        fontWeight: "bold"
     }
 })
 
-export default AddProduct;
+export default EditProduct;

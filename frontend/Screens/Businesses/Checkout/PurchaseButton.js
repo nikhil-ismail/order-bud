@@ -1,17 +1,14 @@
-import React, { useState, useCallback } from "react";
-import { StyleSheet, SafeAreaView, TouchableOpacity, Text, Dimensions } from "react-native";
+import React from "react";
+import { StyleSheet, SafeAreaView, TouchableOpacity, Text } from "react-native";
 
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCartItems, selectCartValue, clearCart, selectCartBusinessAddress, selectCartSize } from '../../../Redux/cartSlice';
 import { selectUserDetails } from '../../../Redux/userSlice';
 import { selectIsDelivery, selectAddress } from '../../../Redux/orderDetailsSlice';
 
-import { useFocusEffect } from '@react-navigation/native'
 import axios from 'axios';
 
 import baseURL from "../../../assets/common/baseUrl";
-
-const { height } = Dimensions.get("window");
 
 const PurchaseButton = props => {
     

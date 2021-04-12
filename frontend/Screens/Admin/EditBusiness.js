@@ -60,7 +60,6 @@ const EditBusiness = (props) => {
     }
 
     const handleUpdateBusiness = () => {
-        console.log(business);
         axios.put(`${baseURL}businesses/${business.id}`, { 
             coverPhoto: image,
             name: businessName,
@@ -70,7 +69,7 @@ const EditBusiness = (props) => {
             categories,
             rating: business.rating
         })
-        .then(res => {
+        .then(() => {
             props.navigation.goBack();
         })
         .catch(err => {
@@ -218,7 +217,7 @@ const styles = StyleSheet.create({
         color: "#404040"
     },
     businessDetails: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         marginTop: 25
     },
     textInput: {

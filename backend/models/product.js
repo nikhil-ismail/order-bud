@@ -37,13 +37,9 @@ const productSchema = mongoose.Schema({
         min: 0,
         max: 255
     },
-    rating: {
-        type: Number,
-        default: 0,
-    },
-    numReviews: {
-        type: Number,
-        default: 0,
+    showOnMenu: {
+        type: Boolean,
+        default: true
     },
     dateCreated: {
         type: Date,

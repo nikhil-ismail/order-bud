@@ -32,7 +32,6 @@ export const orderDetailsReducer = (state = initialState, action) => {
                 address: action.payload
             }
         case SET_IS_DELIVERY:
-            console.log(action.payload);
             return {
                 ...state,
                 delivery: action.payload

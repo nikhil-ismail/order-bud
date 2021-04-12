@@ -3,17 +3,13 @@ const mongoose = require('mongoose');
 const businessSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        default: ''
     },
     address: {
         type: String,
-        required: true
-    },
-    coverImage: {
-        type: String,
         default: ''
     },
-    profileImage: {
+    coverImage: {
         type: String,
         default: ''
     },
@@ -29,6 +25,18 @@ const businessSchema = mongoose.Schema({
     dateCreated: {
         type: Date,
         default: Date.now,
+    },
+    delivery: {
+        type: Boolean,
+        default: false
+    },
+    pickup: {
+        type: Boolean,
+        default: false
+    },
+    owner: {
+        type: String,
+        required: true
     }
 })
 

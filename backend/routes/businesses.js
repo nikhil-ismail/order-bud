@@ -1,11 +1,12 @@
 const { Business } = require('../models/business');
-const { Product } = require('../models/product');
 const { Category } = require('../models/category');
+const { User } = require('../models/user');
 
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const mongoose = require('mongoose');
 
 const FILE_TYPE_MAP = {
     'image/png': 'png',
@@ -42,20 +43,35 @@ router.get(`/`, async (req, res) => {
     res.status(200).send(businessList);
 })
 
-router.get('/:id', async (req, res) => {
-    const business = await Business.find()
-    .populate('categories', 'name')
+router.get('/:userId', async (req, res) => {
+    const user = await User.findById(mongoose.Types.ObjectId(req.params.userId));
+    let business;
 
-    if (!business) {
-        res.status(500).json({ message: 'The business with the given ID was not found.' })
+    if (user.isAdmin) {
+        business = await Business.findOneAndUpdate(
+            { "owner": req.params.userId },
+            {   },
+            { upsert: true, new: true }
+        )
+        .populate('categories', {
+            'name': 1,
+            "_id": 0
+        })
+
+        if (!business) {
+            return res.status(500).json({ message: 'The business with the given ID was not found.' })
+        }
+
+        return res.status(200).send(business);
     }
-    res.status(200).send(business);
+    
+    return res.status(500).send({msg: "You are not a store owner"})
 })
 
 router.post('/', multipleFieldUpload, async (req, res) => {
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
-    let coverPhotoPath, profilePhotoPath;
+    let coverPhotoPath;
 
     if (req.files.coverPhoto) {
         coverPhotoPath = `${basePath}${req.files.coverPhoto[0].filename}`;
@@ -63,20 +79,14 @@ router.post('/', multipleFieldUpload, async (req, res) => {
         coverPhoto = null;
     }
 
-    if (req.files.profilePhoto) {
-        profilePhotoPath = `${basePath}${req.files.profilePhoto[0].filename}`;
-    } else {
-        profilePhoto = null;
-    }
-
     let business = new Business({
+        coverImage: coverPhotoPath,
         name: req.body.name,
         address: req.body.address,
-        coverImage: coverPhotoPath,
-        profileImage: profilePhotoPath,
-        rating: req.body.rating,
+        delivery: req.body.delivery,
+        pickup: req.body.pickup,
         categories: req.body.categories,
-        dateCreated: req.body.dateCreated
+        rating: req.body.rating
     })
 
     business = await business.save();
@@ -89,34 +99,40 @@ router.post('/', multipleFieldUpload, async (req, res) => {
 })
 
 router.put('/:id', multipleFieldUpload, async (req, res) => {
-    // NEED TO UPDATE
+    
+    standardizedCategories = req.body.categories.map(category => {
+        return category.substr(0, 1).toUpperCase() + category.substr(1).toLowerCase();
+    })
+
+    const categories = Promise.all(standardizedCategories.map(async category => {
+        let checkCategory = await Category.findOneAndUpdate(
+            { "name": category },
+            {  },
+            { upsert: true, new: true }
+        )
+
+        return mongoose.Types.ObjectId(checkCategory._id);
+    }))
+
+    const categoriesResolved = await categories;
+
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+    let coverPhotoPath = req.body.coverPhoto;
 
-    let coverPhotoPath;
-    let profilePhotoPath;
-
-    if (req.files.coverPhoto) {
+    if (req.files && req.files.coverPhoto) {
         coverPhotoPath = `${basePath}${req.files.coverPhoto[0].filename}`;
-    } else {
-        coverPhoto = req.body.coverPhoto;
-    }
-
-    if (req.files.profilePhoto) {
-        profilePhotoPath = `${basePath}${req.files.profilePhoto[0].filename}`;
-    } else {
-        profilePhoto = req.body.profilePhoto;
     }
 
     const business = await Business.findByIdAndUpdate(
-        req.params.id,
+        mongoose.Types.ObjectId(req.params.id),
         {
+            coverImage: coverPhotoPath,
             name: req.body.name,
             address: req.body.address,
-            coverImage: coverPhotoPath,
-            profileImage: profilePhotoPath,
-            rating: req.body.rating,
-            categories: req.body.categories,
-            dateCreated: req.body.dateCreated
+            delivery: req.body.delivery,
+            pickup: req.body.pickup,
+            categories: categoriesResolved,
+            rating: req.body.rating
         },
         { new: true }
     )

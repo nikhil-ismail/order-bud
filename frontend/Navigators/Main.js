@@ -9,12 +9,15 @@ import OrdersNavigator from "./OrdersNavigator";
 import UserNavigator from "./UserNavigator";
 import AdminNavigator from "./AdminNavigator";
 
+import { useSelector } from 'react-redux';
+import { selectIsAdmin, selectIsLoggedIn } from '../Redux/userSlice';
+
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
 
-  const isAdmin = true;
-
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const isAdmin = isLoggedIn ? useSelector(selectIsAdmin) : false;
 
   return (
     <Tab.Navigator
