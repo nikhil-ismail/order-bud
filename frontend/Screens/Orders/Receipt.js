@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, Text, Dimensions, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Icon } from 'react-native-elements';
 
@@ -11,22 +11,30 @@ const Receipt = props => {
 
     const { order, ordersCount } = props.route.params;
 
+    const rated = order.rated;
+
     return (
         <View>
             <View style={{backgroundColor: "white", flexDirection: "row", paddingTop: 25, paddingBottom: 15}}>
                 <TouchableOpacity style={{marginTop: 30, marginLeft: 30}} onPress={() => props.navigation.navigate('Orders')}>
                     <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
                 </TouchableOpacity>
-                <Text style={{fontSize: 22, fontWeight: "bold", marginTop: 30, marginLeft: 105}}>Order #{ordersCount}</Text>
+                <Text style={{fontSize: 22, fontWeight: "bold", marginTop: 30, marginLeft: 110}}>Order #{ordersCount}</Text>
             </View>
             <ScrollView>
                 <ReceiptHeader navigation={props.navigation} ordersCount={ordersCount} order={order} />
                 <View style={styles.detailsContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={styles.header}>Your Order Details</Text>
-                        <TouchableOpacity style={styles.rateContainer} onPress={() => props.navigation.navigate('Rate Order', {order: order})}>
-                            <Text style={{fontSize: 16}}>Rate order</Text>
-                        </TouchableOpacity>
+                        { rated ?
+                            <TouchableOpacity style={styles.rateContainer} onPress={() => props.navigation.navigate('Already Rated', {order: order})}>
+                                <Text style={{fontSize: 16}}>Rate order</Text>
+                            </TouchableOpacity>
+                            :
+                            <TouchableOpacity style={styles.rateContainer} onPress={() => props.navigation.navigate('Rate Order', {order: order})}>
+                                <Text style={{fontSize: 16}}>Rate order</Text>
+                            </TouchableOpacity>
+                        }
                     </View>
                     { order.orderItems.map(item => {
                         return <ReceiptItem item={item} />

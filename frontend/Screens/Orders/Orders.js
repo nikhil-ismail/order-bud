@@ -35,6 +35,7 @@ const Orders = (props) => {
         .then((res) => {
           setPendingOrders(res.data.filter(order => order.status === "Pending"));
           setCompletedOrders(res.data.filter(order => order.status === "Completed"));
+          setOrdersCount(pendingOrders.length + completedOrders.length);
           setLoading(false);
         })
         .catch((error) => {
@@ -44,6 +45,7 @@ const Orders = (props) => {
       axios.get(`${baseURL}businesses`)
         .then((res) => {
           setBusinesses(res.data);
+          console.log(businesses);
           setLoading(false)
         })
         .catch((error) => {
@@ -87,7 +89,7 @@ const Orders = (props) => {
                 {
                   completedOrders.length > 0 &&
                   <View style={{ backgroundColor: "white", marginTop: 10 }}>
-                    <Text style={{ fontSize: 21, fontWeight: "bold", marginLeft: 17 }}>Completed</Text>
+                    <Text style={{ fontSize: 24, fontWeight: "bold", marginLeft: 17, marginVertical: 10 }}>Completed</Text>
                     {completedOrders.map(order => {
                       return <OrderCard
                         navigation={props.navigation}

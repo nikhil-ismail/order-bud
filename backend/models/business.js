@@ -3,17 +3,29 @@ const mongoose = require('mongoose');
 const businessSchema = mongoose.Schema({
     name: {
         type: String,
-        default: ''
+        required: true,
     },
     address: {
         type: String,
-        default: ''
+        required: true
     },
     coverImage: {
         type: String,
         default: ''
     },
+    profileImage: {
+        type: String,
+        default: ''
+    },
+    ratings: [{
+        type: Number,
+        default: [],
+    }],
     rating: {
+        type: Number,
+        default: 0,
+    },
+    reviewCount: {
         type: Number,
         default: 0,
     },
@@ -26,18 +38,10 @@ const businessSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    delivery: {
-        type: Boolean,
-        default: false
-    },
-    pickup: {
-        type: Boolean,
-        default: false
-    },
     owner: {
         type: String,
         required: true
-    }
+    },
 })
 
 businessSchema.method('toJSON', function(){

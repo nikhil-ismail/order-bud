@@ -5,28 +5,29 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get(`/:userId`, async (req, res) => {
-    const orderList = await Order.find({ "user": mongoose.Types.ObjectId(req.params.userId) })
-        .populate({
-            path: 'orderItems',
-            populate: {
-                path: 'product',
-                select: {
-                    'name': 1,
-                    'price': 1
-                }
+    const orderList = await Order.find({ "user": mongoose.Types.ObjectId(req.params.userId)})
+    .populate({ 
+        path: 'orderItems',
+        populate: { 
+            path: 'product', 
+            select: {
+                'name': 1,
+                'price': 1
             }
-        })
-        .populate('user', 'name')
-        .populate('business', {
-            coverImage: 1,
-            name: 1
-        })
+        }
+    })
+    .populate('user', 'name')
+    .populate('business', {
+        coverImage: 1,
+        name: 1,
+        ratings: 1,
+        reviewCount: 1
 
-    if (!orderList) {
-        res.status(500).json({ success: false })
+    })
+
+    if(!orderList) {
+        res.status(500).json({success: false})
     }
-
-    console.log(orderList);
 
     res.send(orderList);
 })
@@ -99,6 +100,20 @@ router.post('/', async (req, res) => {
     res.send(order);
 })
 
+router.put('/rated/:orderId', async (req, res)=> {
+    const order = await Order.findByIdAndUpdate(
+        req.params.orderId,
+        {
+            rated: true
+        },
+        { new: true}
+    )
+
+    if(!order)
+    return res.status(400).send('the order cannot be updated!')
+
+    res.send(order);
+})
 
 router.put('/:id', async (req, res) => {
     const order = await Order.findByIdAndUpdate(
