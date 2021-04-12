@@ -2,7 +2,6 @@ import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
 
 import AdminHome from "../Screens/Admin/AdminHome";
-import Admin from "../Screens/Admin/Admin"
 import EditBusiness from "../Screens/Admin/EditBusiness"
 import AddProduct from "../Screens/Admin/AddProduct"
 import EditProduct from "../Screens/Admin/EditProduct"
@@ -14,8 +13,8 @@ function MyStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen 
-                name="Admin"
-                component={Admin}
+                name="Admin Home"
+                component={AdminHome}
                 options={{
                     headerShown: false,
                 }}

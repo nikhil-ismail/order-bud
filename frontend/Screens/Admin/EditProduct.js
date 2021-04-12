@@ -3,6 +3,7 @@ import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions, Text, Touchable
 import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
+import mime from 'mime';
 
 import baseURL from "../../assets/common/baseUrl";
 
@@ -10,7 +11,6 @@ const { width, height } = Dimensions.get("window")
 
 const EditProduct = (props) => {
     const { product } = props.route.params;
-    console.log(product);
 
     const [image, setImage] = useState(product.image);
     const [productName, setProductName] = useState(product.name);
@@ -19,6 +19,8 @@ const EditProduct = (props) => {
     const [stock, setStock] = useState(product.countInStock);
     const [description, setDescription] = useState(product.description);
     const [selectedCategory, setSelectedCategory] = useState(product.category.name);
+
+    const [imageUploaded, setImageUploaded] = useState(false);
 
     const [productNameFocus, setProductNameFocus] = useState(false);
     const [brandFocus, setBrandFocus] = useState(false);
@@ -52,26 +54,36 @@ const EditProduct = (props) => {
 
         if (!result.cancelled) {
             setImage(result.uri);
+            setImageUploaded(true);
         }
     };
 
     const handleUpdateItem = () => {
-        axios.put(`${baseURL}products/${product.id}`, {
-            image: image,
-            name: productName,
-            brand,
-            price,
-            stock,
-            description,
-            category: selectedCategory,
-            business: business.id,
-            showOnMenu: product.showOnMenu
-        })
-            .then(res => {
-                props.navigation.navigate('Admin Home');
+        let formData = new FormData();
+
+        const newImageUri = "file:///" + image.split("file:/").join("");
+
+        if (imageUploaded) {
+            formData.append('image', {
+                uri: newImageUri,
+                type: mime.getType(newImageUri),
+                name: newImageUri.split('/').pop()
+            });
+        }
+        formData.append('name', productName);
+        formData.append('brand', brand);
+        formData.append('price', price);
+        formData.append('stock', stock);
+        formData.append('description', description);
+        formData.append('category', selectedCategory);
+        formData.append('business', business.id);
+
+        axios.put(`${baseURL}products/${product.id}`, formData)
+            .then(() => {
+                props.navigation.goBack();
             })
             .catch(err => {
-                console.log('error updating the item')
+                console.log(err)
             })
     }
 

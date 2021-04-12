@@ -2,7 +2,7 @@ import React, { useState, useCallback } from "react";
 import { View, Text, StyleSheet, ActivityIndicator, ScrollView, SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
 
 import { useSelector } from 'react-redux';
-import { selectUserId } from '../../Redux/userSlice';
+import { selectUserId, selectIsLoggedIn } from '../../Redux/userSlice';
 
 import OrderCard from './OrderCard';
 
@@ -21,7 +21,8 @@ const Orders = (props) => {
   const [businesses, setBusinesses] = useState([]);
   const [ordersCount, setOrdersCount] = useState(0);
 
-  const userId = useSelector(selectUserId);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+  const userId = isLoggedIn && useSelector(selectUserId);
 
   const handleMyOrdersToggle = () => {
     setMyOrdersToggle(!myOrdersToggle);

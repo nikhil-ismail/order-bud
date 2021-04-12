@@ -109,7 +109,7 @@ router.get(`/topProducts/:businessId`, async (req, res) => {
         if (err) {
             return res.status(500).send({msg: "unable to find top products"})
         }
-        console.log(products);
+
         return res.status(200).send(products);
     })
 })
@@ -153,17 +153,26 @@ router.put('/:productId', uploadOptions.single('image'), async (req, res) => {
         return res.status(400).send('Invalid Category');
     }
 
-    const file = req.file;
-    let fileName, basePath;
-    if (file) {
-        fileName = file.filename
-        basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+    const product = await Product.findById(mongoose.Types.ObjectId(req.params.productId));
+    if (!product) {
+        return res.status(400).send('Invalid Product!');
     }
 
-    const product = await Product.findByIdAndUpdate(
+    const file = req.file;
+    let imagePath;
+
+    if (file) {
+        const fileName = file.filename
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        imagePath = `${basePath}${fileName}`;
+    } else {
+        imagePath = product.image
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.params.productId),
         {
-            image: file ? `${basePath}${fileName}` : null,
+            image: imagePath,
             name: req.body.name,
             brand: req.body.brand,
             price: req.body.price,
@@ -171,16 +180,15 @@ router.put('/:productId', uploadOptions.single('image'), async (req, res) => {
             description: req.body.description,
             category: mongoose.Types.ObjectId(category._id),
             business: mongoose.Types.ObjectId(req.body.business),
-            showOnMenu: req.body.showOnMenu
         },
         { new: true }
     )
 
-    if (!product) {
+    if (!updatedProduct) {
         return res.status(500).send('the product cannot be updated!')
     }
 
-    res.send(product);
+    res.send(updatedProduct);
 })
 
 router.put('/toggleShowOnMenu/:productId', async (req, res) => {

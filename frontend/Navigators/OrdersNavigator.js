@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
-import Orders from "../Screens/Orders/Orders";
+import OrdersHome from "../Screens/Orders/OrderHome";
 import BusinessPage from "../Screens/Businesses/Business/BusinessPage";
 import Receipt from '../Screens/Orders/Receipt';
 import RateOrder from '../Screens/Orders/RateOrder';
@@ -13,8 +13,8 @@ function MyStack() {
     return (
         <Stack.Navigator>
             <Stack.Screen 
-                name='Orders'
-                component={Orders}
+                name='Orders Home'
+                component={OrdersHome}
                 options={{
                     headerShown: false,
                 }}

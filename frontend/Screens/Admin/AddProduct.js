@@ -3,6 +3,7 @@ import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions, Text, Touchable
 import * as ImagePicker from 'expo-image-picker';
 import { Icon } from 'react-native-elements';
 import axios from 'axios';
+import mime from 'mime';
 
 import baseURL from "../../assets/common/baseUrl";
 
@@ -54,16 +55,25 @@ const AddProduct = (props) => {
     };
 
     const handleAddItem = () => {
-        axios.post(`${baseURL}products`, {
-            image: image,
-            name: productName,
-            brand,
-            price,
-            stock,
-            description,
-            category: selectedCategory,
-            business: business.id
-        })
+        let formData = new FormData();
+
+        const newImageUri = "file:///" + image.split("file:/").join("");
+
+        formData.append('image', {
+            uri: newImageUri,
+            type: mime.getType(newImageUri),
+            name: newImageUri.split('/').pop()
+        });
+        formData.append('name', productName);
+        formData.append('brand', brand);
+        formData.append('price', price);
+        formData.append('stock', stock);
+        formData.append('description', description);
+        formData.append('category', selectedCategory);
+        formData.append('business', business.id);
+
+
+        axios.post(`${baseURL}products`, formData)
             .then(() => {
                 props.navigation.goBack();
             })

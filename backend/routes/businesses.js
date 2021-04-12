@@ -30,7 +30,6 @@ const storage = multer.diskStorage({
 })
 
 const uploadOptions = multer({ storage: storage });
-const multipleFieldUpload = uploadOptions.fields([{ name: "profilePhoto" }, { name: "coverPhoto" }]);
 
 router.get(`/`, async (req, res) => {
     const businessList = await Business.find()
@@ -68,7 +67,7 @@ router.get('/:userId', async (req, res) => {
     return res.status(500).send({msg: "You are not a store owner"})
 })
 
-router.post('/', multipleFieldUpload, async (req, res) => {
+router.post('/', uploadOptions.single('image'), async (req, res) => {
     const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
 
     let coverPhotoPath;
@@ -122,17 +121,25 @@ router.put('/rating/:id', async (req, res) => {
         { new: true }
     )
 
-    console.log(business);
-
     if (!business) {
         res.status(500).json({ message: 'The business with the given ID was not found.' })
     }
     res.status(200).send(business);
 })
 
-router.put('/:id', multipleFieldUpload, async (req, res) => {
-    
-    standardizedCategories = req.body.categories.map(category => {
+router.put('/:id', uploadOptions.single('image'), async (req, res) => {
+
+    const business = await Business.findById(req.params.id);
+    if (!business) {
+        return res.status(400).send('Invalid Business!');
+    }
+
+    const categoriesArray = req.body.categories.substr(1, req.body.categories.length - 2).split(",");
+    const formattedCategoriesArray = categoriesArray.map(category => {
+        return category.substr(1, category.length - 2)
+    })
+
+    standardizedCategories = formattedCategoriesArray.map(category => {
         return category.substr(0, 1).toUpperCase() + category.substr(1).toLowerCase();
     })
 
@@ -148,32 +155,35 @@ router.put('/:id', multipleFieldUpload, async (req, res) => {
 
     const categoriesResolved = await categories;
 
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-    let coverPhotoPath = req.body.coverPhoto;
-
-    if (req.files && req.files.coverPhoto) {
-        coverPhotoPath = `${basePath}${req.files.coverPhoto[0].filename}`;
+    const file = req.file;
+    let imagePath;
+    
+    if (file) {
+        const fileName = file.filename
+        const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
+        imagePath = `${basePath}${fileName}`;
+    } else {
+        imagePath = business.coverPhoto
     }
 
-    const business = await Business.findByIdAndUpdate(
+    const updatedBusiness = await Business.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.params.id),
         {
-            coverImage: coverPhotoPath,
+            coverImage: imagePath,
             name: req.body.name,
             address: req.body.address,
             delivery: req.body.delivery,
             pickup: req.body.pickup,
             categories: categoriesResolved,
-            rating: req.body.rating
         },
         { new: true }
     )
 
-    if (!business) {
+    if (!updatedBusiness) {
         return res.status(400).send('the business cannot be updated!')
     }
 
-    res.send(business);
+    res.send(updatedBusiness);
 })
 
 router.delete('/:id', (req, res) => {

@@ -37,7 +37,7 @@ export const orderDetailsReducer = (state = initialState, action) => {
                 delivery: action.payload
             }
         case CLEAR_ADDRESS:
-            return state = {}
+            return state = {delivery: true}
     }
     return state;
 }

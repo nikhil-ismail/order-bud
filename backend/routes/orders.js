@@ -67,6 +67,7 @@ router.get('/business/:businessId', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
+    console.log(req.body.isDelivery);
     const orderItemsIds = Promise.all(req.body.order.orderItems.map(async (orderItem) => {
         let newOrderItem = new OrderItem({
             quantity: orderItem.quantity,
