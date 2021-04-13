@@ -6,7 +6,7 @@ const AddToCartButton = (props) => {
 
     return (
         <TouchableOpacity style={styles.addToCart} onPress={props.goToLogin}>
-            <Text style={styles.addToCartText}>Create Account To Add To Cart</Text>
+            <Text style={styles.addToCartText}>Login To Add To Cart</Text>
         </TouchableOpacity>
     )
 }

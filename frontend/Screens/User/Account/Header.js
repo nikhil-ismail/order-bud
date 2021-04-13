@@ -5,7 +5,7 @@ const Header = (props) => {
     return (
         <View style={styles.headerContainer}>
             <Text style={styles.header}>Welcome To OrderBud</Text>
-            <Text style={styles.subHeader}>Order weed from top dispensaries near you.</Text>
+            <Text style={styles.subHeader}>Discover Small Businesses Near You.</Text>
         </View>
     )
 }
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     },
     subHeader: {
         color: "grey",
-        fontSize: 22,
+        fontSize: 24,
         fontWeight: "bold",
         marginTop: 10
     }

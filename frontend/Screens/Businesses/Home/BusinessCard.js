@@ -22,7 +22,6 @@ const BusinessCard = (props) => {
                     <Text style={styles.businessDetailsSubRowText}>$2.99 • </Text>
                     <Text style={styles.businessDetailsSubRowText}>30-40 min</Text>
                 </View>
-                <Text style={styles.friendOrders}>Greg and 3 others have ordered from here</Text>
             </View>
         </TouchableOpacity>
     )
@@ -59,9 +58,9 @@ const styles = StyleSheet.create({
     },
     ratingContainer: {
         backgroundColor: 'rgba(0, 128, 0, 0.75)',
-        height: 30,
-        width: 30,
-        borderRadius: 15,
+        height: 32,
+        width: 32,
+        borderRadius: 16,
         alignItems: "center",
         justifyContent: "center",
         padding: 5

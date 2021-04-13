@@ -74,7 +74,7 @@ router.get(`/topProducts/:businessId`, async (req, res) => {
         {
             $group: {
                 _id: "$orderItems.product",
-                'count': { $sum: 1 }
+                'count': { $sum: "$orderItems.quantity" }
             }
         },
         {
@@ -192,22 +192,10 @@ router.put('/:productId', uploadOptions.single('image'), async (req, res) => {
 })
 
 router.put('/toggleShowOnMenu/:productId', async (req, res) => {
-    const category = await Category.findOne({ "name": req.body.category });
-    if (!category) {
-        return res.status(400).send('Invalid Category');
-    }
     
     const product = await Product.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.params.productId),
         {
-            image: file ? `${basePath}${fileName}` : null,
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            countInStock: req.body.stock,
-            description: req.body.description,
-            category: mongoose.Types.ObjectId(category._id),
-            business: mongoose.Types.ObjectId(req.body.business),
             showOnMenu: req.body.showOnMenu
         },
         { new: true }

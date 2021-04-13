@@ -163,8 +163,9 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
         const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
         imagePath = `${basePath}${fileName}`;
     } else {
-        imagePath = business.coverPhoto
+        imagePath = business.coverImage
     }
+    console.log(req.body.pickup);
 
     const updatedBusiness = await Business.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.params.id),

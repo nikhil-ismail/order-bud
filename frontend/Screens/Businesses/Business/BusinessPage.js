@@ -68,7 +68,7 @@ const BusinessPage = (props) => {
         <>
             {
                 loading === false ?
-                    <View style={{flex: 1}}>
+                    <View style={{flex: 1, marginBottom: 10}}>
                         <ScrollView scrollIndicatorInsets={{ right: 1 }}>
                             <Image
                                 style={styles.coverPhoto}

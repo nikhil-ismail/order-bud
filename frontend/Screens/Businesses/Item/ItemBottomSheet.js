@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
 import ItemImage from './ItemImage';
 import ItemDetails from './ItemDetails';
@@ -11,6 +11,8 @@ import CreateAccountButton from './CreateAccountButton';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart, updateItemQuantity, selectCartItems, clearCart } from '../../../Redux/cartSlice';
 import { selectIsLoggedIn } from '../../../Redux/userSlice';
+
+var { height, width } = Dimensions.get("window");
 
 const ItemBottomSheet = (props) => {
     const [quantity, setQuantity] = useState(props.quantity ? props.quantity : 1);
@@ -132,7 +134,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 5,
         position: "absolute",
         bottom: 2,
-        width: "100%",
+        width: width,
         alignItems: "center",
         paddingBottom: 40
     }

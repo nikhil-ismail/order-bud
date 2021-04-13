@@ -64,9 +64,11 @@ const ManageProducts = (props) => {
                                             {
                                                 topProducts.map(topProduct => {
                                                     return (
-                                                        <View style={styles.topProductsContainer}>
-                                                            <Text style={styles.productName}>{topProduct.product.name}</Text>
-                                                            <Text style={styles.subText}>{topProduct.product.brand}</Text>
+                                                        <View style={[styles.topProductsContainer, {justifyContent: "space-between"}]}>
+                                                            <View>
+                                                                <Text style={styles.productName}>{topProduct.product.name}</Text>
+                                                                <Text style={styles.subText}>{topProduct.product.brand}</Text>
+                                                            </View>
                                                             <Text style={styles.numberSold}>{topProduct.count} Sold</Text>
                                                         </View>
                                                     )
@@ -91,22 +93,26 @@ const ManageProducts = (props) => {
                                                                         <View>
                                                                             <View style={styles.currentProductsCard}>
                                                                                 <View style={styles.productDetailsContainer}>
-                                                                                    <Image
-                                                                                        style={product.image ? styles.productImage : styles.productImagePlaceholder}
-                                                                                        source={{ uri: product.image }}
-                                                                                    />
-                                                                                    <View style={{marginLeft: 10}}>
-                                                                                        <Text style={styles.productName}>{product.name}</Text>
-                                                                                        <Text style={styles.subText}>{product.brand}</Text>
+                                                                                    <View style={{ width: "30%" }}>
+                                                                                        <Image
+                                                                                            style={product.image ? styles.productImage : styles.productImagePlaceholder}
+                                                                                            source={{ uri: product.image }}
+                                                                                        />
+                                                                                    </View>
+                                                                                    <View style={{ width: "70%", paddingHorizontal: 10 }}>
+                                                                                        <Text style={[styles.productName]}>{product.name}</Text>
+                                                                                        <Text style={[styles.subText]}>{product.brand}</Text>
                                                                                         <Text style={[styles.subText, { fontWeight: "bold" }]}>{product.countInStock} In Stock</Text>
                                                                                     </View>
                                                                                 </View>
-                                                                                <TouchableOpacity
-                                                                                    onPress={() => props.navigation.navigate('Edit Product', { business, product })}
-                                                                                    style={styles.editButtonContainer}
-                                                                                >
-                                                                                    <Text style={styles.editButtonText}>Edit</Text>
-                                                                                </TouchableOpacity>
+                                                                                <View style={{ width: "15%" }}>
+                                                                                    <TouchableOpacity
+                                                                                        onPress={() => props.navigation.navigate('Edit Product', { business, product })}
+                                                                                        style={styles.editButtonContainer}
+                                                                                    >
+                                                                                        <Text style={styles.editButtonText}>Edit</Text>
+                                                                                    </TouchableOpacity>
+                                                                                </View>
                                                                             </View>
                                                                             <View style={styles.separator} />
                                                                         </View>
@@ -189,8 +195,9 @@ const styles = StyleSheet.create({
     },
     productDetailsContainer: {
         flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: "space-between",
+        alignItems: "center",
+        width: "85%"
     },
     productImage: {
         height: 100,
@@ -209,7 +216,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         borderRadius: 5,
         height: 40,
-        width: 60
+        width: "100%"
     },
     editButtonText: {
         color: "white",

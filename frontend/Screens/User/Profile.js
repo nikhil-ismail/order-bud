@@ -56,10 +56,6 @@ const Profile = (props) => {
                         <Icon name="sign-out-alt" type="font-awesome-5" color="black" size={30} />
                         <Text style={styles.categoryText}>Log Out</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.category} onPress={handleDeleteUser}>
-                        <Icon name="trash" type="font-awesome-5" color="black" size={30} />
-                        <Text style={{fontSize: 18, color: "red", fontWeight: "bold", marginLeft: 15, marginTop: 5}}>Delete Account</Text>
-                    </TouchableOpacity>
                 </View>
             </ScrollView>
         </SafeAreaView>

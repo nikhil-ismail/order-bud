@@ -3,11 +3,11 @@ const mongoose = require('mongoose');
 const businessSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        default: '',
     },
     address: {
         type: String,
-        required: true
+        default: ''
     },
     coverImage: {
         type: String,
@@ -28,6 +28,14 @@ const businessSchema = mongoose.Schema({
     reviewCount: {
         type: Number,
         default: 0,
+    },
+    delivery: {
+        type: Boolean,
+        default: false,
+    },
+    pickup: {
+        type: Boolean,
+        default: false,
     },
     categories: [{
         type: mongoose.Schema.Types.ObjectId,

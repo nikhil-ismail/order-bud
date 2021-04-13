@@ -88,22 +88,13 @@ const EditProduct = (props) => {
     }
 
     const handleHideItem = () => {
-        axios.put(`${baseURL}products/${product.id}`, {
-            image: image,
-            name: productName,
-            brand,
-            price,
-            stock,
-            description,
-            category: selectedCategory,
-            business: business.id,
-            showOnMenu: !product.showOnMenu
-        })
+        axios.put(`${baseURL}products/toggleShowOnMenu/${product.id}`, { showOnMenu: !product.showOnMenu })
             .then(() => {
                 props.navigation.goBack();
             })
             .catch(err => {
-                console.log('error deleting the item')
+                console.log(err);
+                console.log('error hiding the item')
             })
     }
 
@@ -194,7 +185,7 @@ const EditProduct = (props) => {
                         <Text style={styles.buttonText}>Update Item</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.editDeleteButtonContainer, styles.hideButton]} onPress={handleHideItem}>
-                        <Text style={styles.hideButtonText}>Hide From Menu</Text>
+                        <Text style={styles.hideButtonText}>{product.showOnMenu ? 'Hide From Menu' : 'Show On Menu'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

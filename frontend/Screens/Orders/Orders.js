@@ -73,6 +73,12 @@ const Orders = (props) => {
                   <Text style={styles.header}>My Orders</Text>
                 </View>
                 {
+                  pendingOrders.length === 0 && completedOrders.length === 0 &&
+                  <View style={{alignItems: "center", justifyContent: "center", marginTop: 20}}>
+                    <Text style={{color: "grey", fontSize: 20}}>You have not placed any orders yet.</Text>
+                  </View>
+                }
+                {
                   pendingOrders.length > 0 &&
                   <View style={{ backgroundColor: "white", marginTop: 10 }}>
                     <Text style={{ fontSize: 24, fontWeight: "bold", marginLeft: 17, marginBottom: 10 }}>Current</Text>

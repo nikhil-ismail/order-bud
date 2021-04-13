@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
 import { selectIsDelivery } from '../../../Redux/orderDetailsSlice';
+import { selectIsLoggedIn } from '../../../Redux/userSlice';
 
 import Header from "./Header";
 import Banner from "./Banner";
@@ -27,6 +28,7 @@ const ProductContainer = (props) => {
 
   const cart = useSelector(selectCartItems);
   const isDelivery = useSelector(selectIsDelivery);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
 
   const handleFilter = () => {
     setShowFilter(!showFilter);
@@ -83,7 +85,14 @@ const ProductContainer = (props) => {
                 parent="home"
               />
               <View style={styles.separator} />
-              <Text style={styles.header}>Your Local Dispensaries</Text>
+              {
+                isLoggedIn ?
+                <Text style={styles.header}>Your Local Businesses</Text> :
+                <View>
+                  <Text style={styles.header}>Popular on OrderBud</Text>
+                  <Text style={styles.subHeader}>Enter Your Address For Businesses Near You</Text>
+                </View>
+              }
               <View style={styles.listContainer}>
                 {businesses.map(business => {
                   if (isDelivery && business.delivery || !isDelivery && business.pickup) {
@@ -127,6 +136,13 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     marginTop: 20,
+    marginLeft: (width - 0.925 * width) / 2
+  },
+  subHeader: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "grey",
+    marginTop: 5,
     marginLeft: (width - 0.925 * width) / 2
   }
 });

@@ -12,9 +12,14 @@ const CategoryFilter = (props) => {
         >
             <ListItem>
                 {props.categories.map((category) => (
-                    <TouchableOpacity key={category._id} onPress={() => props.navigation.navigate('Category Filter Results', {category: category.name})}>
-                        <View style={styles.imageFilter} />
-                        <Text style={styles.textStyle}>{category.name}</Text>
+                    <TouchableOpacity
+                        key={category._id}
+                        style={styles.imageFilter}
+                        onPress={() => props.navigation.navigate('Category Filter Results', {category: category.name})}
+                    >
+                        <View style={styles.image}>
+                            <Text style={styles.textStyle}>{category.name}</Text>
+                        </View>
                     </TouchableOpacity>
                 ))}
             </ListItem>
@@ -24,18 +29,23 @@ const CategoryFilter = (props) => {
 
 const styles = StyleSheet.create({
     imageFilter: {
-        height: 125,
-        width: 125,
-        borderRadius: 5,
-        backgroundColor: 'grey',
+        height: 80,
+        width: 120,
         marginRight: 10
     },
+    image: {
+        width: "100%",
+        height: "100%",
+        borderRadius: 5,
+        backgroundColor: 'green',
+        opacity: 0.8,
+        justifyContent: "center",
+        padding: 10
+    },
     textStyle: {
-        position: "absolute",
-        color: "white",
+        color: "white",     
         fontWeight: "bold",
-        bottom: 10,
-        left: 15
+        textAlign: "center"
     }
 })
 

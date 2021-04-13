@@ -14,7 +14,7 @@ const Receipt = props => {
     const rated = order.rated;
 
     return (
-        <View>
+        <View style={{flex: 1}}>
             <View style={{backgroundColor: "white", flexDirection: "row", paddingTop: 25, paddingBottom: 15}}>
                 <TouchableOpacity style={{marginTop: 30, marginLeft: 30}} onPress={() => props.navigation.navigate('Orders Home')}>
                     <Icon name="arrow-left" type="font-awesome-5" color="black" size={25} />
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         marginLeft: 20
     },
     header: {
-        fontSize: 18,
+        fontSize: 23,
         fontWeight: "bold",
         marginTop: 5
     },

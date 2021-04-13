@@ -21,9 +21,6 @@ const BusinessInfo = (props) => {
                     <Text style={styles.businessDetails}> • </Text>
                     <Text style={styles.businessDetails}>30-40 min</Text>
                 </View>
-                <View style={{ flexDirection: "row", marginBottom: 6 }}>
-                    <Text style={styles.businessDetails}>2.99 Delivery Fee</Text>
-                </View>
             </View>
         </View>
     )
@@ -49,9 +46,9 @@ const styles = StyleSheet.create({
     },
     ratingContainer: {
         backgroundColor: 'rgba(0, 128, 0, 0.75)',
-        height: 30,
-        width: 30,
-        borderRadius: 15,
+        height: 32,
+        width: 32,
+        borderRadius: 16,
         alignItems: "center",
         justifyContent: "center",
         padding: 5
