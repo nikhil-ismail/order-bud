@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
 
 import ItemImage from './ItemImage';
 import ItemDetails from './ItemDetails';
@@ -17,8 +17,9 @@ var { height, width } = Dimensions.get("window");
 const ItemBottomSheet = (props) => {
     const [quantity, setQuantity] = useState(props.quantity ? props.quantity : 1);
     const [showDisclaimer, setShowDisclaimer] = useState(false);
+    const [error, setError] = useState(false);
 
-    const { id, image, name, description, brand, price, business } = props.product;
+    const { id, image, name, description, brand, price, business, countInStock } = props.product;
 
     const dispatch = useDispatch();
     const cartItems = useSelector(selectCartItems);
@@ -68,12 +69,18 @@ const ItemBottomSheet = (props) => {
     }
 
     const handlePlusCounter = () => {
-        setQuantity(quantity + 1);
+        if (countInStock > quantity) {
+            setQuantity(quantity + 1);
+            setError('');
+        } else {
+            setError(`Sorry, we do not have enough in stock to sell more than ${quantity} ${quantity === 1 ? 'unit' : 'units'} of this item.`);
+        }
     }
 
     const handleMinusCounter = () => {
         if (quantity > 1) {
             setQuantity(quantity - 1);
+            setError('');
         }
     }
 
@@ -109,6 +116,10 @@ const ItemBottomSheet = (props) => {
             <ItemDetails name={name} brand={brand} description={description} />
             <QuantitySetter quantity={quantity} onPlus={handlePlusCounter} onMinus={handleMinusCounter} />
             {
+                error.length > 1 &&
+                <Text style={styles.errorMessage}>{error}</Text>
+            }
+            {
                 isLoggedIn
                 ?
                 <AddToCartButton handlePress={handleAddToCart} price={price} quantity={quantity} cartType={props.cartType} />
@@ -137,6 +148,13 @@ const styles = StyleSheet.create({
         width: width,
         alignItems: "center",
         paddingBottom: 40
+    },
+    errorMessage: {
+        color: "red",
+        fontSize: 18,
+        marginHorizontal: 15,
+        marginBottom: 15,
+        textAlign: "center"
     }
 });
 

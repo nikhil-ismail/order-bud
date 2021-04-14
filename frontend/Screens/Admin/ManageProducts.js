@@ -64,7 +64,7 @@ const ManageProducts = (props) => {
                                             {
                                                 topProducts.map(topProduct => {
                                                     return (
-                                                        <View style={[styles.topProductsContainer, {justifyContent: "space-between"}]}>
+                                                        <View style={[styles.topProductsContainer, { justifyContent: "space-between" }]}>
                                                             <View>
                                                                 <Text style={styles.productName}>{topProduct.product.name}</Text>
                                                                 <Text style={styles.subText}>{topProduct.product.brand}</Text>
@@ -102,7 +102,19 @@ const ManageProducts = (props) => {
                                                                                     <View style={{ width: "70%", paddingHorizontal: 10 }}>
                                                                                         <Text style={[styles.productName]}>{product.name}</Text>
                                                                                         <Text style={[styles.subText]}>{product.brand}</Text>
-                                                                                        <Text style={[styles.subText, { fontWeight: "bold" }]}>{product.countInStock} In Stock</Text>
+                                                                                        {
+                                                                                            product.countInStock === 0
+                                                                                            ?
+                                                                                            <Text style={[styles.subText, { fontWeight: "bold", color: "red" }]}>{product.countInStock} In Stock</Text>
+                                                                                            :
+                                                                                            (
+                                                                                                product.countInStock < 5
+                                                                                                ?
+                                                                                                <Text style={[styles.subText, { fontWeight: "bold", color: "orange" }]}>{product.countInStock} In Stock</Text>
+                                                                                                :
+                                                                                                <Text style={[styles.subText, { fontWeight: "bold", color: "green" }]}>{product.countInStock} In Stock</Text>
+                                                                                            )
+                                                                                        }
                                                                                     </View>
                                                                                 </View>
                                                                                 <View style={{ width: "15%" }}>

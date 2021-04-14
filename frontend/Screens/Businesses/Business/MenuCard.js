@@ -5,7 +5,7 @@ var { width } = Dimensions.get("window");
 
 const MenuCard = (props) => {
 
-    const { name, image, brand, description } = props.product;
+    const { name, image, brand, description, countInStock } = props.product;
 
     const handlePress = () => {
         props.handleShowItemModal(props.product)
@@ -20,6 +20,10 @@ const MenuCard = (props) => {
                             <Text style={styles.subText}>{brand}</Text>
                         </View>
                         <Text style={styles.description}>{description.length > 70 ? description.substr(0, 70) + '...' : description}</Text>
+                        {
+                            countInStock === 0 &&
+                            <Text style={styles.outOfStock}>Out Of Stock</Text>
+                        }
                     </View>
                     <Image
                         style={styles.image}
@@ -66,6 +70,12 @@ const styles = StyleSheet.create({
     description: {
         fontSize: 17,
         color: 'grey'
+    },
+    outOfStock: {
+        color: "red",
+        fontSize: 15,
+        fontWeight: "bold",
+        marginVertical: 10
     }
 })
 
