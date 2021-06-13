@@ -4,24 +4,26 @@ import { Icon, BottomSheet } from 'react-native-elements';
 
 import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../Redux/userSlice";
+import { selectAddress } from "../../../Redux/orderDetailsSlice";
 
-import SearchBar from '../../../Shared/SearchBar';
 import AddressCard from "./AddressCard";
 
 const Addresses = (props) => {
     const userDetails = useSelector(selectUserDetails);
+    const address = useSelector(selectAddress);
 
     return (
         <SafeAreaView>
             <ScrollView>
                 <View style={styles.titleContainer}>
-                    <Text style={styles.title}>Add Address</Text>
+                    <Text style={styles.title}>Manage Addresses</Text>
                 </View>
-                <View style={{marginBottom: 10}}>
-                    <SearchBar placeholder="Search for a new address..." />
-                </View>
-                <AddressCard />
-                <AddressCard />
+                <TouchableOpacity style={styles.addContainer} onPress={() => props.navigation.navigate('Enter Address')}>
+                    <View style={styles.addIcon}>
+                        <Icon name="plus" type="font-awesome-5" color="black" size={25} />
+                    </View>
+                    <Text style={styles.addAddressText}>Add New Address</Text>
+                </TouchableOpacity>
                 <AddressCard />
             </ScrollView>
         </SafeAreaView>
@@ -37,6 +39,23 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 26,
+        fontWeight: "bold"
+    },
+    addContainer: {
+        flexDirection: "row",
+        backgroundColor: "white",
+        paddingVertical: 20,
+        marginBottom: 3    
+    },
+    addIcon: {
+        marginLeft: 30,
+        marginTop: 8
+    },
+    addAddressText: {
+        fontSize: 16,
+        paddingHorizontal: 30,
+        marginTop: 12,
+        color: "green",
         fontWeight: "bold"
     },
 })

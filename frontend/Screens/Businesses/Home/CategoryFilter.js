@@ -30,7 +30,7 @@ const CategoryFilter = (props) => {
 const styles = StyleSheet.create({
     imageFilter: {
         height: 80,
-        width: 120,
+        width: 140,
         marginRight: 10
     },
     image: {

@@ -30,7 +30,7 @@ const PurchaseButton = props => {
                 quantity: item.quantity
             }
         }),
-        shippingAddress1: orderType ? orderAddress : businessAddress,
+        shippingAddress1: orderType ? orderAddress.mainText : businessAddress.mainText,
         phone: userDetails.phone,
         isDelivery: orderType,
         totalPrice: (cartTotalPrice * 1.13).toFixed(2),
@@ -40,7 +40,7 @@ const PurchaseButton = props => {
 
     const handlePurchase = () => {
         axios.post(`${baseURL}orders`, { order })
-        .then(res => {
+        .then(() => {
             console.log('order successfully purchased')
             props.navigation.navigate('Home');
             dispatch(clearCart());

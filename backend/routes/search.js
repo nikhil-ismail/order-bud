@@ -89,6 +89,7 @@ router.get('/', (req, res) => {
                     if (err) {
                         return res.status(500).send({ msg: "Unable to reconcile business names" });
                     }
+                    
                     return res.status(200).send({
                         productMatches,
                         businessMatches

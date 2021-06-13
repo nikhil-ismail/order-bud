@@ -14,8 +14,13 @@ const EnterAddress = (props) => {
 
     const dispatch = useDispatch();
 
-    const handleAddAddress = (address) => {
-        dispatch(setAddress(address));
+    const handleAddAddress = (prediction) => {
+        dispatch(setAddress({
+            fullAddress: prediction.description,
+            addressPrimaryText: prediction.structured_formatting.main_text,
+            addressSecondaryText: prediction.structured_formatting.secondary_text,
+            addressPlaceId: prediction.place_id
+        }));
         props.navigation.goBack();
     }
 
@@ -52,7 +57,7 @@ const EnterAddress = (props) => {
                                 <TouchableOpacity
                                     key={prediction.id}
                                     style={styles.predictionContainer}
-                                    onPress={() => handleAddAddress(prediction.structured_formatting.main_text)}
+                                    onPress={() => handleAddAddress(prediction)}
                                 >
                                     <Icon name="map-marker-alt" type="font-awesome-5" color="black" size={26} />
                                     <View style={styles.destinationDetails}>

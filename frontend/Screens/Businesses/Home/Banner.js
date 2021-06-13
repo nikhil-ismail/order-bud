@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Image, StyleSheet, Dimensions, View, ScrollView, SafeAreaView } from "react-native";
-import Swiper from "react-native-swiper/src";
+import React from "react";
+import { Image, StyleSheet, Dimensions, View } from "react-native";
 import { Text } from "native-base";
 
 var { width } = Dimensions.get("window");
@@ -42,6 +41,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 24,
     bottom: 10,
+    marginLeft: 20,
     margin: 10,
     marginRight: 50
   }

@@ -31,7 +31,7 @@ const Header = (props) => {
                 </View>
             </View>
             <TouchableOpacity style={styles.address} onPress={() => props.navigation.navigate('Enter Address')}>
-                <Text style={styles.addressText}>{address === undefined ? 'Enter Address' : address}</Text>
+                <Text style={styles.addressText}>{address === undefined ? 'Enter Address' : address.mainText}</Text>
                 <Icon name="angle-down" type="font-awesome-5" color="green" size={20} />
             </TouchableOpacity>
         </SafeAreaView>

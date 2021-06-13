@@ -35,7 +35,7 @@ const Register = (props) => {
                     onFocus={() => setNameFocus(true)}
                     onBlur={() => setNameFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                 />
                 <TextInput
                     style={[styles.textInput, emailFocus && styles.focusInputStyle]}
@@ -46,7 +46,7 @@ const Register = (props) => {
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                 />
                 <TextInput
                     style={[styles.textInput, phoneFocus && styles.focusInputStyle]}
@@ -68,7 +68,7 @@ const Register = (props) => {
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                     secureTextEntry={true}
                 />
                 <TextInput
@@ -80,7 +80,7 @@ const Register = (props) => {
                     onFocus={() => setConfirmPasswordFocus(true)}
                     onBlur={() => setConfirmPasswordFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                     secureTextEntry={true}
                 />
             </View>

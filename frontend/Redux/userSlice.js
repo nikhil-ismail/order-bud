@@ -27,7 +27,6 @@ export const userReducer = (state = initialState, action) => {
                 details: {
                     ...state.details,
                     id: action.payload.user.id,
-                    address: action.payload.user.address,
                     email: action.payload.user.email,
                     isAdmin: action.payload.user.isAdmin,
                     name: action.payload.user.name,

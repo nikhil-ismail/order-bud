@@ -1,12 +1,11 @@
 import React from "react";
-import { View, StyleSheet, Dimensions, Text } from "react-native";
+import { View, StyleSheet, Text } from "react-native";
 
 import Address from './Address';
 
 import { useSelector } from 'react-redux';
-import { selectAddress, selectIsDelivery } from '../../../Redux/orderDetailsSlice';
+import { selectIsDelivery } from '../../../Redux/orderDetailsSlice';
 
-const { height } = Dimensions.get('window')
 
 const OrderLogistics = props => {
 

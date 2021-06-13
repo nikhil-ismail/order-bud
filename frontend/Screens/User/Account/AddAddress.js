@@ -5,6 +5,8 @@ import { useSelector } from 'react-redux';
 import { selectAddress } from '../../../Redux/orderDetailsSlice';
 
 const AddAddress = (props) => {
+    const address = useSelector(selectAddress);
+
     return (
         <View style={styles.bodyContainer}>
             <View style={styles.inputContainer}>
@@ -12,11 +14,14 @@ const AddAddress = (props) => {
                     style={styles.textInput}
                     onFocus={() => props.navigation.navigate('Enter Address')}
                     placeholder="Enter Address"
-                    value={useSelector(selectAddress)}
+                    value={address && address.fullAddress}
                 />
             </View>
             <TouchableOpacity style={styles.buttonContainer} onPress={() => props.handleAddAddress()}>
                 <Text style={styles.buttonText}>Create Account</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.backButtonContainer} onPress={() => props.goBack()}>
+                <Text style={styles.backButtonText}>Go Back</Text>
             </TouchableOpacity>
         </View>
     )
@@ -54,6 +59,21 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: "white",
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+    backButtonContainer: {
+        borderColor: "green",
+        borderWidth: 1,
+        padding: 10,
+        width: "100%",
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 5,
+        marginTop: 10
+    },
+    backButtonText: {
+        color: "green",
         fontSize: 20,
         fontWeight: "bold"
     }

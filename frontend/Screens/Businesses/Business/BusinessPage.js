@@ -33,8 +33,8 @@ const BusinessPage = (props) => {
         setShowItemModal(false);
     }
 
-    const { coverImage, name, address, rating, categories } = props.route.params;
-    const businessDetails = { name, address, rating };
+    const { coverImage, name, fullAddress, rating, categories } = props.route.params;
+    const businessDetails = { name, fullAddress, rating };
     const id = props.route.params.id ? props.route.params.id : props.route.params._id;
     const cart = useSelector(selectCartItems);
 

@@ -1,4 +1,4 @@
-const {User} = require('../models/user');
+const { User } = require('../models/user');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
@@ -7,105 +7,72 @@ const jwt = require('jsonwebtoken');
 router.get(`/`, async (req, res) => {
     const userList = await User.find().select('-passwordHash');
 
-    if(!userList) {
-        res.status(500).json({success: false})
-    } 
+    if (!userList) {
+        res.status(500).json({ success: false })
+    }
     res.send(userList);
 })
 
-router.get('/:id', async(req,res)=>{
+router.get('/:id', async (req, res) => {
     const user = await User.findById(req.params.id).select('-passwordHash');
 
-    if(!user) {
-        res.status(500).json({message: 'The user with the given ID was not found.'})
-    } 
+    if (!user) {
+        res.status(500).json({ message: 'The user with the given ID was not found.' })
+    }
     res.status(200).send(user);
 })
 
-router.put('/:id',async (req, res)=> {
+router.post('/login', async (req, res) => {
+    const user = await User.findOne({ email: req.body.email })
 
-    const userExist = await User.findById(req.params.id);
-    let newPassword
-    if(req.body.password) {
-        newPassword = bcrypt.hashSync(req.body.password, 10)
-    } else {
-        newPassword = userExist.passwordHash;
-    }
-
-    const user = await User.findByIdAndUpdate(
-        req.params.id,
-        {
-            name: req.body.name,
-            email: req.body.email,
-            passwordHash: newPassword,
-            phone: req.body.phone,
-            isAdmin: req.body.isAdmin,
-            street: req.body.street,
-            apartment: req.body.apartment,
-            zip: req.body.zip,
-            city: req.body.city,
-            country: req.body.country,
-        },
-        { new: true}
-    )
-
-    if(!user) {
-        return res.status(400).send('the user cannot be created!')
-    }
-
-    res.send(user);
-})
-
-router.post('/login', async (req,res) => {
-    const user = await User.findOne({email: req.body.email})
-
-    if(!user) {
+    if (!user) {
         return res.status(400).send('The user not found');
     }
 
-    if(user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
-        const accessToken = jwt.sign({ userId: user.id}, process.env.secret);
-       
+    if (user && bcrypt.compareSync(req.body.password, user.passwordHash)) {
+        const accessToken = jwt.sign({ userId: user.id }, process.env.secret);
+
         res.status(200).send({
             auth: true,
-            user: {
-                id: user.id,
-                address: user.address,
-                email: user.email,
-                isAdmin: user.isAdmin,
-                name: user.name,
-                phone: user.phone
-            },
+            user: user,
             accessToken: accessToken
-        }) 
+        })
     } else {
-       res.status(400).send('Password is wrong!');
+        res.status(400).send('Password is wrong!');
     }
 })
 
 router.post('/register', async (req, res) => {
-    const userExists = await User.findOne({email: req.body.email});
+    const userExists = await User.findOne({ email: req.body.email });
 
     if (userExists) {
         console.log('here')
         return res.status(400).send('A user with this email already exists');
     }
 
+    let address = {
+        fullAddress: req.body.fullAddress,
+        addressPrimaryText: req.body.addressPrimaryText,
+        addressSecondaryText: req.body.addressSecondaryText,
+        addressPlaceId: req.body.addressPlaceId
+    }
+
     let user = new User({
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        address: req.body.address,
+        address: address,
         passwordHash: bcrypt.hashSync(req.body.password, 10),
-        isAdmin: false,
+        isAdmin: false
     })
+    
     user = await user.save();
 
     if (!user) {
         return res.status(400).send('The user cannot be created!');
     }
 
-    const accessToken = jwt.sign({ userId: user.id}, process.env.secret);
+    const accessToken = jwt.sign({ userId: user.id }, process.env.secret);
 
     return res.status(200).send({
         auth: true,
@@ -114,38 +81,72 @@ router.post('/register', async (req, res) => {
     });
 })
 
-router.post('/addAddress/:id', async (req, res) => {
-    const userExists = await User.findById(req.params.id);
+router.put('/changePassword/:id',async (req, res)=> {
+    let oldPassword = req.body.oldPassword;
+    let newPassword = req.body.newPassword;
+    let newPasswordHash;
 
-    if (!userExists) {
-        return res.status(400).send('Could not find the user');
+    const userExist = await User.findById(req.params.id);
+    console.log(userExist);
+
+    if (bcrypt.compareSync(oldPassword, userExist.passwordHash)) {
+        newPasswordHash = bcrypt.hashSync(newPassword, 10)
+    }
+    else {
+        return res.status(400).send('Password is wrong!');
     }
 
     const user = await User.findByIdAndUpdate(
         req.params.id,
         {
-            address: { $push: { address: req.body.address }}
+            passwordHash: newPasswordHash,
         },
         { new: true}
     )
 
-    if (!user) {
-        return res.status(400).send('Could not add the address to the user');
+    if(!user) {
+        return res.status(400).send('The password cannot be changed!')
     }
 
-    return res.status(200).send({address: req.body.address });
+    res.send(user);
 })
 
+router.put('/changeDetails/:id',async (req, res)=> {
+    let name = req.body.name;
+    let phone = req.body.phone;
+    let email = req.body.email;
+
+    const userExist = await User.findById(req.params.id);
+    //console.log(name, phone, email);
+
+    const user = await User.findByIdAndUpdate(
+        req.params.id,
+        {
+            name: name,
+            phone: phone,
+            email: email
+
+        },
+        { new: true}
+
+    )
+
+    if(!user) {
+        return res.status(400).send('Your personal information cannot be updated!')
+    }
+
+    res.status(200).send({auth: true, user: user})
+})
 
 router.delete('/:id', (req, res) => {
-    User.findByIdAndRemove(req.params.id).then(user =>{
-        if(user) {
-            return res.status(200).json({success: true, message: 'the user is deleted!'})
+    User.findByIdAndRemove(req.params.id).then(user => {
+        if (user) {
+            return res.status(200).json({ success: true, message: 'the user is deleted!' })
         } else {
-            return res.status(404).json({success: false , message: "user not found!"})
+            return res.status(404).json({ success: false, message: "user not found!" })
         }
     }).catch(err => {
-       return res.status(500).json({success: false, error: err}) 
+        return res.status(500).json({ success: false, error: err })
     })
 })
 

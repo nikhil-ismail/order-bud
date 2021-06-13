@@ -26,7 +26,7 @@ const Login = (props) => {
                     onFocus={() => setEmailFocus(true)}
                     onBlur={() => setEmailFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                 />
                 <TextInput
                     style={[styles.textInput, passwordFocus && styles.focusInputStyle]}
@@ -37,7 +37,7 @@ const Login = (props) => {
                     onFocus={() => setPasswordFocus(true)}
                     onBlur={() => setPasswordFocus(false)}
                     blurOnSubmit={false}
-                    autoCapitalize={false}
+                    autoCapitalize='none'
                     secureTextEntry={true}
                 />
             </View>

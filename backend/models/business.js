@@ -5,9 +5,21 @@ const businessSchema = mongoose.Schema({
         type: String,
         default: '',
     },
-    address: {
+    fullAddress: {
         type: String,
-        default: ''
+        default: '',
+    },
+    addressPrimaryText: {
+        type: String,
+        default: '',
+    },
+    addressSecondaryText: {
+        type: String,
+        default: '',
+    },
+    addressPlaceId: {
+        type: String,
+        default: '',
     },
     coverImage: {
         type: String,

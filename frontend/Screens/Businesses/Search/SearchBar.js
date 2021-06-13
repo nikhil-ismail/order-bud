@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TouchableOpacity, TextInput } from "react-native";
-import { Icon } from 'react-native-elements';
+import { StyleSheet, View, TextInput } from "react-native";
 
 const SearchBar = (props) => {
   const [query, setQuery] = useState('');
@@ -15,7 +14,6 @@ const SearchBar = (props) => {
 
   return (
     <View style={styles.container}>
-      {props.showFilterIcon ?
         <View style={styles.searchContainer}>
           <TextInput
             style={styles.searchBarFilterIcon}
@@ -24,22 +22,9 @@ const SearchBar = (props) => {
             value={query}
             onChangeText={text => setQuery(text)}
             onSubmitEditing={handleSubmit}
-            autoCapitalize={false}
+            autoCapitalize="none"
           />
         </View>
-        :
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchBarFilterIcon}
-            placeholder={props.placeholder}
-            name="search"
-            value={query}
-            onChangeText={text => setQuery(text)}
-            onSubmitEditing={handleSubmit}
-            autoCapitalize={false}
-          />
-        </View>
-      }
     </View>
   )
 }

@@ -38,6 +38,8 @@ router.get(`/`, async (req, res) => {
     if (!businessList) {
         res.status(500).json({ success: false })
     }
+
+    console.log(businessList);
     
     res.status(200).send(businessList);
 })
@@ -67,38 +69,7 @@ router.get('/:userId', async (req, res) => {
     return res.status(500).send({msg: "You are not a store owner"})
 })
 
-router.post('/', uploadOptions.single('image'), async (req, res) => {
-    const basePath = `${req.protocol}://${req.get('host')}/public/uploads/`;
-
-    let coverPhotoPath;
-
-    if (req.files.coverPhoto) {
-        coverPhotoPath = `${basePath}${req.files.coverPhoto[0].filename}`;
-    } else {
-        coverPhoto = null;
-    }
-
-    let business = new Business({
-        coverImage: coverPhotoPath,
-        name: req.body.name,
-        address: req.body.address,
-        delivery: req.body.delivery,
-        pickup: req.body.pickup,
-        categories: req.body.categories,
-        rating: req.body.rating
-    })
-
-    business = await business.save();
-
-    if (!business) {
-        return res.status(400).send('the business cannot be created!')
-    }
-
-    res.status(200).send(business);
-})
-
 router.put('/rating/:id', async (req, res) => {
-
     businessRatings = req.body.businessRatings;
     reviewCount = req.body.reviewCount;
     userRating = req.body.userRating;
@@ -134,26 +105,29 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
         return res.status(400).send('Invalid Business!');
     }
 
-    const categoriesArray = req.body.categories.substr(1, req.body.categories.length - 2).split(",");
-    const formattedCategoriesArray = categoriesArray.map(category => {
-        return category.substr(1, category.length - 2)
-    })
+    let categoriesResolved = [];
+    if (req.body.categories.length > 2) {
+        const categoriesArray = req.body.categories.substr(1, req.body.categories.length - 2).split(",");
+        const formattedCategoriesArray = categoriesArray.map(category => {
+            return category.substr(1, category.length - 2)
+        })
 
-    standardizedCategories = formattedCategoriesArray.map(category => {
-        return category.substr(0, 1).toUpperCase() + category.substr(1).toLowerCase();
-    })
+        standardizedCategories = formattedCategoriesArray.map(category => {
+            return category.substr(0, 1).toUpperCase() + category.substr(1).toLowerCase();
+        })
 
-    const categories = Promise.all(standardizedCategories.map(async category => {
-        let checkCategory = await Category.findOneAndUpdate(
-            { "name": category },
-            {  },
-            { upsert: true, new: true }
-        )
+        const categories = Promise.all(standardizedCategories.map(async category => {
+            let checkCategory = await Category.findOneAndUpdate(
+                { "name": category },
+                {  },
+                { upsert: true, new: true }
+            )
 
-        return mongoose.Types.ObjectId(checkCategory._id);
-    }))
+            return mongoose.Types.ObjectId(checkCategory._id);
+        }))
 
-    const categoriesResolved = await categories;
+        categoriesResolved = await categories;
+    }
 
     const file = req.file;
     let imagePath;
@@ -165,14 +139,16 @@ router.put('/:id', uploadOptions.single('image'), async (req, res) => {
     } else {
         imagePath = business.coverImage
     }
-    console.log(req.body.pickup);
 
     const updatedBusiness = await Business.findByIdAndUpdate(
         mongoose.Types.ObjectId(req.params.id),
         {
             coverImage: imagePath,
             name: req.body.name,
-            address: req.body.address,
+            fullAddress: req.body.fullAddress,
+            addressPrimaryText: req.body.addressPrimaryText,
+            addressSecondaryText: req.body.addressSecondaryText,
+            addressPlaceId: req.body.addressPlaceId,
             delivery: req.body.delivery,
             pickup: req.body.pickup,
             categories: categoriesResolved,

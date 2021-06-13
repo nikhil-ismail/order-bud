@@ -6,6 +6,7 @@ import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
 import { selectIsDelivery } from '../../../Redux/orderDetailsSlice';
+import { selectAddress } from '../../../Redux/orderDetailsSlice';
 import { selectIsLoggedIn } from '../../../Redux/userSlice';
 
 import Header from "./Header";
@@ -17,34 +18,71 @@ import ViewCartButton from "../Cart/ViewCartButton";
 import SearchBar from "../Search/SearchBar";
 
 import baseURL from "../../../assets/common/baseUrl";
+import { googleDistanceMatrixApiKey } from "../../../assets/common/api_key";
 
 const { width } = Dimensions.get("window")
 
 const ProductContainer = (props) => {
   const [businesses, setBusinesses] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(true)
-  const [showFilter, setShowFilter] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const cart = useSelector(selectCartItems);
+  const address = useSelector(selectAddress);
   const isDelivery = useSelector(selectIsDelivery);
   const isLoggedIn = useSelector(selectIsLoggedIn);
-
-  const handleFilter = () => {
-    setShowFilter(!showFilter);
-  }
 
   useFocusEffect(
     useCallback(() => {
 
       // Businesses
       axios.get(`${baseURL}businesses`)
-        .then((res) => {
-          setBusinesses(res.data);
-          setLoading(false)
+        .then(async (res) => {
+          if (address !== undefined) {
+            const origin = 'origins=place_id:' + address.placeId;
+
+            let destinations = 'destinations=';
+            for (let i = 0; i < res.data.length; i++) {
+              destinations += i === res.data.length - 1 ? 'place_id:' + res.data[i].addressPlaceId : 'place_id:' + res.data[i].addressPlaceId + '|';
+            }
+
+            const key = 'key=' + googleDistanceMatrixApiKey;
+
+            const apiResponse = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?${origin}&${destinations}&${key}`)
+            const travelTimesDistances = apiResponse.data.rows[0].elements.map(destination => {
+              return {
+                distance: destination.distance.text,
+                duration: destination.duration.text
+              }
+            });
+
+            let nearbyBusinesses = [];
+            for (let i = 0; i < travelTimesDistances.length; i++) {
+              if (parseFloat(travelTimesDistances[i].distance.split(" ")[0]) < 30) {
+                nearbyBusinesses.push({
+                  businessDetails: res.data[i],
+                  travelDetails: travelTimesDistances[i]
+                })
+              }
+            }
+            setBusinesses(nearbyBusinesses);
+            setLoading(false);
+          } else {
+            const featuredBusinesses = res.data.map(business => {
+              return {
+                businessDetails: business,
+                travelDetails: {
+                  distance: '',
+                  duration: ''
+                }
+              }
+            })
+            setBusinesses(featuredBusinesses);
+            setLoading(false);
+          }
         })
         .catch((error) => {
-          console.log('Api call error - businesses')
+          console.log(error)
         })
 
       // Categories
@@ -60,49 +98,52 @@ const ProductContainer = (props) => {
         setBusinesses([]);
         setCategories([]);
       };
-    }, [])
+    }, [address])
   )
 
   return (
     <>
       {loading === false ? (
-        <SafeAreaView style={{flex: 1, backgroundColor: "white"}}>
-            <Header
+        <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
+          <Header
+            navigation={props.navigation}
+          />
+          <ScrollView>
+            <Banner />
+            <CategoryFilter
               navigation={props.navigation}
+              businesses={businesses}
+              categories={categories}
             />
-            <ScrollView>
-              <Banner />
-              <CategoryFilter
-                navigation={props.navigation}
-                businesses={businesses}
-                categories={categories}
-              />
-              <SearchBar
-                placeholder="Search..."
-                handleFilter={handleFilter}
-                showFilterIcon={true}
-                navigation={props.navigation}
-                parent="home"
-              />
-              <View style={styles.separator} />
-              {
-                isLoggedIn ?
+            <SearchBar
+              placeholder="Search..."
+              navigation={props.navigation}
+              parent="home"
+            />
+            <View style={styles.separator} />
+            {
+              isLoggedIn ?
                 <Text style={styles.header}>Your Local Businesses</Text> :
                 <View>
                   <Text style={styles.header}>Popular on OrderBud</Text>
                   <Text style={styles.subHeader}>Enter Your Address For Businesses Near You</Text>
                 </View>
-              }
-              <View style={styles.listContainer}>
-                {businesses.map(business => {
-                  if (isDelivery && business.delivery || !isDelivery && business.pickup) {
-                    return (
-                      <BusinessCard key={business.name} business={business} navigation={props.navigation} />
-                    )
-                  }
-                })}
-              </View>
-            </ScrollView>
+            }
+            <View style={styles.listContainer}>
+              {businesses.map(business => {
+                if (isDelivery && business.businessDetails.delivery || !isDelivery && business.businessDetails.pickup) {
+                  return (
+                    <BusinessCard
+                      key={business.businessDetails.name}
+                      businessDetails={business.businessDetails}
+                      travelDetails={business.travelDetails}
+                      navigation={props.navigation}
+                    />
+                  )
+                }
+              })}
+            </View>
+          </ScrollView>
           {
             cart.length > 0 &&
             <ViewCartButton navigation={props.navigation} />
@@ -122,7 +163,8 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     elevation: 8,
-    paddingVertical: 15
+    paddingVertical: 15,
+    paddingHorizontal: 5
   },
   center: {
     justifyContent: 'center',

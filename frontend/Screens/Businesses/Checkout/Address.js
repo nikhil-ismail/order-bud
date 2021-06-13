@@ -12,6 +12,8 @@ const Address = props => {
     const isDelivery = useSelector(selectIsDelivery);
     const businessAddress = useSelector(selectCartBusinessAddress);
 
+    console.log(businessAddress);
+
     return (
         <View style={styles.addressContainer}>
             <View style={styles.pinAddressContainer}>
@@ -19,7 +21,8 @@ const Address = props => {
                     <Icon name="map-pin" type="font-awesome-5" color="black" size={28} />
                 </View>
                 <View style={styles.addressTextContainer}>
-                    <Text style={styles.street}>{isDelivery ? address : businessAddress}</Text>
+                    <Text style={styles.street}>{isDelivery ? address.mainText : businessAddress.mainText }</Text>
+                    <Text style={styles.city}>{isDelivery ? address.secondaryText : businessAddress.secondaryText }</Text>
                 </View>
             </View>
             {

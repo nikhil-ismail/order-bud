@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextInput } from "react-native";
 import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions, Text, TouchableOpacity } from "react-native";
 import { Icon, BottomSheet } from 'react-native-elements';
@@ -7,8 +7,15 @@ import { useSelector } from "react-redux";
 import { selectUserDetails } from "../../../Redux/userSlice";
 
 const EditUserDetails = (props) => {
-
     const userDetails = useSelector(selectUserDetails);
+
+    const [name, setName] = useState(userDetails.name);
+    const [phone, setPhone] = useState(userDetails.phone);
+    const [email, setEmail] = useState(userDetails.email);
+
+    const handleUpdateDetails = () => {
+        props.handleUpdateDetails(name, phone, email);
+    }
 
     return (
         <SafeAreaView>
@@ -19,7 +26,7 @@ const EditUserDetails = (props) => {
                             <Text style={styles.header}>Name</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <TextInput placeholder={userDetails.name} style={styles.input}></TextInput>
+                            <TextInput placeholder={userDetails.name} style={styles.input} onChangeText={text => setName(text)}></TextInput>
                         </View>
                     </View>
                     <View style={styles.categoryContainer}>
@@ -27,7 +34,7 @@ const EditUserDetails = (props) => {
                             <Text style={styles.header}>Phone Number</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <TextInput placeholder={userDetails.phone} style={styles.input}></TextInput>
+                            <TextInput placeholder={userDetails.phone} style={styles.input} onChangeText={text => setPhone(text)}></TextInput>
                         </View>
                     </View>
                     <View style={styles.categoryContainer}>
@@ -35,23 +42,7 @@ const EditUserDetails = (props) => {
                             <Text style={styles.header}>Email</Text>
                         </View>
                         <View style={styles.inputContainer}>
-                            <TextInput placeholder={userDetails.email} style={styles.input}></TextInput>
-                        </View>
-                    </View>
-                    <View style={styles.categoryContainer}>
-                        <View style={styles.headerContainer}>
-                            <Text style={styles.header}>Current Password</Text>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <TextInput style={styles.input}></TextInput>
-                        </View>
-                    </View>
-                    <View style={styles.categoryContainer}>
-                        <View style={styles.headerContainer}>
-                            <Text style={styles.header}>New Password</Text>
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <TextInput style={styles.input}></TextInput>
+                            <TextInput placeholder={userDetails.email} style={styles.input} onChangeText={text => setEmail(text)}></TextInput>
                         </View>
                     </View>
                 </View>
@@ -59,7 +50,7 @@ const EditUserDetails = (props) => {
                     <TouchableOpacity style={styles.cancelBtn} onPress={() => props.handleEdit()}>
                         <Text style={styles.cancelText}>Cancel</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.updateBtn}>
+                    <TouchableOpacity style={styles.updateBtn} onPress={() => handleUpdateDetails()}>
                         <Text style={styles.updateText}>Update</Text>
                     </TouchableOpacity>
                 </View>

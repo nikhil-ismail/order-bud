@@ -185,7 +185,7 @@ const EditProduct = (props) => {
                         <Text style={styles.buttonText}>Update Item</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.editDeleteButtonContainer, styles.hideButton]} onPress={handleHideItem}>
-                        <Text style={styles.hideButtonText}>{product.showOnMenu ? 'Hide From Menu' : 'Show On Menu'}</Text>
+                        <Text style={styles.hideButtonText}>{product.showOnMenu ? 'Hide Item' : 'Show Item'}</Text>
                     </TouchableOpacity>
                 </View>
             </View>

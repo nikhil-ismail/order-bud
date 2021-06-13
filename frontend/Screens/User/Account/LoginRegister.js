@@ -12,8 +12,7 @@ import ErrorMessage from './ErrorMessage';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../../Redux/userSlice';
-import { setAddress } from '../../../Redux/orderDetailsSlice';
-import { selectAddress } from '../../../Redux/orderDetailsSlice';
+import { setAddress, selectAddress } from '../../../Redux/orderDetailsSlice';
 
 import baseURL from "../../../assets/common/baseUrl";
 
@@ -37,12 +36,21 @@ const LoginRegister = (props) => {
         setError('');
     }
 
+    const goBack = () => {
+        setRegisterStep(1);
+    }
+
     const handleLogin = (email, password) => {
         axios.post(`${baseURL}users/login`, { email, password })
             .then(response => {
                 if (response.data.auth) {
                     dispatch(setUser(response.data));
-                    dispatch(setAddress(response.data.user.address));
+                    dispatch(setAddress({ 
+                        fullAddress: response.data.user.address[0].fullAddress,
+                        mainText: action.payload.user.address[0].addressPrimaryText,
+                        secondaryText: action.payloaduser.address[0].addressSecondaryText,
+                        placeId: action.payload.user.address[0].addressPlaceId
+                     }));
                     if (props.route.params !== undefined) {
                         props.navigation.goBack();
                     }
@@ -50,7 +58,7 @@ const LoginRegister = (props) => {
                     setError('Unable to log in. Please try again.');
                 }
             })
-            .catch(err => {
+            .catch(() => {
                 setError('An error occurred while logging in. Please try again.')
             });
     }
@@ -65,26 +73,41 @@ const LoginRegister = (props) => {
     }
 
     const handleAddAddress = () => {
-        axios.post(`${baseURL}users/register`, { 
+        axios.post(`${baseURL}users/register`, {
             email: userInfo.email,
             name: userInfo.name,
             phone: userInfo.phone,
             password: userInfo.password,
-            address: address
-         })
+            fullAddress: address.fullAddress,
+            addressPrimaryText: address.mainText,
+            addressSecondaryText: address.secondaryText,
+            addressPlaceId: address.placeId,
+        })
         .then(response => {
             if (response.data.auth && props.route.params !== undefined) {
                 dispatch(setUser(response.data));
-                dispatch(setAddress(response.data.user.address));
+                console.log(response.data.user);
+                dispatch(setAddress({ 
+                    fullAddress: response.data.user.address[0].fullAddress,
+                    mainText: action.payload.user.address[0].addressPrimaryText,
+                    secondaryText: action.payloaduser.address[0].addressSecondaryText,
+                    placeId: action.payload.user.address[0].addressPlaceId
+                 }));
                 props.navigation.goBack();
             } else if (response.data.auth) {
+                console.log(response.data.user);
                 dispatch(setUser(response.data));
-                dispatch(setAddress(response.data.user.address));
+                dispatch(setAddress({ 
+                    fullAddress: response.data.user.address[0].fullAddress,
+                    mainText: action.payload.user.address[0].addressPrimaryText,
+                    secondaryText: action.payloaduser.address[0].addressSecondaryText,
+                    placeId: action.payload.user.address[0].addressPlaceId
+                 }));
             } else {
                 setError('An error occurred adding this address. Please try again.')
             }
         })
-        .catch(err => {
+        .catch(() => {
             setError('An error occurred while registering. Please try again.')
         });
     }
@@ -111,7 +134,7 @@ const LoginRegister = (props) => {
                                     ?
                                     <Register handleRegister={handleRegister} registerStep={registerStep} />
                                     :
-                                    <AddAddress handleAddAddress={handleAddAddress} navigation={props.navigation} />
+                                    <AddAddress handleAddAddress={handleAddAddress} navigation={props.navigation} goBack={goBack} />
                             )
                     }
                     {error.length > 0 && <ErrorMessage error={error} />}

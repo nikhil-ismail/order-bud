@@ -6,8 +6,10 @@ import axios from 'axios';
 
 import { useSelector } from 'react-redux';
 import { selectCartItems } from '../../../Redux/cartSlice';
+import { selectAddress } from '../../../Redux/orderDetailsSlice';
 
 import baseURL from "../../../assets/common/baseUrl";
+import { googleDistanceMatrixApiKey } from "../../../assets/common/api_key";
 
 import SearchBar from "./SearchBar";
 import SearchFilter from './SearchFilter';
@@ -16,7 +18,7 @@ import MenuCard from '../Business/MenuCard';
 import ViewCartButton from "../Cart/ViewCartButton";
 import Item from '../Item/Item';
 
-const { width, height } = Dimensions.get("window")
+const { width } = Dimensions.get("window")
 
 const SearchResults = (props) => {
   const [showFilter, setShowFilter] = useState(false);
@@ -27,6 +29,7 @@ const SearchResults = (props) => {
   const [query, setQuery] = useState(props.route.params.query);
 
   const cart = useSelector(selectCartItems);
+  const address = useSelector(selectAddress);
 
   const numMatches = !loading && results.businessMatches.length + results.productMatches.length;
 
@@ -47,9 +50,55 @@ const SearchResults = (props) => {
   useFocusEffect(
     useCallback(() => {
       axios.get(`${baseURL}search/?searchTerm=${query}`)
-        .then(res => {
-          setResults(res.data);
-          setLoading(false);
+        .then(async res => {
+          if (address !== undefined && res.data.businessMatches.length > 0) {
+            const origin = 'origins=place_id:' + address.placeId;
+
+            let destinations = 'destinations=';
+            for (let i = 0; i < res.data.businessMatches.length; i++) {
+              destinations += i === res.data.businessMatches.length - 1 ? 'place_id:' + res.data.businessMatches[i].addressPlaceId : 'place_id:' + res.data.businessMatches[i].addressPlaceId + '|';
+            }
+            const key = 'key=' + googleDistanceMatrixApiKey;
+
+            const apiResponse = await axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?${origin}&${destinations}&${key}`)
+            const travelTimesDistances = apiResponse.data.rows[0].elements.map(destination => {
+              return {
+                distance: destination.distance.text,
+                duration: destination.duration.text
+              }
+            });
+
+            let nearbyBusinesses = [];
+            for (let i = 0; i < travelTimesDistances.length; i++) {
+              if (parseFloat(travelTimesDistances[i].distance.split(" ")[0]) < 30) {
+                nearbyBusinesses.push({
+                  businessDetails: res.data.businessMatches[i],
+                  travelDetails: travelTimesDistances[i]
+                })
+              }
+            }
+
+            setResults({
+              businessMatches: nearbyBusinesses,
+              productMatches: res.data.productMatches
+            });
+            setLoading(false);
+          } else {
+            const featuredBusinesses = res.data.businessMatches.map(business => {
+              return {
+                businessDetails: business,
+                travelDetails: {
+                  distance: '',
+                  duration: ''
+                }
+              }
+            })
+            setResults({
+              businessMatches: featuredBusinesses,
+              productMatches: res.data.productMatches
+            });
+            setLoading(false);
+          }
         })
         .catch(err => {
           console.log("API call error - search results")
@@ -106,7 +155,12 @@ const SearchResults = (props) => {
                                     ? { width: width } : { width: 0.9 * width }
                                   ]}
                                 >
-                                  <BusinessCard key={business.name} business={business} navigation={props.navigation} />
+                                  <BusinessCard
+                                    key={business.name}
+                                    businessDetails={business.businessDetails}
+                                    travelDetails={business.travelDetails}
+                                    navigation={props.navigation}
+                                  />
                                 </View>
                               )
                             })

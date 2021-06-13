@@ -21,10 +21,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    address: {
-        type: String,
+    address: [{
+        type: Object,
         required: true
-    }
+    }]
 });
 
 userSchema.virtual('id').get(function () {

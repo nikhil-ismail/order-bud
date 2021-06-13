@@ -1,22 +1,12 @@
 import React from "react";
-import { StyleSheet, View, TouchableOpacity, TextInput } from "react-native";
-import { Icon } from 'react-native-elements';
+import { StyleSheet, View, TextInput } from "react-native";
 
 const SearchBar = (props) => {
     return(
         <View style={styles.container}>
-          {props.showFilterIcon ?
-            <View style={styles.searchContainer}>
-              <TextInput style={styles.searchBarFilterIcon} placeholder={props.placeholder} />
-              <TouchableOpacity onPress={props.handleFilter} style={styles.filterBtn}>
-                <Icon name="sliders-h" type="font-awesome-5" size={30} />
-              </TouchableOpacity>
-            </View>
-            :
             <View style={styles.searchContainer}>
               <TextInput style={styles.searchBar} placeholder={props.placeholder} />
             </View>
-          }
         </View>
     )
 }

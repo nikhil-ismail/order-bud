@@ -1,14 +1,16 @@
 import React from 'react';
 import { StyleSheet, View, Image, Text, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 const BusinessCard = (props) => {
-    const { coverImage, name, rating, address } = props.business;
+    const { coverImage, name, rating, fullAddress } = props.businessDetails;
+    const { distance, duration } = props.travelDetails;
 
     return (
-        <TouchableOpacity style={styles.container} onPress={() => props.navigation.navigate('Business Page', props.business)}>
+        <TouchableOpacity style={styles.container} onPress={() => props.navigation.navigate('Business Page', props.businessDetails)}>
             <Image
                 style={styles.image}
-                source={{ uri: coverImage }}
+                source={{ uri: coverImage !== '' ? coverImage :"https://www.cnu.org/sites/default/files/storefront-proportions.jpg"}}
             />
             <View style={styles.businessDetails}>
                 <View style={styles.businessDetailsHeaderRow}>
@@ -17,11 +19,24 @@ const BusinessCard = (props) => {
                         <Text style={styles.ratingText}>{rating}</Text>
                     </View>
                 </View>
-                <View style={styles.businessDetailsSubRow}>
-                    <Text style={styles.businessDetailsSubRowText}>{address} • </Text>
-                    <Text style={styles.businessDetailsSubRowText}>$2.99 • </Text>
-                    <Text style={styles.businessDetailsSubRowText}>30-40 min</Text>
-                </View>
+                {
+                    distance !== '' && duration !== '' ?
+                    <View style={styles.businessDetailsSubRow}>
+                        <View style={styles.travelDetailContainer}>
+                            <Icon name="route" type="font-awesome-5" color="grey" size={15} />
+                            <Text style={[styles.businessDetailsSubRowText, {marginLeft: 5}]}>{distance}</Text>
+                        </View>
+                        <View style={styles.travelDetailContainer}>
+                            <Icon name="car" type="font-awesome-5" color="grey" size={16} />
+                            <Text style={[styles.businessDetailsSubRowText, {marginLeft: 5}]}>{duration}</Text>
+                        </View>
+                    </View>
+                    :
+                    <View style={styles.businessDetailsSubRow}>
+                        <Text style={styles.businessDetailsSubRowText}>{fullAddress}</Text>
+                    </View>
+                }
+                
             </View>
         </TouchableOpacity>
     )
@@ -57,7 +72,7 @@ const styles = StyleSheet.create({
         fontSize: 20,
     },
     ratingContainer: {
-        backgroundColor: 'rgba(0, 128, 0, 0.75)',
+        backgroundColor: '#e3e3e3',
         height: 32,
         width: 32,
         borderRadius: 16,
@@ -66,24 +81,22 @@ const styles = StyleSheet.create({
         padding: 5
     },
     ratingText: {
-        fontWeight: "bold",
-        color: "white"
+        fontWeight: "bold"
     },
     businessDetailsSubRow: {
         flexDirection: "row",
         alignItems: "center",
         marginVertical: 2.5
     },
+    travelDetailContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginRight: 20
+    },
     businessDetailsSubRowText: {
-        fontSize: 15,
+        fontSize: 16,
         color: "grey",
         fontWeight: "bold"
-    },
-    friendOrders: {
-        fontSize: 16,
-        color: "green",
-        fontWeight: 'bold',
-        marginVertical: 2.5
     }
 })
 

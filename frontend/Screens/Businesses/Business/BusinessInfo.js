@@ -3,7 +3,7 @@ import { View, StyleSheet, Text } from 'react-native';
 
 const BusinessInfo = (props) => {
 
-    const { name, address, rating } = props.businessDetails
+    const { name, fullAddress, rating } = props.businessDetails
 
     return (
         <View>
@@ -15,11 +15,7 @@ const BusinessInfo = (props) => {
                     </View>
                 </View>
                 <View style={{ flexDirection: "row", marginBottom: 6 }}>
-                    <Text style={styles.businessDetails}>Open Now</Text>
-                    <Text style={styles.businessDetails}> • </Text>
-                    <Text style={styles.businessDetails}>{address}</Text>
-                    <Text style={styles.businessDetails}> • </Text>
-                    <Text style={styles.businessDetails}>30-40 min</Text>
+                    <Text style={styles.businessDetails}>{fullAddress}</Text>
                 </View>
             </View>
         </View>

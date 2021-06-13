@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 28,
         fontWeight: "bold",
-        marginLeft: 5
+        marginLeft: 5,
+        color: "#303030"
     },
     subHeader: {
         fontSize: 22,

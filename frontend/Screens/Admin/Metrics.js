@@ -22,7 +22,7 @@ const AdminHome = (props) => {
 
 const styles = StyleSheet.create({
     sectionContainer: {
-        marginTop: 10,
+        marginTop: 30,
         marginBottom: 50,
         backgroundColor: '#fcfcfc',
         shadowColor: '#a6a6a6',
@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 28,
         fontWeight: "bold",
-        marginLeft: 5
+        marginLeft: 5,
+        color: "#303030"
     },
     metricsContainer: {
         flexDirection: "row",

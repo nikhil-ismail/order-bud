@@ -62,8 +62,6 @@ router.get('/business/:businessId', async (req, res) => {
             .reduce((accumulator, currValue) => accumulator + currValue) : 0.00;
     const orderVolume = orders.length;
 
-    console.log(orders);
-
     res.send({ orders, salesVolume, orderVolume });
 })
 

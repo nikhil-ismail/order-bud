@@ -7,14 +7,18 @@ import mime from 'mime';
 
 import baseURL from "../../assets/common/baseUrl";
 
+import { useSelector } from 'react-redux';
+import { selectBusinessAddress } from '../../Redux/businessSlice';
+
 const { width, height } = Dimensions.get("window")
 
 const EditBusiness = (props) => {
     const { business } = props.route.params;
 
+    const businessAddress = useSelector(selectBusinessAddress);
+
     const [image, setImage] = useState(business && business.coverImage);
     const [businessName, setBusinessName] = useState(business && business.name);
-    const [address, setAddress] = useState(business && business.address);
     const [offerDelivery, setOfferDelivery] = useState(business ? business.delivery : false);
     const [offerPickup, setOfferPickup] = useState(business ? business.pickup : false);
     const [category, setCategory] = useState('');
@@ -23,7 +27,6 @@ const EditBusiness = (props) => {
     const [imageUploaded, setImageUploaded] = useState(false);
 
     const [businessNameFocus, setBusinessNameFocus] = useState(false);
-    const [addressFocus, setAddressFocus] = useState(false);
     const [categoryFocus, setCategoryFocus] = useState(false);
 
     useEffect(() => {
@@ -44,8 +47,6 @@ const EditBusiness = (props) => {
             aspect: [4, 3],
             quality: 1,
         });
-
-        console.log(result);
 
         if (!result.cancelled) {
             setImage(result.uri);
@@ -75,20 +76,23 @@ const EditBusiness = (props) => {
             });
         }
         formData.append('name', businessName);
-        formData.append('address', address);
+        formData.append('fullAddress', businessAddress.fullAddress);
+        formData.append('addressPrimaryText', businessAddress.mainText);
+        formData.append('addressSecondaryText', businessAddress.secondaryText);
+        formData.append('addressPlaceId', businessAddress.placeId);
         formData.append('delivery', offerDelivery);
         formData.append('pickup', offerPickup);
         formData.append('categories', JSON.stringify(categories));
 
-        console.log(categories);
+        console.log(formData);
 
         axios.put(`${baseURL}businesses/${business.id}`, formData)
-        .then(() => {
-            props.navigation.goBack();
-        })
-        .catch(err => {
-            console.log('error updating the business')
-        })
+            .then(() => {
+                props.navigation.goBack();
+            })
+            .catch(() => {
+                console.log('error updating the business')
+            })
     }
 
     return (
@@ -113,12 +117,10 @@ const EditBusiness = (props) => {
                     onBlur={() => setBusinessNameFocus(false)}
                 />
                 <TextInput
+                    style={styles.textInput}
+                    onFocus={() => props.navigation.navigate('Enter Address')}
                     placeholder="Address"
-                    style={[styles.textInput, addressFocus && styles.focusInputStyle]}
-                    value={address}
-                    onChangeText={text => setAddress(text)}
-                    onFocus={() => setAddressFocus(true)}
-                    onBlur={() => setAddressFocus(false)}
+                    value={businessAddress.fullAddress}
                 />
                 <View style={styles.separator} />
                 <View style={styles.switchContainer}>
