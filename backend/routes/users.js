@@ -124,8 +124,9 @@ router.put('/changeDetails/:id',async (req, res)=> {
         {
             name: name,
             phone: phone,
-            email: email
-
+            email: email,
+            id: req.params.id,
+            isAdmin: userExist.isAdmin
         },
         { new: true}
 
