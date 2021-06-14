@@ -32,16 +32,10 @@ const PersonalInformation = (props) => {
             .then(response => {
                 if (response.data.auth) {
                     console.log(response.data)
-                    dispatch(setUser({ 
-                        fullAddress: response.data.user.address[0].fullAddress,
-                        mainText: action.payload.user.address[0].addressPrimaryText,
-                        secondaryText: action.payloaduser.address[0].addressSecondaryText,
-                        placeId: action.payload.user.address[0].addressPlaceId
-                     }));
+                    dispatch(setUser(response.data));
                     setEdit(!edit);
-
                 } else {
-                    setError('Unable to log in. Please try again.');
+                    setError('Unable to change personal information. Please try again.');
                 }
             })
             .catch(() => {
