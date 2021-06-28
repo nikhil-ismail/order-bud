@@ -45,12 +45,7 @@ const LoginRegister = (props) => {
             .then(response => {
                 if (response.data.auth) {
                     dispatch(setUser(response.data));
-                    dispatch(setAddress({ 
-                        fullAddress: response.data.user.address[0].fullAddress,
-                        mainText: action.payload.user.address[0].addressPrimaryText,
-                        secondaryText: action.payloaduser.address[0].addressSecondaryText,
-                        placeId: action.payload.user.address[0].addressPlaceId
-                     }));
+                    dispatch(setAddress(response.data.user.address[response.data.user.address.length - 1]));
                     if (props.route.params !== undefined) {
                         props.navigation.goBack();
                     }
@@ -86,23 +81,13 @@ const LoginRegister = (props) => {
         .then(response => {
             if (response.data.auth && props.route.params !== undefined) {
                 dispatch(setUser(response.data));
-                console.log(response.data.user);
-                dispatch(setAddress({ 
-                    fullAddress: response.data.user.address[0].fullAddress,
-                    mainText: action.payload.user.address[0].addressPrimaryText,
-                    secondaryText: action.payloaduser.address[0].addressSecondaryText,
-                    placeId: action.payload.user.address[0].addressPlaceId
-                 }));
+                console.log('----USER RESPONSE DATA-----',response.data.user);
+                //dispatch(setAddress(response.data.user.address[0]));
                 props.navigation.goBack();
             } else if (response.data.auth) {
-                console.log(response.data.user);
+                console.log('----USER RESPONSE DATA-----', response.data.user);
                 dispatch(setUser(response.data));
-                dispatch(setAddress({ 
-                    fullAddress: response.data.user.address[0].fullAddress,
-                    mainText: action.payload.user.address[0].addressPrimaryText,
-                    secondaryText: action.payloaduser.address[0].addressSecondaryText,
-                    placeId: action.payload.user.address[0].addressPlaceId
-                 }));
+                //dispatch(setAddress(response.data.user.address[0]));
             } else {
                 setError('An error occurred adding this address. Please try again.')
             }

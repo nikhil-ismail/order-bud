@@ -42,6 +42,6 @@ export const userReducer = (state = initialState, action) => {
 
 // SELECTOR
 export const selectIsLoggedIn = (state) => Object.keys(state.userDetails).length !== 0;
-export const selectUserDetails = (state) => state.userDetails.details;
+export const selectUserDetails = (state) => Object.keys(state.userDetails).length !== 0 ? state.userDetails.details : '';
 export const selectUserId = (state) => state.userDetails.details.id;
 export const selectIsAdmin = (state) => Object.keys(state.userDetails).length !== 0 ? state.userDetails.details.isAdmin : false;

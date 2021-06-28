@@ -22,28 +22,26 @@ const Profile = (props) => {
 
     return (
         <SafeAreaView>
-            <ScrollView>
-                <View style={styles.nameContainer}>
-                    <TouchableOpacity style={styles.sectionIcon}>
-                        <Icon name="user-circle" type="font-awesome-5" color="black" size={45} />
-                    </TouchableOpacity>
-                    <Text style={styles.name}>{userDetails.name}</Text>
-                </View>
-                <View style={styles.categoryContainer}>
-                    <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Personal Information')}>
-                        <Icon name="user" type="font-awesome-5" color="black" size={30} />
-                        <Text style={styles.categoryText}>Personal Information</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Addresses')}>
-                        <Icon name="home" type="font-awesome-5" color="black" size={30} />
-                        <Text style={styles.categoryText}>Addresses</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.category} onPress={handleLogoutUser}>
-                        <Icon name="sign-out-alt" type="font-awesome-5" color="black" size={30} />
-                        <Text style={styles.categoryText}>Log Out</Text>
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+            <View style={styles.nameContainer}>
+                <TouchableOpacity style={styles.sectionIcon}>
+                    <Icon name="user-circle" type="font-awesome-5" color="black" size={45} />
+                </TouchableOpacity>
+                <Text style={styles.name}>{userDetails.name}</Text>
+            </View>
+            <View style={styles.categoryContainer}>
+                <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Personal Information')}>
+                    <Icon name="user" type="font-awesome-5" color="black" size={30} />
+                    <Text style={styles.categoryText}>Personal Information</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.category} onPress={() => props.navigation.navigate('Addresses')}>
+                    <Icon name="home" type="font-awesome-5" color="black" size={30} />
+                    <Text style={styles.categoryText}>Addresses</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.category} onPress={handleLogoutUser}>
+                    <Icon name="sign-out-alt" type="font-awesome-5" color="black" size={30} />
+                    <Text style={styles.categoryText}>Log Out</Text>
+                </TouchableOpacity>
+            </View>
         </SafeAreaView>
     )
 }

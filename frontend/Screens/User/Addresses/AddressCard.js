@@ -3,31 +3,44 @@ import { View, SafeAreaView, ScrollView, StyleSheet, Dimensions, Text, Touchable
 import { Icon, BottomSheet } from 'react-native-elements';
 
 import { useSelector } from "react-redux";
-import { selectUserDetails } from "../../../Redux/userSlice";
 import { selectAddress } from "../../../Redux/orderDetailsSlice";
 
 const AddressCard = (props) => {
-    const userDetails = useSelector(selectUserDetails);
-    const address = useSelector(selectAddress);
 
     return (
         <SafeAreaView>
-            <TouchableOpacity>
+            { props.active ?
+            <View>
+                <View style={styles.cardContainer}>
+                    <View style={styles.leftContainer}>
+                        <View style={styles.pinIcon}>
+                            <Icon name="map-pin" type="font-awesome-5" color="green" size={25} />
+                        </View>
+                        <View style={styles.addressContainer}>
+                            <Text style={styles.addressText1Active}>{props.addressPrimaryText}</Text>
+                            <Text style={styles.addressText2Active}>{props.addressSecondaryText}</Text>
+                        </View>
+                    </View>
+                </View>
+            </View>
+            :
+            <TouchableOpacity onPress={() => props.handleAddressToggle(props.addressPlaceId)}>
                 <View style={styles.cardContainer}>
                     <View style={styles.leftContainer}>
                         <View style={styles.pinIcon}>
                             <Icon name="map-pin" type="font-awesome-5" color="black" size={25} />
                         </View>
                         <View style={styles.addressContainer}>
-                            <Text style={styles.addressText1}>{address.mainText}</Text>
-                            <Text style={styles.addressText2}>{address.secondaryText}</Text>
+                            <Text style={styles.addressText1}>{props.addressPrimaryText}</Text>
+                            <Text style={styles.addressText2}>{props.addressSecondaryText}</Text>
                         </View>
                     </View>
-                    <TouchableOpacity style={styles.deleteIcon}>
-                        <Icon name="trash-alt" type="font-awesome-5" color="red" size={30} />
+                    <TouchableOpacity style={styles.deleteIcon} onPress={() => props.handleDeleteAddress(props.addressPlaceId)}>
+                        <Icon name="trash-alt" type="font-awesome-5" color="red" size={25} />
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
+            }
         </SafeAreaView>
     )
 }
@@ -53,6 +66,15 @@ const styles = StyleSheet.create({
     },
     addressText2: {
         fontSize: 16,
+    },
+    addressText1Active: {
+        fontSize: 16,
+        fontWeight: "bold",
+        color: "green"
+    },
+    addressText2Active: {
+        fontSize: 16,
+        color: "green"
     },
     pinIcon: {
         marginLeft: 30,

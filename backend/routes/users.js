@@ -22,6 +22,16 @@ router.get('/:id', async (req, res) => {
     res.status(200).send(user);
 })
 
+router.get(`/addresses/:id`, async (req, res) => {
+    const userAddresses = await User.findById(req.params.id).select('address');
+
+    if (!userAddresses) {
+        res.status(500).json({ message: 'The user with the given ID was not found.' })
+    }
+    
+    res.status(200).send(userAddresses);
+})
+
 router.post('/login', async (req, res) => {
     const user = await User.findOne({ email: req.body.email })
 
@@ -46,22 +56,20 @@ router.post('/register', async (req, res) => {
     const userExists = await User.findOne({ email: req.body.email });
 
     if (userExists) {
-        console.log('here')
         return res.status(400).send('A user with this email already exists');
-    }
-
-    let address = {
-        fullAddress: req.body.fullAddress,
-        addressPrimaryText: req.body.addressPrimaryText,
-        addressSecondaryText: req.body.addressSecondaryText,
-        addressPlaceId: req.body.addressPlaceId
     }
 
     let user = new User({
         name: req.body.name,
         email: req.body.email,
         phone: req.body.phone,
-        address: address,
+        address: {
+            fullAddress: req.body.fullAddress,
+            addressPrimaryText: req.body.addressPrimaryText,
+            addressSecondaryText: req.body.addressSecondaryText,
+            addressPlaceId: req.body.addressPlaceId,
+            active: true
+        },
         passwordHash: bcrypt.hashSync(req.body.password, 10),
         isAdmin: false
     })
@@ -137,6 +145,87 @@ router.put('/changeDetails/:id',async (req, res)=> {
     }
 
     res.status(200).send({auth: true, user: user})
+})
+
+router.put('/addAddress/:id',async (req, res)=> {
+    let fullAddress = req.body.fullAddress;
+    let addressPrimaryText = req.body.addressPrimaryText;
+    let addressSecondaryText = req.body.addressSecondaryText;
+    let addressPlaceId = req.body.addressPlaceId;
+    let oldAddressPlaceId = req.body.oldAddressId;
+    
+    let user = await User.findById(req.params.id);
+    
+    for (let i = 0; i < user.address.length; i++) {
+        if (user.address[i].addressPlaceId === oldAddressPlaceId) {
+            user.address[i].active = false;
+        }
+    }
+
+    user.address.push({
+        "fullAddress": fullAddress,
+        "addressPrimaryText": addressPrimaryText,
+        "addressSecondaryText": addressSecondaryText,
+        "addressPlaceId": addressPlaceId,
+        "active": true
+    })
+
+    console.log('-----USER-----', user);
+
+    user = await user.save();
+
+    if(!user) {
+        return res.status(400).send('Unable to add address!')
+    }
+
+    res.status(200).send({auth: true, user: user})
+})
+
+router.put('/changeActiveAddress/:id',async (req, res)=> {
+    let activeAddressPlaceId = req.body.activeAddressPlaceId;
+    let newActiveAddressPlaceId = req.body.newActiveAddressPlaceId;
+
+    let user = await User.findById(req.params.id);
+    
+    for (let i = 0; i < user.address.length; i++) {
+        if (user.address[i].addressPlaceId === activeAddressPlaceId) {
+            user.address[i].active = false;
+        }
+    }
+
+    for (let i = 0; i < user.address.length; i++) {
+        if (user.address[i].addressPlaceId === newActiveAddressPlaceId) {
+            user.address[i].active = true;
+        }
+    }
+
+    user = await user.save();
+
+    if(!user) {
+        return res.status(400).send('Unable to change address!')
+    }
+
+    res.status(200).send({auth: true, user: user})
+})
+
+router.put('/deleteAddress/:id',async (req, res)=> {
+    let addressPlaceId = req.body.addressPlaceId;
+
+    let user = await User.findById(req.params.id);
+
+    for (let i = 0; i < user.address.length; i++) {
+        if (user.address[i].addressPlaceId === addressPlaceId) {
+            user.address.splice(i,1);
+        }
+    }
+
+    user = await user.save();
+
+    if(!user) {
+        return res.status(400).send('Unable to delete address!')
+    }
+
+    res.status(200).send({user: user})
 })
 
 router.delete('/:id', (req, res) => {

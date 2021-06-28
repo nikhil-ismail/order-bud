@@ -52,9 +52,6 @@ const PersonalInformation = (props) => {
                         <Icon name="pencil-alt" type="font-awesome-5" color="black" size={25} />
                     </TouchableOpacity>
                 </View>
-                <View style={styles.profilePictureContainer}>
-                    <View style={styles.profilePicturePlaceholder} />
-                </View>
                 { edit ?
                     <EditUserDetails
                         handleUpdateDetails={handleUpdateDetails}
@@ -81,17 +78,6 @@ const styles = StyleSheet.create({
         fontSize: 26,
         marginLeft: 70,
         fontWeight: "bold"
-    },
-    profilePictureContainer: {
-        backgroundColor: "white",
-        paddingVertical: 20
-    },
-    profilePicturePlaceholder: {
-        backgroundColor: "grey",
-        marginLeft: 25,
-        height: 100,
-        width: 100,
-        borderRadius: 60
     },
     editIcon: {
         marginRight: 30

@@ -5,6 +5,7 @@ import Profile from '../Screens/User/User';
 import PersonalInformation from '../Screens/User/PersonalInformation/PersonalInformation';
 import Addresses from '../Screens/User/Addresses/Addresses';
 import EnterAddress from "../Screens/Businesses/Home/EnterAddress";
+import AddAddress from '../Screens/User/Addresses/AddAddress';
 
 const Stack = createStackNavigator();
 
@@ -35,6 +36,13 @@ function MyStack() {
             <Stack.Screen 
                 name="Enter Address"
                 component={EnterAddress}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <Stack.Screen 
+                name="Add Address"
+                component={AddAddress}
                 options={{
                     headerShown: false
                 }}

@@ -21,10 +21,25 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
-    address: [{
-        type: Object,
-        required: true
-    }]
+    address: [
+        {
+            fullAddress: {
+                type: String,
+            },
+            addressPrimaryText: {
+                type: String
+            },
+            addressSecondaryText: {
+                type: String
+            },
+            addressPlaceId: {
+                type: String
+            },
+            active: {
+                type: Boolean
+            }
+        }
+    ]
 });
 
 userSchema.virtual('id').get(function () {

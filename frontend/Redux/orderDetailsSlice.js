@@ -27,7 +27,7 @@ const initialState = { delivery: true };
 export const orderDetailsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_ADDRESS:
-            console.log('payload', action.payload)
+            console.log(action.payload);
             return {
                 ...state,
                 address: {
