@@ -22,12 +22,7 @@ I built the frontend of this application using **React Native** and used **Redux
 
 | Managing Your Account on OrderBud    |
 | --------------------------------------|
-|<img width="382" alt="personal-information" src="https://user-images.githubusercontent.com/76892804/123900203-a420b380-d936-11eb-825d-8550e4cb1d01.png">
-<img width="382" alt="edit-information" src="https://user-images.githubusercontent.com/76892804/123900227-b00c7580-d936-11eb-8524-c2dc04cc3f6e.png">
-<img width="387" alt="change-password" src="https://user-images.githubusercontent.com/76892804/123900231-b26ecf80-d936-11eb-9068-2e04606a7302.png">
-<img width="381" alt="view-addresses" src="https://user-images.githubusercontent.com/76892804/123900237-b4389300-d936-11eb-9160-1849a10f19c6.png">
-<img width="380" alt="add-address" src="https://user-images.githubusercontent.com/76892804/123900245-b69aed00-d936-11eb-9ad5-214db0480293.png">
-<img width="378" alt="switch-address" src="https://user-images.githubusercontent.com/76892804/123900248-b864b080-d936-11eb-89f2-31071c247d39.png">
+|<img width="382" alt="personal-information" src="https://user-images.githubusercontent.com/76892804/123900203-a420b380-d936-11eb-825d-8550e4cb1d01.png">&nbsp;&nbsp;&nbsp;<img width="382" alt="edit-information" src="https://user-images.githubusercontent.com/76892804/123900227-b00c7580-d936-11eb-8524-c2dc04cc3f6e.png">&nbsp;&nbsp;&nbsp;<img width="387" alt="change-password" src="https://user-images.githubusercontent.com/76892804/123900231-b26ecf80-d936-11eb-9068-2e04606a7302.png">&nbsp;&nbsp;&nbsp;<img width="381" alt="view-addresses" src="https://user-images.githubusercontent.com/76892804/123900237-b4389300-d936-11eb-9160-1849a10f19c6.png">&nbsp;&nbsp;&nbsp;<img width="380" alt="add-address" src="https://user-images.githubusercontent.com/76892804/123900245-b69aed00-d936-11eb-9ad5-214db0480293.png">&nbsp;&nbsp;&nbsp;<img width="378" alt="switch-address" src="https://user-images.githubusercontent.com/76892804/123900248-b864b080-d936-11eb-89f2-31071c247d39.png">
 |
 
 | Managing Your Business on OrderBud    |
