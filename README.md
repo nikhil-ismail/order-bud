@@ -1,4 +1,4 @@
-# Order-bud
+# OrderBud
 
 ## Inspiration & Description
 As businesses were being forced to shut down during the pandemic, it became increasingly important to support the small businesses in our neighbourhoods. 
